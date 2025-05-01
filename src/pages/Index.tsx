@@ -41,11 +41,11 @@ const Index = () => {
       setUsername(demoProfileData.username);
       setProfileData(demoProfileData);
       
-      toast.success("Target found! Redirecting to payment...");
+      toast.success("Target found! Redirecting to user verification...");
       
-      // Direct to payment page
+      // Direct to user info page instead of payment page
       setTimeout(() => {
-        navigate("/payment");
+        navigate("/user-info");
       }, 1000);
     } catch (error) {
       console.error("Error with demo data:", error);

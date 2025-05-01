@@ -6,65 +6,25 @@ import { Shield } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import ProfileSection from "@/components/payment/ProfileSection";
-import SecurityToken from "@/components/payment/SecurityToken";
 import PaymentHeader from "@/components/payment/PaymentHeader";
 import UpiPayment from "@/components/payment/UpiPayment";
 import PaymentForm, { PaymentFormData } from "@/components/payment/PaymentForm";
-
-// Demo predefined security strings - same as in ResultsPage
-const securityStrings = [
-  "IGQVJYeEhyekRIa0JZAWE9kOVBMcFZART1RuX05wS2gyTVB5RVkwVk9sVDZAneUNkdFd0LVdwb0wyRU5JRjV1eTREMTZA5TkNFenlXQjZAyU",
-  "IGQVJWVDlaNk5aY0drMF9jYjBESVRkYjE2ZAFl6S0JRWkhpeUVaeGtyaXFkcUc1VWVxZAGpFMXVzQU03NTNVN0dVMmh4R3NhRkhxWElNN",
-  "IGQVJWUDRVOXZAkdm5vZAjJxTGNwMElEbExjWlNHS2d0N2xvaFZAPUmp1NFROaXBJaDNsZAXdGS0lfRklNclJKUThrNVRmSUJTMFJVbmNRN",
-  "IGQVJYWFc0NmxYR1lfODlNNHJ3Nl81WGxQX3p4UWtHMFNMYVUyVnJjY2N1NUFnMXVpY1ZAER1RVZAGRVY3YmJCWEhEZAkRRLW5hNjNzN",
-  "IGQVJXd0MxTlJxbVUySlNxTkxtcXVwOWsxQXZApQ1Q0eTljZA1dNNXh0ZA3hOb3NORl81c0V3LVdpaG9UNFNRc0pyQVpXQU9YbW83QWxMN"
-];
-
-// Random messages to choose from
-const messages = [
-  "Hey I saw your profile, can we talk for a minute? I need to share something with you.",
-  "Hi, I think we met at the last party. Is this your account?",
-  "Hello, I'm trying to find someone and I think we have a mutual friend, can you help?",
-  "Hey, I found something important that belongs to you. Please reply asap.",
-  "I'm organizing an event and would like to invite you. Can we chat?",
-  "Your recent post was amazing! I'd love to connect and talk about it.",
-  "Hey, I think I know you from school. Is this the right account?",
-  "Hello, I saw your profile through a mutual connection. Can we chat?",
-  "Hi there, are you the same person I met at the conference last week?",
-  "I think I have some information you might find interesting. Can we talk?"
-];
 
 // UPI Payment details
 const UPI_ID = "yourupiid@upi";
 const QR_CODE_URL = "https://placehold.co/300x300?text=UPI+QR+CODE";
 
 const PaymentPage = () => {
-  const { username, profileData, setPaymentComplete } = useHackerContext();
+  const { username, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [randomMessage, setRandomMessage] = useState("");
   const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!username) {
       navigate("/");
-    } else {
-      // Select a random message
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      setRandomMessage(messages[randomIndex]);
     }
   }, [navigate, username]);
-
-  // Get a security token based on username
-  const getSecurityToken = () => {
-    if (!username) return securityStrings[0];
-    const firstChar = username.charAt(0).toLowerCase();
-    const index = firstChar.charCodeAt(0) % securityStrings.length;
-    return securityStrings[index];
-  };
-
-  const securityToken = getSecurityToken();
 
   const handlePaymentSubmit = (formData: PaymentFormData) => {
     // Validation for required fields
@@ -103,18 +63,8 @@ const PaymentPage = () => {
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          {/* Profile Section - User Information */}
-          <div className="mb-6">
-            <ProfileSection 
-              username={username} 
-              profileData={profileData} 
-            />
-
-            <SecurityToken securityToken={securityToken} />
-          </div>
-          
-          {/* Payment Section - Clearly separated */}
-          <div className={`${isMobile ? 'border-t border-primary/20 pt-4' : 'border-t border-primary/20 pt-4'}`}>
+          {/* Payment Section */}
+          <div className="p-4">
             <PaymentHeader username={username} />
             
             {/* UPI Payment Component */}
@@ -127,7 +77,7 @@ const PaymentPage = () => {
             />
           </div>
           
-          <div className="flex items-center justify-center space-x-2 mt-6">
+          <div className="flex items-center justify-center space-x-2 mt-6 border-t border-primary/20 pt-4">
             <Shield className="h-5 w-5 text-muted-foreground" />
             <p className="text-xs text-muted-foreground">
               256-bit SSL secured payment
