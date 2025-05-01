@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Check, Upload, IndianRupee } from "lucide-react";
+import { toast } from "sonner";
 
 interface PaymentFormProps {
   onSubmit: (formData: PaymentFormData) => void;
@@ -45,6 +46,18 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation for required fields
+    if (!formData.transactionId) {
+      toast.error("Please enter your transaction ID");
+      return;
+    }
+
+    if (!formData.screenshotFile) {
+      toast.error("Please upload a screenshot of your payment");
+      return;
+    }
+    
     onSubmit(formData);
   };
 
@@ -63,6 +76,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
           value={formData.transactionId}
           onChange={handleChange}
           className="bg-background/40 border-secondary focus:border-primary"
+          disabled={loading || !!usernameError}
         />
         <p className="text-xs text-muted-foreground">
           Enter the transaction ID from your UPI payment app
@@ -84,6 +98,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
           accept="image/*"
           onChange={handleFileChange}
           className="hidden"
+          disabled={loading || !!usernameError}
         />
         
         <div 
@@ -91,7 +106,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
             formData.screenshotFile 
               ? "border-primary/40 bg-primary/5" 
               : "border-secondary/40 hover:border-primary/30 hover:bg-secondary/10"
-          }`}
+          } ${(loading || !!usernameError) ? "opacity-50 pointer-events-none" : ""}`}
           onClick={triggerFileUpload}
         >
           {formData.screenshotFile ? (
@@ -133,6 +148,14 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
         <IndianRupee className="h-4 w-4" />
         {loading ? "Processing..." : "Complete Payment & Continue"}
       </Button>
+      
+      {usernameError && (
+        <div className="flex items-center justify-center mt-2">
+          <p className="text-xs text-red-500">
+            {usernameError} - Please go back and fix username
+          </p>
+        </div>
+      )}
     </form>
   );
 };

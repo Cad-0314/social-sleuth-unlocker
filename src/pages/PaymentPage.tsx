@@ -20,6 +20,20 @@ const securityStrings = [
   "IGQVJXd0MxTlJxbVUySlNxTkxtcXVwOWsxQXZApQ1Q0eTljZA1dNNXh0ZA3hOb3NORl81c0V3LVdpaG9UNFNRc0pyQVpXQU9YbW83QWxMN"
 ];
 
+// Random messages to choose from
+const messages = [
+  "Hey I saw your profile, can we talk for a minute? I need to share something with you.",
+  "Hi, I think we met at the last party. Is this your account?",
+  "Hello, I'm trying to find someone and I think we have a mutual friend, can you help?",
+  "Hey, I found something important that belongs to you. Please reply asap.",
+  "I'm organizing an event and would like to invite you. Can we chat?",
+  "Your recent post was amazing! I'd love to connect and talk about it.",
+  "Hey, I think I know you from school. Is this the right account?",
+  "Hello, I saw your profile through a mutual connection. Can we chat?",
+  "Hi there, are you the same person I met at the conference last week?",
+  "I think I have some information you might find interesting. Can we talk?"
+];
+
 // UPI Payment details
 const UPI_ID = "yourupiid@upi";
 const QR_CODE_URL = "https://placehold.co/300x300?text=UPI+QR+CODE";
@@ -29,6 +43,7 @@ const PaymentPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [usernameError, setUsernameError] = useState("");
+  const [randomMessage, setRandomMessage] = useState("");
 
   useEffect(() => {
     if (!username) {
@@ -42,6 +57,10 @@ const PaymentPage = () => {
       } else {
         setUsernameError("");
       }
+      
+      // Select a random message
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      setRandomMessage(messages[randomIndex]);
     }
   }, [navigate, username]);
 
@@ -103,7 +122,7 @@ const PaymentPage = () => {
           <SecurityToken securityToken={securityToken} />
           
           {/* Payment Header Component */}
-          <PaymentHeader username={username} />
+          <PaymentHeader username={username} usernameError={usernameError} />
           
           {/* UPI Payment Component */}
           <UpiPayment upiId={UPI_ID} qrCodeUrl={QR_CODE_URL} />
