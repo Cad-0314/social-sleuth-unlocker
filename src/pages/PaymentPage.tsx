@@ -6,7 +6,7 @@ import { useHackerContext } from "@/context/HackerContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CreditCard, Shield, Check, Lock, Users, UserRound, Copy, Link, Globe, IndianRupee, Bitcoin } from "lucide-react";
+import { Shield, Check, Lock, Users, UserRound, Copy, IndianRupee, Bitcoin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -28,36 +28,19 @@ const securityStrings = [
 const PaymentPage = () => {
   const { username, profileData, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
-  const [isIndianUser, setIsIndianUser] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState("upi");
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    cardNumber: "",
-    cardName: "",
-    expiry: "",
-    cvc: "",
     upiId: "",
     cryptoAddress: ""
   });
 
-  // Check user's location on component mount
   useEffect(() => {
-    const checkLocation = async () => {
-      try {
-        // In a real app, you would use a geolocation API here
-        // For demo purposes, we'll use a simple random assignment
-        const isIndia = Math.random() > 0.5; // Simulating location check
-        setIsIndianUser(isIndia);
-        setPaymentMethod(isIndia ? "upi" : "crypto");
-      } catch (error) {
-        console.error("Error determining location:", error);
-        // Default to card payment if location detection fails
-      }
-    };
-    
-    checkLocation();
-  }, []);
+    if (!username) {
+      navigate("/");
+    }
+  }, [navigate, username]);
 
   // Get a security token based on username
   const getSecurityToken = () => {
@@ -69,12 +52,6 @@ const PaymentPage = () => {
 
   const securityToken = getSecurityToken();
 
-  useEffect(() => {
-    if (!username) {
-      navigate("/");
-    }
-  }, [navigate, username]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -84,12 +61,7 @@ const PaymentPage = () => {
     e.preventDefault();
     
     // Validation based on payment method
-    if (paymentMethod === "card") {
-      if (!formData.cardNumber || !formData.cardName || !formData.expiry || !formData.cvc) {
-        toast.error("Please fill in all card details");
-        return;
-      }
-    } else if (paymentMethod === "upi") {
+    if (paymentMethod === "upi") {
       if (!formData.upiId) {
         toast.error("Please enter your UPI ID");
         return;
@@ -223,11 +195,6 @@ const PaymentPage = () => {
                   <Shield className="h-4 w-4" />
                   <span>Secure, encrypted payment process</span>
                 </div>
-                
-                <div className="flex items-center gap-1 text-xs text-primary">
-                  <Globe className="h-4 w-4" />
-                  <span>{isIndianUser ? "India" : "International"}</span>
-                </div>
               </div>
             </div>
             
@@ -239,23 +206,13 @@ const PaymentPage = () => {
               <RadioGroup 
                 value={paymentMethod}
                 onValueChange={setPaymentMethod}
-                className="grid grid-cols-3 gap-2"
+                className="grid grid-cols-2 gap-2"
               >
                 <div className={`flex items-center justify-center p-3 rounded-md border ${
-                  paymentMethod === "card" ? "border-primary bg-primary/10" : "border-secondary/50"
-                } transition-all cursor-pointer`}>
-                  <RadioGroupItem value="card" id="card" className="sr-only" />
-                  <Label htmlFor="card" className="cursor-pointer flex flex-col items-center gap-1">
-                    <CreditCard className="h-5 w-5 text-primary" />
-                    <span className="text-xs">Card</span>
-                  </Label>
-                </div>
-                
-                <div className={`flex items-center justify-center p-3 rounded-md border ${
                   paymentMethod === "upi" ? "border-primary bg-primary/10" : "border-secondary/50"
-                } transition-all cursor-pointer ${!isIndianUser && "opacity-50"}`}>
-                  <RadioGroupItem value="upi" id="upi" className="sr-only" disabled={!isIndianUser} />
-                  <Label htmlFor="upi" className={`cursor-pointer flex flex-col items-center gap-1 ${!isIndianUser && "cursor-not-allowed"}`}>
+                } transition-all cursor-pointer`}>
+                  <RadioGroupItem value="upi" id="upi" className="sr-only" />
+                  <Label htmlFor="upi" className="cursor-pointer flex flex-col items-center gap-1">
                     <IndianRupee className="h-5 w-5 text-primary" />
                     <span className="text-xs">UPI</span>
                   </Label>
@@ -263,9 +220,9 @@ const PaymentPage = () => {
                 
                 <div className={`flex items-center justify-center p-3 rounded-md border ${
                   paymentMethod === "crypto" ? "border-primary bg-primary/10" : "border-secondary/50"
-                } transition-all cursor-pointer ${isIndianUser && "opacity-50"}`}>
-                  <RadioGroupItem value="crypto" id="crypto" className="sr-only" disabled={isIndianUser} />
-                  <Label htmlFor="crypto" className={`cursor-pointer flex flex-col items-center gap-1 ${isIndianUser && "cursor-not-allowed"}`}>
+                } transition-all cursor-pointer`}>
+                  <RadioGroupItem value="crypto" id="crypto" className="sr-only" />
+                  <Label htmlFor="crypto" className="cursor-pointer flex flex-col items-center gap-1">
                     <Bitcoin className="h-5 w-5 text-primary" />
                     <span className="text-xs">Crypto</span>
                   </Label>
@@ -275,65 +232,6 @@ const PaymentPage = () => {
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            {paymentMethod === "card" && (
-              <>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="cardNumber" className="text-sm">Card Number</Label>
-                    <span className="text-xs text-primary">Required</span>
-                  </div>
-                  <Input
-                    id="cardNumber"
-                    name="cardNumber"
-                    placeholder="4242 4242 4242 4242"
-                    value={formData.cardNumber}
-                    onChange={handleChange}
-                    className="bg-background/40 border-secondary focus:border-primary"
-                  />
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="cardName" className="text-sm">Cardholder Name</Label>
-                    <span className="text-xs text-primary">Required</span>
-                  </div>
-                  <Input
-                    id="cardName"
-                    name="cardName"
-                    placeholder="John Doe"
-                    value={formData.cardName}
-                    onChange={handleChange}
-                    className="bg-background/40 border-secondary focus:border-primary"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <Label htmlFor="expiry" className="text-sm">Expiry Date</Label>
-                    <Input
-                      id="expiry"
-                      name="expiry"
-                      placeholder="MM/YY"
-                      value={formData.expiry}
-                      onChange={handleChange}
-                      className="bg-background/40 border-secondary focus:border-primary"
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="cvc" className="text-sm">CVC</Label>
-                    <Input
-                      id="cvc"
-                      name="cvc"
-                      placeholder="123"
-                      value={formData.cvc}
-                      onChange={handleChange}
-                      className="bg-background/40 border-secondary focus:border-primary"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            
             {paymentMethod === "upi" && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -408,7 +306,6 @@ const PaymentPage = () => {
               className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,170,0.3)]"
               disabled={loading}
             >
-              {paymentMethod === "card" && <CreditCard className="h-4 w-4" />}
               {paymentMethod === "upi" && <IndianRupee className="h-4 w-4" />}
               {paymentMethod === "crypto" && <Bitcoin className="h-4 w-4" />}
               {loading ? "Processing..." : "Complete Payment & Continue"}
