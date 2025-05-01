@@ -16,6 +16,8 @@ interface ProfileData {
 interface HackerContextType {
   username: string;
   setUsername: (username: string) => void;
+  senderUsername: string;
+  setSenderUsername: (username: string) => void;
   profilePic: string;
   setProfilePic: (pic: string) => void;
   verificationStatus: boolean;
@@ -38,6 +40,7 @@ export function useHackerContext() {
 
 export function HackerProvider({ children }: { children: React.ReactNode }) {
   const [username, setUsername] = useState("");
+  const [senderUsername, setSenderUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
@@ -46,6 +49,8 @@ export function HackerProvider({ children }: { children: React.ReactNode }) {
   const value = {
     username,
     setUsername,
+    senderUsername,
+    setSenderUsername,
     profilePic,
     setProfilePic,
     verificationStatus,
