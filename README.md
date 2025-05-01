@@ -1,73 +1,137 @@
-# Welcome to your Lovable project
 
-## Project info
+# Instagram Password Finder (Simulation)
 
-**URL**: https://lovable.dev/projects/3ec4c95e-160d-4182-a38d-6a6439c5e071
+This is a simulated Instagram password hacking tool created for educational purposes only. The application demonstrates a multi-step process that mimics a hacking attempt but doesn't actually perform any malicious actions.
 
-## How can I edit this code?
+**IMPORTANT: This is a simulation and does not actually hack Instagram accounts.**
 
-There are several ways of editing your application.
+## Project Overview
 
-**Use Lovable**
+This application simulates a hacking tool with the following workflow:
+1. User enters an Instagram username
+2. Application fetches and displays profile information from an API
+3. User completes a "verification" step
+4. User enters payment information
+5. Application simulates "hacking" the account
+6. A fake password is displayed as a "result"
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3ec4c95e-160d-4182-a38d-6a6439c5e071) and start prompting.
+## Project Structure
 
-Changes made via Lovable will be committed automatically to this repo.
+### Core Files
 
-**Use your preferred IDE**
+- `src/main.tsx`: The entry point for the application, wraps the app with the HackerContext provider.
+- `src/App.tsx`: Main application component that sets up routing and global providers.
+- `src/index.css`: Global CSS styles including matrix background and terminal styling.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Pages
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- `src/pages/Index.tsx`: Initial landing page where users enter an Instagram username. Calls the API to fetch account information.
+- `src/pages/VerificationPage.tsx`: Displays retrieved Instagram profile information and prompts the user to send a verification message.
+- `src/pages/PaymentPage.tsx`: Collects payment information (credit card details).
+- `src/pages/ProcessingPage.tsx`: Shows an animated progress bar and simulated hacking progress with terminal-style text.
+- `src/pages/ResultsPage.tsx`: Displays the "hacked" password (fake) and account information.
+- `src/pages/NotFound.tsx`: 404 error page for undefined routes.
 
-Follow these steps:
+### Context and State Management
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- `src/context/HackerContext.tsx`: Global state management for the application, storing username, profile data, verification status, and payment status.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### UI Components
 
-# Step 3: Install the necessary dependencies.
-npm i
+The project uses [shadcn/ui](https://ui.shadcn.com/) components:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+#### Form Components
+- `src/components/ui/input.tsx`: Text input component
+- `src/components/ui/textarea.tsx`: Multi-line text input
+- `src/components/ui/label.tsx`: Form label component
+- `src/components/ui/button.tsx`: Button component
+- `src/components/ui/checkbox.tsx`: Checkbox input
+- `src/components/ui/radio-group.tsx`: Radio button group
+- `src/components/ui/select.tsx`: Dropdown select component
+- `src/components/ui/switch.tsx`: Toggle switch component
+- `src/components/ui/slider.tsx`: Range slider component
+- `src/components/ui/input-otp.tsx`: One-time password input
+
+#### Layout Components
+- `src/components/ui/card.tsx`: Card container component
+- `src/components/ui/separator.tsx`: Visual divider
+- `src/components/ui/aspect-ratio.tsx`: Maintains aspect ratio of content
+- `src/components/ui/scroll-area.tsx`: Scrollable container
+- `src/components/ui/resizable.tsx`: Resizable panels
+- `src/components/ui/tabs.tsx`: Tabbed interface
+- `src/components/ui/accordion.tsx`: Collapsible content sections
+- `src/components/ui/popover.tsx`: Popup content
+- `src/components/ui/hover-card.tsx`: Hover information card
+- `src/components/ui/sheet.tsx`: Slide-in panel
+- `src/components/ui/dropdown-menu.tsx`: Dropdown menu
+- `src/components/ui/sidebar.tsx`: Side navigation panel
+
+#### Feedback Components
+- `src/components/ui/alert.tsx`: Alert message
+- `src/components/ui/toast.tsx`: Toast notification
+- `src/components/ui/sonner.tsx`: Toast notification manager
+- `src/components/ui/progress.tsx`: Progress indicator
+- `src/components/ui/skeleton.tsx`: Loading placeholder
+
+#### Display Components
+- `src/components/ui/avatar.tsx`: User avatar
+- `src/components/ui/badge.tsx`: Status badge
+- `src/components/ui/tooltip.tsx`: Tooltip information
+
+### Utility Files
+
+- `src/lib/utils.ts`: Utility functions, including the `cn` function for Tailwind class merging
+- `src/hooks/use-mobile.tsx`: Hook for detecting mobile devices
+- `src/hooks/use-toast.ts`: Hook for managing toast notifications
+
+## API Integration
+
+The application connects to an external API to fetch Instagram profile information:
+
+```
+POST http://localhost:5000/get_instagram_profile
+Content-Type: application/json
+Body: {"username": "[instagram-username]"}
 ```
 
-**Edit a file directly in GitHub**
+Sample response:
+```json
+{
+  "username": "natgeo",
+  "full_name": "National Geographic",
+  "bio": "Experience the world through the eyes of National Geographic photographers.",
+  "is_verified": true,
+  "is_business_account": true,
+  "followers": 281000000,
+  "following": 140,
+  "profile_pic_url": "https://instagram.fxyz1-1.fna.fbcdn.net/v/t51.2885-19/11820623_1609296079338702_106602879_a.jpg?...",
+  "is_private": false
+}
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Development
 
 This project is built with:
-
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+### Local Development
 
-Simply open [Lovable](https://lovable.dev/projects/3ec4c95e-160d-4182-a38d-6a6439c5e071) and click on Share -> Publish.
+```sh
+# Install dependencies
+npm i
 
-## Can I connect a custom domain to my Lovable project?
+# Start development server
+npm run dev
+```
 
-Yes, you can!
+## Legal Disclaimer
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This application is a simulation created for educational purposes only. It does not actually hack or attempt to hack Instagram accounts. Unauthorized access to accounts is illegal and unethical.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## License
+
+© 2025 SocialSleuth. All rights reserved. This is a fictional project.
