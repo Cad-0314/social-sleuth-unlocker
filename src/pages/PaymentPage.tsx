@@ -6,11 +6,11 @@ import { useHackerContext } from "@/context/HackerContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CreditCard, Shield, Check, User, Instagram, Lock } from "lucide-react";
+import { CreditCard, Shield, Check, Instagram, Lock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const PaymentPage = () => {
-  const { username, senderUsername, profileData, setPaymentComplete } = useHackerContext();
+  const { username, profileData, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
@@ -41,36 +41,23 @@ const PaymentPage = () => {
     // Here we're just simulating a delay
     setTimeout(() => {
       setPaymentComplete(true);
-      navigate("/processing");
+      // Now navigate to message page instead of processing
+      navigate("/message");
     }, 2000);
   };
 
   if (!username) {
+    // Use useEffect in actual implementation to avoid React warning
     navigate("/");
     return null;
   }
-
-  // Generate personalized message based on sender's username
-  const getPersonalizedMessage = () => {
-    if (!senderUsername) return "Server access requires payment to continue";
-    
-    const firstLetter = senderUsername.charAt(0).toLowerCase();
-    
-    if ("aeiou".includes(firstLetter)) {
-      return `Hey ${senderUsername}! We've located ${username}'s data. Unlock access now`;
-    } else if (firstLetter <= 'm') {
-      return `${senderUsername}, we found ${username}'s credentials. One-time access fee required`;
-    } else {
-      return `${senderUsername}, ${username}'s account located. Complete payment to continue`;
-    }
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
-          <p className="text-muted-foreground text-sm">Almost there - complete payment to continue</p>
+          <p className="text-muted-foreground text-sm">Complete payment to continue</p>
         </div>
         
         <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)]">
@@ -110,7 +97,7 @@ const PaymentPage = () => {
             
             <div className="space-y-3 mb-4">
               <p className="text-sm text-muted-foreground">
-                {getPersonalizedMessage()}
+                Complete payment to begin password recovery for @{username}
               </p>
               
               <div className="flex items-center gap-2 text-xs bg-green-900/20 text-green-400 p-2 rounded border border-green-900/30">
@@ -187,7 +174,7 @@ const PaymentPage = () => {
               disabled={loading}
             >
               <CreditCard className="h-4 w-4" />
-              {loading ? "Processing..." : "Complete Payment & Begin Recovery"}
+              {loading ? "Processing..." : "Complete Payment & Continue"}
             </Button>
           </form>
           

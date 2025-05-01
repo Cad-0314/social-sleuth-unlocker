@@ -1,51 +1,45 @@
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
 import { Check } from "lucide-react";
 
+// Demo predefined passwords
+const demoPasswords = [
+  "Insta123!",
+  "Password2024#",
+  "SecretAccess55!",
+  "MyAccount_92",
+  "SocialMedia2025$",
+  "PrivateLogin!23",
+  "InstagramUser789!",
+  "AccessGranted123$",
+  "SecurePass2024!",
+  "ProfileLogin&75"
+];
+
 const ResultsPage = () => {
-  const { username, profilePic } = useHackerContext();
-  const [password, setPassword] = useState("");
+  const { username, profileData } = useHackerContext();
   const navigate = useNavigate();
+  
+  // Get a consistent password based on username
+  const getUserPassword = () => {
+    if (!username) return demoPasswords[0];
+    
+    // Use the first character of the username to select a password
+    const firstChar = username.charAt(0).toLowerCase();
+    const index = firstChar.charCodeAt(0) % demoPasswords.length;
+    return demoPasswords[index];
+  };
+  
+  const password = getUserPassword();
 
   useEffect(() => {
     if (!username) {
       navigate("/");
-      return;
     }
-    
-    // Generate a random fake password
-    const generatePassword = () => {
-      const special = "!@#$%^&*";
-      const lowercase = "abcdefghijklmnopqrstuvwxyz";
-      const uppercase = lowercase.toUpperCase();
-      const numbers = "0123456789";
-      const all = lowercase + uppercase + numbers + special;
-      
-      // Start with username-based component
-      let pwd = username.substring(0, 3);
-      
-      // Add a capital letter
-      pwd += uppercase[Math.floor(Math.random() * uppercase.length)];
-      
-      // Add some random characters
-      for (let i = 0; i < 4; i++) {
-        pwd += all[Math.floor(Math.random() * all.length)];
-      }
-      
-      // Add a special character
-      pwd += special[Math.floor(Math.random() * special.length)];
-      
-      // Add some numbers
-      pwd += Math.floor(Math.random() * 100).toString();
-      
-      return pwd;
-    };
-    
-    setPassword(generatePassword());
   }, [navigate, username]);
 
   const handleCopyPassword = () => {
@@ -84,7 +78,7 @@ const ResultsPage = () => {
           
           <div className="flex items-center mb-6">
             <img 
-              src={profilePic} 
+              src={profileData?.profile_pic_url} 
               alt={username} 
               className="w-16 h-16 rounded-full border-2 border-primary"
             />
