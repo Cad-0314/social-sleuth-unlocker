@@ -1,6 +1,18 @@
 
 import React, { createContext, useContext, useState } from "react";
 
+interface ProfileData {
+  username: string;
+  full_name: string;
+  bio: string;
+  is_verified: boolean;
+  is_business_account: boolean;
+  followers: number;
+  following: number;
+  profile_pic_url: string;
+  is_private: boolean;
+}
+
 interface HackerContextType {
   username: string;
   setUsername: (username: string) => void;
@@ -10,6 +22,8 @@ interface HackerContextType {
   setVerificationStatus: (status: boolean) => void;
   paymentComplete: boolean;
   setPaymentComplete: (status: boolean) => void;
+  profileData: ProfileData | null;
+  setProfileData: (data: ProfileData) => void;
 }
 
 const HackerContext = createContext<HackerContextType | undefined>(undefined);
@@ -27,6 +41,7 @@ export function HackerProvider({ children }: { children: React.ReactNode }) {
   const [profilePic, setProfilePic] = useState("");
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   const value = {
     username,
@@ -36,7 +51,9 @@ export function HackerProvider({ children }: { children: React.ReactNode }) {
     verificationStatus,
     setVerificationStatus,
     paymentComplete,
-    setPaymentComplete
+    setPaymentComplete,
+    profileData,
+    setProfileData
   };
 
   return <HackerContext.Provider value={value}>{children}</HackerContext.Provider>;

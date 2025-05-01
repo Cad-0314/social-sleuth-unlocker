@@ -10,7 +10,7 @@ import { Lock } from "lucide-react";
 const Index = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setUsername, setProfilePic } = useHackerContext();
+  const { setUsername, setProfileData } = useHackerContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,19 +23,33 @@ const Index = () => {
     
     setLoading(true);
     
-    // In a real app, this would call an API to fetch info
-    // Here we're just simulating a delay
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:5000/get_instagram_profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: inputUsername }),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch account data");
+      }
+      
+      const profileData = await response.json();
+      
       // Store in context
-      setUsername(inputUsername);
+      setUsername(profileData.username);
+      setProfileData(profileData);
       
-      // Generate a fake profile pic URL (in reality this would come from an API)
-      const randomId = Math.floor(Math.random() * 1000);
-      setProfilePic(`https://i.pravatar.cc/150?img=${randomId}`);
-      
-      setLoading(false);
+      toast.success("Account found!");
       navigate("/verify");
-    }, 1500);
+    } catch (error) {
+      console.error("Error fetching account data:", error);
+      toast.error("Failed to find account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -85,7 +99,7 @@ const Index = () => {
               className="w-full bg-primary hover:bg-primary/80 text-primary-foreground"
               disabled={loading}
             >
-              {loading ? "Processing..." : "Find Password"}
+              {loading ? "Searching..." : "Find Password"}
             </Button>
           </form>
         </div>
