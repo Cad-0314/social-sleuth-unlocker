@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -30,40 +29,33 @@ const Index = () => {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:5000/get_instagram_profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: inputUsername }),
-      });
-      
-      if (!response.ok) {
-        throw new Error("Failed to fetch account data");
-      }
-      
-      const profileData = await response.json();
+      // Instead of API call, use demo data
+      const demoProfileData = {
+        username: inputUsername,
+        full_name: inputUsername.charAt(0).toUpperCase() + inputUsername.slice(1) + " Official",
+        bio: "This is a demo account for " + inputUsername,
+        is_verified: Math.random() > 0.5,
+        is_business_account: Math.random() > 0.5,
+        followers: Math.floor(Math.random() * 1000000) + 1000,
+        following: Math.floor(Math.random() * 1000) + 100,
+        profile_pic_url: "https://picsum.photos/200",
+        is_private: Math.random() > 0.7
+      };
       
       // Store in context
-      setUsername(profileData.username);
+      setUsername(demoProfileData.username);
       setContextSenderUsername(senderUsername);
-      setProfileData(profileData);
+      setProfileData(demoProfileData);
       
       toast.success("Target found! Redirecting to payment...");
       
       // Skip verification and go directly to payment
-      navigate("/payment");
-    } catch (error) {
-      console.error("Error fetching account data:", error);
-      toast.error("Failed to find account. We'll use backup method.");
-      
-      // Even if API fails, still proceed to payment with entered usernames
-      setUsername(inputUsername);
-      setContextSenderUsername(senderUsername);
-      
       setTimeout(() => {
         navigate("/payment");
-      }, 1500);
+      }, 1000);
+    } catch (error) {
+      console.error("Error with demo data:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

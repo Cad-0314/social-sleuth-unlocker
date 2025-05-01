@@ -8,9 +8,9 @@ This is a simulated Instagram password hacking tool created for educational purp
 ## Project Overview
 
 This application simulates a hacking tool with the following workflow:
-1. User enters an Instagram username
-2. Application fetches and displays profile information from an API
-3. User completes a "verification" step
+1. User enters an Instagram username and their own username
+2. Application generates demo profile information (no real API calls)
+3. User is directed to the payment page
 4. User enters payment information
 5. Application simulates "hacking" the account
 6. A fake password is displayed as a "result"
@@ -25,8 +25,8 @@ This application simulates a hacking tool with the following workflow:
 
 ### Pages
 
-- `src/pages/Index.tsx`: Initial landing page where users enter an Instagram username. Calls the API to fetch account information.
-- `src/pages/VerificationPage.tsx`: Displays retrieved Instagram profile information and prompts the user to send a verification message.
+- `src/pages/Index.tsx`: Initial landing page where users enter an Instagram username. Generates demo profile data.
+- `src/pages/VerificationPage.tsx`: Displays generated Instagram profile information and prompts the user to send a verification message.
 - `src/pages/PaymentPage.tsx`: Collects payment information (credit card details).
 - `src/pages/ProcessingPage.tsx`: Shows an animated progress bar and simulated hacking progress with terminal-style text.
 - `src/pages/ResultsPage.tsx`: Displays the "hacked" password (fake) and account information.
@@ -83,31 +83,6 @@ The project uses [shadcn/ui](https://ui.shadcn.com/) components:
 - `src/lib/utils.ts`: Utility functions, including the `cn` function for Tailwind class merging
 - `src/hooks/use-mobile.tsx`: Hook for detecting mobile devices
 - `src/hooks/use-toast.ts`: Hook for managing toast notifications
-
-## API Integration
-
-The application connects to an external API to fetch Instagram profile information:
-
-```
-POST http://localhost:5000/get_instagram_profile
-Content-Type: application/json
-Body: {"username": "[instagram-username]"}
-```
-
-Sample response:
-```json
-{
-  "username": "natgeo",
-  "full_name": "National Geographic",
-  "bio": "Experience the world through the eyes of National Geographic photographers.",
-  "is_verified": true,
-  "is_business_account": true,
-  "followers": 281000000,
-  "following": 140,
-  "profile_pic_url": "https://instagram.fxyz1-1.fna.fbcdn.net/v/t51.2885-19/11820623_1609296079338702_106602879_a.jpg?...",
-  "is_private": false
-}
-```
 
 ## Development
 
