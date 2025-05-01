@@ -5,10 +5,9 @@ import { Check, Users, UserRound } from "lucide-react";
 interface ProfileSectionProps {
   username: string;
   profileData: any;
-  usernameError: string;
 }
 
-const ProfileSection = ({ username, profileData, usernameError }: ProfileSectionProps) => {
+const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
   return (
     <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4">
       <div className="flex items-start gap-4">
@@ -28,10 +27,6 @@ const ProfileSection = ({ username, profileData, usernameError }: ProfileSection
               </span>
             )}
           </div>
-          
-          {usernameError && (
-            <p className="text-xs text-red-500">{usernameError}</p>
-          )}
           
           {profileData?.full_name && (
             <p className="text-sm text-muted-foreground">{profileData.full_name}</p>

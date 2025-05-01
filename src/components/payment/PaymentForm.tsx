@@ -9,7 +9,6 @@ import { toast } from "sonner";
 interface PaymentFormProps {
   onSubmit: (formData: PaymentFormData) => void;
   loading: boolean;
-  usernameError: string;
 }
 
 export interface PaymentFormData {
@@ -17,7 +16,7 @@ export interface PaymentFormData {
   screenshotFile: File | null;
 }
 
-const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => {
+const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<PaymentFormData>({
     transactionId: "",
@@ -76,7 +75,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
           value={formData.transactionId}
           onChange={handleChange}
           className="bg-background/40 border-secondary focus:border-primary"
-          disabled={loading || !!usernameError}
+          disabled={loading}
         />
         <p className="text-xs text-muted-foreground">
           Enter the transaction ID from your UPI payment app
@@ -98,7 +97,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
           accept="image/*"
           onChange={handleFileChange}
           className="hidden"
-          disabled={loading || !!usernameError}
+          disabled={loading}
         />
         
         <div 
@@ -106,7 +105,7 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
             formData.screenshotFile 
               ? "border-primary/40 bg-primary/5" 
               : "border-secondary/40 hover:border-primary/30 hover:bg-secondary/10"
-          } ${(loading || !!usernameError) ? "opacity-50 pointer-events-none" : ""}`}
+          } ${loading ? "opacity-50 pointer-events-none" : ""}`}
           onClick={triggerFileUpload}
         >
           {formData.screenshotFile ? (
@@ -143,19 +142,11 @@ const PaymentForm = ({ onSubmit, loading, usernameError }: PaymentFormProps) => 
       <Button 
         type="submit" 
         className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,170,0.3)]"
-        disabled={loading || !!usernameError}
+        disabled={loading}
       >
         <IndianRupee className="h-4 w-4" />
         {loading ? "Processing..." : "Complete Payment & Continue"}
       </Button>
-      
-      {usernameError && (
-        <div className="flex items-center justify-center mt-2">
-          <p className="text-xs text-red-500">
-            {usernameError} - Please go back and fix username
-          </p>
-        </div>
-      )}
     </form>
   );
 };

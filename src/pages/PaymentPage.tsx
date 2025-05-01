@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
 import { Shield } from "lucide-react";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import ProfileSection from "@/components/payment/ProfileSection";
 import SecurityToken from "@/components/payment/SecurityToken";
@@ -42,22 +43,13 @@ const PaymentPage = () => {
   const { username, profileData, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [usernameError, setUsernameError] = useState("");
   const [randomMessage, setRandomMessage] = useState("");
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!username) {
       navigate("/");
     } else {
-      // Validate username format
-      if (username.includes(" ")) {
-        setUsernameError("Username cannot contain spaces");
-      } else if (username.length < 3) {
-        setUsernameError("Username must be at least 3 characters long");
-      } else {
-        setUsernameError("");
-      }
-      
       // Select a random message
       const randomIndex = Math.floor(Math.random() * messages.length);
       setRandomMessage(messages[randomIndex]);
@@ -97,7 +89,7 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
@@ -111,28 +103,29 @@ const PaymentPage = () => {
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          {/* Profile Section Component */}
-          <ProfileSection 
-            username={username} 
-            profileData={profileData} 
-            usernameError={usernameError} 
-          />
+          {/* Profile Section - User Information */}
+          <div className="mb-6">
+            <ProfileSection 
+              username={username} 
+              profileData={profileData} 
+            />
 
-          {/* Security Token Component */}
-          <SecurityToken securityToken={securityToken} />
+            <SecurityToken securityToken={securityToken} />
+          </div>
           
-          {/* Payment Header Component */}
-          <PaymentHeader username={username} usernameError={usernameError} />
-          
-          {/* UPI Payment Component */}
-          <UpiPayment upiId={UPI_ID} qrCodeUrl={QR_CODE_URL} />
-          
-          {/* Payment Form Component */}
-          <PaymentForm 
-            onSubmit={handlePaymentSubmit}
-            loading={loading}
-            usernameError={usernameError}
-          />
+          {/* Payment Section - Clearly separated */}
+          <div className={`${isMobile ? 'border-t border-primary/20 pt-4' : 'border-t border-primary/20 pt-4'}`}>
+            <PaymentHeader username={username} />
+            
+            {/* UPI Payment Component */}
+            <UpiPayment upiId={UPI_ID} qrCodeUrl={QR_CODE_URL} />
+            
+            {/* Payment Form Component */}
+            <PaymentForm 
+              onSubmit={handlePaymentSubmit}
+              loading={loading}
+            />
+          </div>
           
           <div className="flex items-center justify-center space-x-2 mt-6">
             <Shield className="h-5 w-5 text-muted-foreground" />
