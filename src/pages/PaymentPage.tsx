@@ -1,12 +1,12 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHackerContext } from "@/context/HackerContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Check, Lock, Users, UserRound, Copy, IndianRupee, Bitcoin } from "lucide-react";
+import { Shield, Check, Lock, Users, UserRound, Copy, IndianRupee, Upload } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -14,7 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card } from "@/components/ui/card";
 
 // Demo predefined security strings - same as in ResultsPage
 const securityStrings = [
@@ -25,20 +25,36 @@ const securityStrings = [
   "IGQVJXd0MxTlJxbVUySlNxTkxtcXVwOWsxQXZApQ1Q0eTljZA1dNNXh0ZA3hOb3NORl81c0V3LVdpaG9UNFNRc0pyQVpXQU9YbW83QWxMN"
 ];
 
+// UPI Payment details
+const UPI_ID = "yourupiid@upi";
+const QR_CODE_URL = "https://placehold.co/300x300?text=UPI+QR+CODE";
+
 const PaymentPage = () => {
   const { username, profileData, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("upi");
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     upiId: "",
-    cryptoAddress: ""
+    transactionId: "",
+    screenshotFile: null as File | null
   });
+
+  const [usernameError, setUsernameError] = useState("");
 
   useEffect(() => {
     if (!username) {
       navigate("/");
+    } else {
+      // Validate username format
+      if (username.includes(" ")) {
+        setUsernameError("Username cannot contain spaces");
+      } else if (username.length < 3) {
+        setUsernameError("Username must be at least 3 characters long");
+      } else {
+        setUsernameError("");
+      }
     }
   }, [navigate, username]);
 
@@ -57,20 +73,33 @@ const PaymentPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({ 
+        ...prev, 
+        screenshotFile: e.target.files![0]
+      }));
+    }
+  };
+
+  const triggerFileUpload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation based on payment method
-    if (paymentMethod === "upi") {
-      if (!formData.upiId) {
-        toast.error("Please enter your UPI ID");
-        return;
-      }
-    } else if (paymentMethod === "crypto") {
-      if (!formData.cryptoAddress) {
-        toast.error("Please enter the crypto transaction ID");
-        return;
-      }
+    // Validation for required fields
+    if (!formData.transactionId) {
+      toast.error("Please enter your transaction ID");
+      return;
+    }
+
+    if (!formData.screenshotFile) {
+      toast.error("Please upload a screenshot of your payment");
+      return;
     }
     
     setLoading(true);
@@ -88,9 +117,14 @@ const PaymentPage = () => {
     toast.success("Security token copied to clipboard!");
   };
 
+  const handleCopyUpiId = () => {
+    navigator.clipboard.writeText(UPI_ID);
+    toast.success("UPI ID copied to clipboard!");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md md:max-w-lg">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
           <p className="text-muted-foreground text-sm">Complete payment to continue</p>
@@ -106,7 +140,7 @@ const PaymentPage = () => {
           {/* Enhanced Profile Section */}
           <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4">
             <div className="flex items-start gap-4">
-              <Avatar className="h-20 w-20 border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)]">
+              <Avatar className="h-16 w-16 md:h-20 md:w-20 border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)]">
                 <AvatarImage src={profileData?.profile_pic_url} alt={username} className="object-cover" />
                 <AvatarFallback className="bg-secondary text-primary text-lg">
                   {username?.substring(0, 2)?.toUpperCase()}
@@ -123,11 +157,15 @@ const PaymentPage = () => {
                   )}
                 </div>
                 
+                {usernameError && (
+                  <p className="text-xs text-red-500">{usernameError}</p>
+                )}
+                
                 {profileData?.full_name && (
                   <p className="text-sm text-muted-foreground">{profileData.full_name}</p>
                 )}
                 
-                <div className="flex gap-4 mt-2">
+                <div className="flex flex-wrap gap-4 mt-2">
                   <div className="flex items-center gap-1">
                     <Users className="h-4 w-4 text-primary/80" />
                     <span className="text-xs text-muted-foreground">Followers:</span>
@@ -197,117 +235,146 @@ const PaymentPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* UPI Payment Method */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <IndianRupee className="h-5 w-5 text-primary" />
+              <h3 className="font-medium">UPI Payment</h3>
+            </div>
             
-            {/* Payment Method Selection */}
-            <div className="mb-5">
-              <Label htmlFor="payment-method" className="text-sm mb-2 block">
-                Select Payment Method
-              </Label>
-              <RadioGroup 
-                value={paymentMethod}
-                onValueChange={setPaymentMethod}
-                className="grid grid-cols-2 gap-2"
-              >
-                <div className={`flex items-center justify-center p-3 rounded-md border ${
-                  paymentMethod === "upi" ? "border-primary bg-primary/10" : "border-secondary/50"
-                } transition-all cursor-pointer`}>
-                  <RadioGroupItem value="upi" id="upi" className="sr-only" />
-                  <Label htmlFor="upi" className="cursor-pointer flex flex-col items-center gap-1">
-                    <IndianRupee className="h-5 w-5 text-primary" />
-                    <span className="text-xs">UPI</span>
-                  </Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Left column - QR Code */}
+              <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center">
+                <p className="text-sm text-muted-foreground mb-2">Scan QR Code</p>
+                <div className="bg-white p-2 rounded-md mb-2">
+                  <img 
+                    src={QR_CODE_URL} 
+                    alt="UPI QR Code" 
+                    className="w-full max-w-[200px] h-auto rounded"
+                  />
                 </div>
-                
-                <div className={`flex items-center justify-center p-3 rounded-md border ${
-                  paymentMethod === "crypto" ? "border-primary bg-primary/10" : "border-secondary/50"
-                } transition-all cursor-pointer`}>
-                  <RadioGroupItem value="crypto" id="crypto" className="sr-only" />
-                  <Label htmlFor="crypto" className="cursor-pointer flex flex-col items-center gap-1">
-                    <Bitcoin className="h-5 w-5 text-primary" />
-                    <span className="text-xs">Crypto</span>
-                  </Label>
+                <p className="text-xs text-muted-foreground text-center">
+                  Scan with any UPI app
+                </p>
+              </Card>
+              
+              {/* Right column - UPI ID */}
+              <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col">
+                <p className="text-sm text-muted-foreground mb-2">Or pay using UPI ID</p>
+                <div className="flex items-center bg-secondary/30 p-2 rounded mb-3">
+                  <span className="font-mono text-primary flex-1 text-sm overflow-hidden text-ellipsis">
+                    {UPI_ID}
+                  </span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 px-2"
+                          onClick={handleCopyUpiId}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copy UPI ID</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </RadioGroup>
+                <div className="text-xs bg-primary/10 p-2 rounded border border-primary/20 mt-auto">
+                  <p className="font-medium text-primary mb-1">Payment Amount:</p>
+                  <p className="text-lg font-bold text-primary">₹1499.00</p>
+                </div>
+              </Card>
             </div>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            {paymentMethod === "upi" && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="upiId" className="text-sm">UPI ID</Label>
-                  <span className="text-xs text-primary">Required</span>
-                </div>
-                <Input
-                  id="upiId"
-                  name="upiId"
-                  placeholder="username@upi"
-                  value={formData.upiId}
-                  onChange={handleChange}
-                  className="bg-background/40 border-secondary focus:border-primary"
-                />
-                <div className="text-xs text-muted-foreground mt-2">
-                  <p>Supported UPI apps:</p>
-                  <div className="flex gap-2 mt-1">
-                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">Google Pay</div>
-                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">PhonePe</div>
-                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">Paytm</div>
-                  </div>
-                </div>
+            {/* Transaction ID Input */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="transactionId" className="text-sm">Transaction ID</Label>
+                <span className="text-xs text-primary">Required</span>
               </div>
-            )}
+              <Input
+                id="transactionId"
+                name="transactionId"
+                placeholder="Enter UPI transaction ID"
+                value={formData.transactionId}
+                onChange={handleChange}
+                className="bg-background/40 border-secondary focus:border-primary"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter the transaction ID from your UPI payment app
+              </p>
+            </div>
             
-            {paymentMethod === "crypto" && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="cryptoAddress" className="text-sm">Transaction ID</Label>
-                  <span className="text-xs text-primary">Required</span>
-                </div>
-                <Input
-                  id="cryptoAddress"
-                  name="cryptoAddress"
-                  placeholder="Enter transaction ID after payment"
-                  value={formData.cryptoAddress}
-                  onChange={handleChange}
-                  className="bg-background/40 border-secondary focus:border-primary"
-                />
-                <div className="bg-secondary/20 border border-secondary/30 rounded-md p-3 mt-2 text-sm">
-                  <p className="font-medium text-primary mb-1">Send payment to:</p>
-                  <p className="font-mono text-xs text-muted-foreground break-all">
-                    bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
-                  </p>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-xs text-muted-foreground">Amount: 0.0015 BTC</span>
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-7 text-xs"
-                      onClick={() => {
-                        navigator.clipboard.writeText("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh");
-                        toast.success("Crypto address copied!");
-                      }}
-                    >
-                      <Copy className="h-3.5 w-3.5 mr-1" />
-                      Copy
-                    </Button>
-                  </div>
-                </div>
+            {/* Screenshot Upload */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="screenshot" className="text-sm">Payment Screenshot</Label>
+                <span className="text-xs text-primary">Required</span>
               </div>
-            )}
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                id="screenshot"
+                name="screenshot"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              
+              <div 
+                className={`border-2 border-dashed rounded-md p-4 text-center cursor-pointer transition-all ${
+                  formData.screenshotFile 
+                    ? "border-primary/40 bg-primary/5" 
+                    : "border-secondary/40 hover:border-primary/30 hover:bg-secondary/10"
+                }`}
+                onClick={triggerFileUpload}
+              >
+                {formData.screenshotFile ? (
+                  <div className="flex flex-col items-center">
+                    <div className="bg-primary/10 rounded-full p-2 mb-2">
+                      <Check className="h-5 w-5 text-primary" />
+                    </div>
+                    <p className="text-sm font-medium text-primary truncate max-w-full">
+                      {formData.screenshotFile.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Click to change file
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className="bg-secondary/20 rounded-full p-2 mb-2">
+                      <Upload className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <p className="text-sm font-medium">Upload Screenshot</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Click to select a file or drag and drop
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
             
             <div className="flex items-center justify-between my-1">
               <span className="text-primary font-medium">Total:</span>
-              <span className="text-lg font-bold text-primary">$19.99</span>
+              <span className="text-lg font-bold text-primary">₹1499.00</span>
             </div>
             
             <Button 
               type="submit" 
               className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,170,0.3)]"
-              disabled={loading}
+              disabled={loading || !!usernameError}
             >
-              {paymentMethod === "upi" && <IndianRupee className="h-4 w-4" />}
-              {paymentMethod === "crypto" && <Bitcoin className="h-4 w-4" />}
+              <IndianRupee className="h-4 w-4" />
               {loading ? "Processing..." : "Complete Payment & Continue"}
             </Button>
           </form>
