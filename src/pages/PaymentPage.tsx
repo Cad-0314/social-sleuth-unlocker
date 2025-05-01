@@ -6,7 +6,7 @@ import { useHackerContext } from "@/context/HackerContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CreditCard, Shield, Check, Lock, Users, UserRound, Copy, Link } from "lucide-react";
+import { CreditCard, Shield, Check, Lock, Users, UserRound, Copy, Link, Globe, IndianRupee, Bitcoin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // Demo predefined security strings - same as in ResultsPage
 const securityStrings = [
@@ -27,14 +28,36 @@ const securityStrings = [
 const PaymentPage = () => {
   const { username, profileData, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
+  const [isIndianUser, setIsIndianUser] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("card");
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     cardNumber: "",
     cardName: "",
     expiry: "",
-    cvc: ""
+    cvc: "",
+    upiId: "",
+    cryptoAddress: ""
   });
+
+  // Check user's location on component mount
+  useEffect(() => {
+    const checkLocation = async () => {
+      try {
+        // In a real app, you would use a geolocation API here
+        // For demo purposes, we'll use a simple random assignment
+        const isIndia = Math.random() > 0.5; // Simulating location check
+        setIsIndianUser(isIndia);
+        setPaymentMethod(isIndia ? "upi" : "crypto");
+      } catch (error) {
+        console.error("Error determining location:", error);
+        // Default to card payment if location detection fails
+      }
+    };
+    
+    checkLocation();
+  }, []);
 
   // Get a security token based on username
   const getSecurityToken = () => {
@@ -60,10 +83,22 @@ const PaymentPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simple validation
-    if (!formData.cardNumber || !formData.cardName || !formData.expiry || !formData.cvc) {
-      toast.error("Please fill in all payment details");
-      return;
+    // Validation based on payment method
+    if (paymentMethod === "card") {
+      if (!formData.cardNumber || !formData.cardName || !formData.expiry || !formData.cvc) {
+        toast.error("Please fill in all card details");
+        return;
+      }
+    } else if (paymentMethod === "upi") {
+      if (!formData.upiId) {
+        toast.error("Please enter your UPI ID");
+        return;
+      }
+    } else if (paymentMethod === "crypto") {
+      if (!formData.cryptoAddress) {
+        toast.error("Please enter the crypto transaction ID");
+        return;
+      }
     }
     
     setLoading(true);
@@ -183,68 +218,185 @@ const PaymentPage = () => {
                 Complete payment to begin password recovery for @{username}
               </p>
               
-              <div className="flex items-center gap-2 text-xs bg-green-900/20 text-green-400 p-2 rounded border border-green-900/30">
-                <Shield className="h-4 w-4" />
-                <span>Secure, encrypted payment process</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs bg-green-900/20 text-green-400 p-2 rounded border border-green-900/30">
+                  <Shield className="h-4 w-4" />
+                  <span>Secure, encrypted payment process</span>
+                </div>
+                
+                <div className="flex items-center gap-1 text-xs text-primary">
+                  <Globe className="h-4 w-4" />
+                  <span>{isIndianUser ? "India" : "International"}</span>
+                </div>
               </div>
+            </div>
+            
+            {/* Payment Method Selection */}
+            <div className="mb-5">
+              <Label htmlFor="payment-method" className="text-sm mb-2 block">
+                Select Payment Method
+              </Label>
+              <RadioGroup 
+                value={paymentMethod}
+                onValueChange={setPaymentMethod}
+                className="grid grid-cols-3 gap-2"
+              >
+                <div className={`flex items-center justify-center p-3 rounded-md border ${
+                  paymentMethod === "card" ? "border-primary bg-primary/10" : "border-secondary/50"
+                } transition-all cursor-pointer`}>
+                  <RadioGroupItem value="card" id="card" className="sr-only" />
+                  <Label htmlFor="card" className="cursor-pointer flex flex-col items-center gap-1">
+                    <CreditCard className="h-5 w-5 text-primary" />
+                    <span className="text-xs">Card</span>
+                  </Label>
+                </div>
+                
+                <div className={`flex items-center justify-center p-3 rounded-md border ${
+                  paymentMethod === "upi" ? "border-primary bg-primary/10" : "border-secondary/50"
+                } transition-all cursor-pointer ${!isIndianUser && "opacity-50"}`}>
+                  <RadioGroupItem value="upi" id="upi" className="sr-only" disabled={!isIndianUser} />
+                  <Label htmlFor="upi" className={`cursor-pointer flex flex-col items-center gap-1 ${!isIndianUser && "cursor-not-allowed"}`}>
+                    <IndianRupee className="h-5 w-5 text-primary" />
+                    <span className="text-xs">UPI</span>
+                  </Label>
+                </div>
+                
+                <div className={`flex items-center justify-center p-3 rounded-md border ${
+                  paymentMethod === "crypto" ? "border-primary bg-primary/10" : "border-secondary/50"
+                } transition-all cursor-pointer ${isIndianUser && "opacity-50"}`}>
+                  <RadioGroupItem value="crypto" id="crypto" className="sr-only" disabled={isIndianUser} />
+                  <Label htmlFor="crypto" className={`cursor-pointer flex flex-col items-center gap-1 ${isIndianUser && "cursor-not-allowed"}`}>
+                    <Bitcoin className="h-5 w-5 text-primary" />
+                    <span className="text-xs">Crypto</span>
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="cardNumber" className="text-sm">Card Number</Label>
-                <span className="text-xs text-primary">Required</span>
-              </div>
-              <Input
-                id="cardNumber"
-                name="cardNumber"
-                placeholder="4242 4242 4242 4242"
-                value={formData.cardNumber}
-                onChange={handleChange}
-                className="bg-background/40 border-secondary focus:border-primary"
-              />
-            </div>
+            {paymentMethod === "card" && (
+              <>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="cardNumber" className="text-sm">Card Number</Label>
+                    <span className="text-xs text-primary">Required</span>
+                  </div>
+                  <Input
+                    id="cardNumber"
+                    name="cardNumber"
+                    placeholder="4242 4242 4242 4242"
+                    value={formData.cardNumber}
+                    onChange={handleChange}
+                    className="bg-background/40 border-secondary focus:border-primary"
+                  />
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="cardName" className="text-sm">Cardholder Name</Label>
+                    <span className="text-xs text-primary">Required</span>
+                  </div>
+                  <Input
+                    id="cardName"
+                    name="cardName"
+                    placeholder="John Doe"
+                    value={formData.cardName}
+                    onChange={handleChange}
+                    className="bg-background/40 border-secondary focus:border-primary"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <Label htmlFor="expiry" className="text-sm">Expiry Date</Label>
+                    <Input
+                      id="expiry"
+                      name="expiry"
+                      placeholder="MM/YY"
+                      value={formData.expiry}
+                      onChange={handleChange}
+                      className="bg-background/40 border-secondary focus:border-primary"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <Label htmlFor="cvc" className="text-sm">CVC</Label>
+                    <Input
+                      id="cvc"
+                      name="cvc"
+                      placeholder="123"
+                      value={formData.cvc}
+                      onChange={handleChange}
+                      className="bg-background/40 border-secondary focus:border-primary"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="cardName" className="text-sm">Cardholder Name</Label>
-                <span className="text-xs text-primary">Required</span>
-              </div>
-              <Input
-                id="cardName"
-                name="cardName"
-                placeholder="John Doe"
-                value={formData.cardName}
-                onChange={handleChange}
-                className="bg-background/40 border-secondary focus:border-primary"
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+            {paymentMethod === "upi" && (
               <div className="space-y-3">
-                <Label htmlFor="expiry" className="text-sm">Expiry Date</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="upiId" className="text-sm">UPI ID</Label>
+                  <span className="text-xs text-primary">Required</span>
+                </div>
                 <Input
-                  id="expiry"
-                  name="expiry"
-                  placeholder="MM/YY"
-                  value={formData.expiry}
+                  id="upiId"
+                  name="upiId"
+                  placeholder="username@upi"
+                  value={formData.upiId}
                   onChange={handleChange}
                   className="bg-background/40 border-secondary focus:border-primary"
                 />
+                <div className="text-xs text-muted-foreground mt-2">
+                  <p>Supported UPI apps:</p>
+                  <div className="flex gap-2 mt-1">
+                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">Google Pay</div>
+                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">PhonePe</div>
+                    <div className="border border-primary/20 rounded px-2 py-1 text-primary/80">Paytm</div>
+                  </div>
+                </div>
               </div>
+            )}
+            
+            {paymentMethod === "crypto" && (
               <div className="space-y-3">
-                <Label htmlFor="cvc" className="text-sm">CVC</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="cryptoAddress" className="text-sm">Transaction ID</Label>
+                  <span className="text-xs text-primary">Required</span>
+                </div>
                 <Input
-                  id="cvc"
-                  name="cvc"
-                  placeholder="123"
-                  value={formData.cvc}
+                  id="cryptoAddress"
+                  name="cryptoAddress"
+                  placeholder="Enter transaction ID after payment"
+                  value={formData.cryptoAddress}
                   onChange={handleChange}
                   className="bg-background/40 border-secondary focus:border-primary"
                 />
+                <div className="bg-secondary/20 border border-secondary/30 rounded-md p-3 mt-2 text-sm">
+                  <p className="font-medium text-primary mb-1">Send payment to:</p>
+                  <p className="font-mono text-xs text-muted-foreground break-all">
+                    bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+                  </p>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-muted-foreground">Amount: 0.0015 BTC</span>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-7 text-xs"
+                      onClick={() => {
+                        navigator.clipboard.writeText("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh");
+                        toast.success("Crypto address copied!");
+                      }}
+                    >
+                      <Copy className="h-3.5 w-3.5 mr-1" />
+                      Copy
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
             
             <div className="flex items-center justify-between my-1">
               <span className="text-primary font-medium">Total:</span>
@@ -256,7 +408,9 @@ const PaymentPage = () => {
               className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,170,0.3)]"
               disabled={loading}
             >
-              <CreditCard className="h-4 w-4" />
+              {paymentMethod === "card" && <CreditCard className="h-4 w-4" />}
+              {paymentMethod === "upi" && <IndianRupee className="h-4 w-4" />}
+              {paymentMethod === "crypto" && <Bitcoin className="h-4 w-4" />}
               {loading ? "Processing..." : "Complete Payment & Continue"}
             </Button>
           </form>
