@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
-import { Shield } from "lucide-react";
+import { Shield, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -52,11 +52,15 @@ const PaymentPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
+          <div className="inline-flex items-center gap-2 mb-2">
+            <Zap className="h-5 w-5 text-primary animate-pulse" />
+            <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
+            <Zap className="h-5 w-5 text-primary animate-pulse" />
+          </div>
           <p className="text-muted-foreground text-sm">Complete payment to continue</p>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)]">
+        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,255,170,0.3)]">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>

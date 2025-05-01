@@ -1,6 +1,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, Users, UserRound } from "lucide-react";
+import { Check, Users, UserRound, Star } from "lucide-react";
 
 interface ProfileSectionProps {
   username: string;
@@ -9,7 +9,7 @@ interface ProfileSectionProps {
 
 const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
   return (
-    <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4">
+    <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4 glass-card neon-border">
       <div className="flex items-start gap-4">
         <Avatar className="h-16 w-16 md:h-20 md:w-20 border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)]">
           <AvatarImage src={profileData?.profile_pic_url} alt={username} className="object-cover" />
@@ -22,7 +22,7 @@ const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-foreground">@{username}</h3>
             {profileData?.is_verified && (
-              <span className="bg-primary/20 p-0.5 rounded">
+              <span className="bg-primary/20 p-0.5 rounded neon-border">
                 <Check className="h-3.5 w-3.5 text-primary" />
               </span>
             )}
@@ -33,13 +33,13 @@ const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
           )}
           
           <div className="flex flex-wrap gap-4 mt-2">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-secondary/30 px-2 py-1 rounded-full">
               <Users className="h-4 w-4 text-primary/80" />
               <span className="text-xs text-muted-foreground">Followers:</span>
               <span className="text-xs font-medium text-primary">{profileData?.followers?.toLocaleString()}</span>
             </div>
             
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-secondary/30 px-2 py-1 rounded-full">
               <UserRound className="h-4 w-4 text-primary/80" />
               <span className="text-xs text-muted-foreground">Following:</span>
               <span className="text-xs font-medium text-primary">{profileData?.following?.toLocaleString()}</span>
@@ -47,8 +47,14 @@ const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
           </div>
           
           {profileData?.bio && (
-            <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-              {profileData.bio}
+            <div className="mt-2 p-2 bg-secondary/10 rounded border border-secondary/20">
+              <div className="flex items-center gap-1 mb-1">
+                <Star className="h-3 w-3 text-primary/80" />
+                <span className="text-xs text-primary">Bio</span>
+              </div>
+              <div className="text-xs text-muted-foreground line-clamp-2">
+                {profileData.bio}
+              </div>
             </div>
           )}
         </div>

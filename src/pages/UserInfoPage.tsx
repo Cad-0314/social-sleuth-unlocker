@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
 import { Button } from "@/components/ui/button";
-import { Shield } from "lucide-react";
+import { Shield, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import ProfileSection from "@/components/payment/ProfileSection";
@@ -47,7 +47,11 @@ const UserInfoPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-primary">Account Verification</h1>
+          <div className="inline-flex items-center gap-2 mb-2">
+            <Zap className="h-5 w-5 text-primary animate-pulse" />
+            <h1 className="text-2xl font-bold text-primary">Account Verification</h1>
+            <Zap className="h-5 w-5 text-primary animate-pulse" />
+          </div>
           <p className="text-muted-foreground text-sm">Verify account details before proceeding to payment</p>
         </div>
         
@@ -60,7 +64,10 @@ const UserInfoPage = () => {
           
           {/* User Information Section */}
           <div className="p-4">
-            <h2 className="text-lg font-bold mb-4 text-primary">Target Account</h2>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-3 w-3 rounded-full bg-primary animate-pulse"></div>
+              <h2 className="text-lg font-bold text-primary">Target Account</h2>
+            </div>
             
             {/* Profile Section - User Information */}
             <div className="mb-6">
@@ -74,7 +81,7 @@ const UserInfoPage = () => {
             
             <Button 
               onClick={handleContinueToPayment}
-              className="w-full mt-6 bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(0,255,170,0.3)]"
+              className="w-full mt-6 bg-primary hover:bg-primary/80 text-primary-foreground cyber-button shadow-[0_0_15px_rgba(0,255,170,0.3)]"
             >
               Continue to Payment
             </Button>

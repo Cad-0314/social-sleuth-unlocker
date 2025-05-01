@@ -1,5 +1,5 @@
 
-import { Copy, IndianRupee } from "lucide-react";
+import { Copy, IndianRupee, QrCode } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,9 +30,12 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left column - QR Code */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center">
-          <p className="text-sm text-muted-foreground mb-2">Scan QR Code</p>
-          <div className="bg-white p-2 rounded-md mb-2">
+        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center glass-card">
+          <div className="flex items-center gap-2 mb-2">
+            <QrCode className="h-4 w-4 text-primary" />
+            <p className="text-sm">Scan QR Code</p>
+          </div>
+          <div className="bg-white p-2 rounded-md mb-2 neon-border">
             <img 
               src={qrCodeUrl} 
               alt="UPI QR Code" 
@@ -45,9 +48,9 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
         </Card>
         
         {/* Right column - UPI ID */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col">
+        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col glass-card">
           <p className="text-sm text-muted-foreground mb-2">Or pay using UPI ID</p>
-          <div className="flex items-center bg-secondary/30 p-2 rounded mb-3">
+          <div className="flex items-center bg-secondary/30 p-2 rounded mb-3 neon-border">
             <span className="font-mono text-primary flex-1 text-sm overflow-hidden text-ellipsis">
               {upiId}
             </span>
@@ -69,7 +72,7 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="text-xs bg-primary/10 p-2 rounded border border-primary/20 mt-auto">
+          <div className="text-xs bg-primary/10 p-2 rounded border border-primary/20 mt-auto neon-border">
             <p className="font-medium text-primary mb-1">Payment Amount:</p>
             <p className="text-lg font-bold text-primary">₹1499.00</p>
           </div>

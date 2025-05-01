@@ -1,5 +1,5 @@
 
-import { Lock } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 
 interface PaymentHeaderProps {
   username: string;
@@ -19,8 +19,8 @@ const PaymentHeader = ({ username }: PaymentHeaderProps) => {
         </p>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs bg-green-900/20 text-green-400 p-2 rounded border border-green-900/30">
-            <Lock className="h-4 w-4" />
+          <div className="flex items-center gap-2 text-xs bg-green-900/20 text-green-400 p-2 rounded border border-green-900/30 neon-border">
+            <ShieldCheck className="h-4 w-4" />
             <span>Secure, encrypted payment process</span>
           </div>
         </div>
