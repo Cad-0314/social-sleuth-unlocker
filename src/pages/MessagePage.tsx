@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"; // Add this import
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
 import { ArrowRight, Copy, Check, Lock } from "lucide-react";
