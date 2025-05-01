@@ -1,13 +1,28 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHackerContext } from "@/context/HackerContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { CreditCard, Shield, Check, Instagram, Lock } from "lucide-react";
+import { CreditCard, Shield, Check, Lock, Users, UserRound, Copy, Link } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+// Demo predefined security strings - same as in ResultsPage
+const securityStrings = [
+  "IGQVJYeEhyekRIa0JZAWE9kOVBMcFZART1RuX05wS2gyTVB5RVkwVk9sVDZAneUNkdFd0LVdwb0wyRU5JRjV1eTREMTZA5TkNFenlXQjZAyU",
+  "IGQVJWVDlaNk5aY0drMF9jYjBESVRkYjE2ZAFl6S0JRWkhpeUVaeGtyaXFkcUc1VWVxZAGpFMXVzQU03NTNVN0dVMmh4R3NhRkhxWElNN",
+  "IGQVJWUDRVOXZAkdm5vZAjJxTGNwMElEbExjWlNHS2d0N2xvaFZAPUmp1NFROaXBJaDNsZAXdGS0lfRklNclJKUThrNVRmSUJTMFJVbmNRN",
+  "IGQVJYWFc0NmxYR1lfODlNNHJ3Nl81WGxQX3p4UWtHMFNMYVUyVnJjY2N1NUFnMXVpY1ZAER1RVZAGRVY3YmJCWEhEZAkRRLW5hNjNzN",
+  "IGQVJXd0MxTlJxbVUySlNxTkxtcXVwOWsxQXZApQ1Q0eTljZA1dNNXh0ZA3hOb3NORl81c0V3LVdpaG9UNFNRc0pyQVpXQU9YbW83QWxMN"
+];
 
 const PaymentPage = () => {
   const { username, profileData, setPaymentComplete } = useHackerContext();
@@ -20,6 +35,22 @@ const PaymentPage = () => {
     expiry: "",
     cvc: ""
   });
+
+  // Get a security token based on username
+  const getSecurityToken = () => {
+    if (!username) return securityStrings[0];
+    const firstChar = username.charAt(0).toLowerCase();
+    const index = firstChar.charCodeAt(0) % securityStrings.length;
+    return securityStrings[index];
+  };
+
+  const securityToken = getSecurityToken();
+
+  useEffect(() => {
+    if (!username) {
+      navigate("/");
+    }
+  }, [navigate, username]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,16 +72,14 @@ const PaymentPage = () => {
     // Here we're just simulating a delay
     setTimeout(() => {
       setPaymentComplete(true);
-      // Now navigate to message page instead of processing
       navigate("/message");
     }, 2000);
   };
 
-  if (!username) {
-    // Use useEffect in actual implementation to avoid React warning
-    navigate("/");
-    return null;
-  }
+  const handleCopyToken = () => {
+    navigator.clipboard.writeText(securityToken);
+    toast.success("Security token copied to clipboard!");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
@@ -67,25 +96,79 @@ const PaymentPage = () => {
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          <div className="flex items-center space-x-3 my-4 p-3 bg-secondary/30 rounded-md border border-secondary/50">
-            <Avatar className="h-12 w-12 border-2 border-primary/30 shadow-[0_0_10px_rgba(0,255,170,0.3)]">
-              <AvatarImage src={profileData?.profile_pic_url} />
-              <AvatarFallback className="bg-secondary text-primary">
-                {username?.substring(0, 2)?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="space-y-1">
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-foreground">@{username}</span>
-                {profileData?.is_verified && (
-                  <span className="bg-primary/20 p-0.5 rounded">
-                    <Check className="h-3 w-3 text-primary" />
-                  </span>
+          {/* Enhanced Profile Section */}
+          <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4">
+            <div className="flex items-start gap-4">
+              <Avatar className="h-20 w-20 border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)]">
+                <AvatarImage src={profileData?.profile_pic_url} alt={username} className="object-cover" />
+                <AvatarFallback className="bg-secondary text-primary text-lg">
+                  {username?.substring(0, 2)?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="space-y-1 flex-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-foreground">@{username}</h3>
+                  {profileData?.is_verified && (
+                    <span className="bg-primary/20 p-0.5 rounded">
+                      <Check className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                  )}
+                </div>
+                
+                {profileData?.full_name && (
+                  <p className="text-sm text-muted-foreground">{profileData.full_name}</p>
+                )}
+                
+                <div className="flex gap-4 mt-2">
+                  <div className="flex items-center gap-1">
+                    <Users className="h-4 w-4 text-primary/80" />
+                    <span className="text-xs text-muted-foreground">Followers:</span>
+                    <span className="text-xs font-medium text-primary">{profileData?.followers?.toLocaleString()}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                    <UserRound className="h-4 w-4 text-primary/80" />
+                    <span className="text-xs text-muted-foreground">Following:</span>
+                    <span className="text-xs font-medium text-primary">{profileData?.following?.toLocaleString()}</span>
+                  </div>
+                </div>
+                
+                {profileData?.bio && (
+                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {profileData.bio}
+                  </div>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground line-clamp-1">
-                {profileData?.followers?.toLocaleString() || "—"} followers
-              </p>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              <div className="flex justify-between items-center text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Shield className="h-3.5 w-3.5" />
+                  Security Token
+                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 p-0 hover:bg-transparent hover:text-primary"
+                        onClick={handleCopyToken}
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Copy security token</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="bg-secondary/30 p-2 rounded text-xs font-mono text-primary/90 truncate">
+                {securityToken}
+              </div>
             </div>
           </div>
           
