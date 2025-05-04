@@ -1,5 +1,5 @@
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Check, Users, UserRound, Star, RefreshCw, Shield, Verified } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,6 +56,14 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
       <div className="flex items-center gap-5">
         <div className="relative group">
           <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-primary/50 shadow-[0_0_15px_rgba(0,255,170,0.35)] ring-2 ring-primary/20 ring-offset-2 ring-offset-background/50 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,255,170,0.5)]">
+            {!imageError && profileData?.profile_pic_url && (
+              <img 
+                src={profileData.profile_pic_url}
+                alt={`${username}'s profile`}
+                className="h-full w-full object-cover rounded-full"
+                onError={() => setImageError(true)}
+              />
+            )}
             <AvatarFallback className="bg-gradient-to-br from-secondary/70 to-secondary/90 text-primary text-xl font-bold">
               {getInitials()}
             </AvatarFallback>
