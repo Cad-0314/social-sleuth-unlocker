@@ -3,9 +3,10 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
 import { Button } from "@/components/ui/button";
-import { Shield, Zap, AlertTriangle } from "lucide-react";
+import { Shield, Zap, AlertTriangle, RefreshCw } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner";
 
 import ProfileSection from "@/components/payment/ProfileSection";
 import SecurityToken from "@/components/payment/SecurityToken";
@@ -20,7 +21,7 @@ const securityStrings = [
 ];
 
 const UserInfoPage = () => {
-  const { username, profileData, error, isLoading } = useHackerContext();
+  const { username, profileData, error, isLoading, setError } = useHackerContext();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -105,7 +106,14 @@ const UserInfoPage = () => {
             </div>
             
             <div className="p-6">
-              <div className="loading-spinner mb-4"></div>
+              <div className="relative w-24 h-24 mx-auto mb-6">
+                <div className="absolute inset-0 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                <div className="absolute inset-3 border-3 border-primary/20 border-b-primary rounded-full animate-spin animation-delay-150"></div>
+                <div className="absolute inset-6 flex items-center justify-center">
+                  <RefreshCw className="h-8 w-8 text-primary animate-pulse" />
+                </div>
+              </div>
+              
               <h3 className="text-primary font-mono text-lg mb-2">Connecting to Target</h3>
               <div className="flex flex-col space-y-2 mt-4 terminal-text">
                 <p className="text-sm text-primary/80">
@@ -114,9 +122,23 @@ const UserInfoPage = () => {
                 <p className="text-sm text-primary/80">
                   <span className="text-primary/60">[system]$</span> Retrieving account data...
                 </p>
+                <p className="text-sm text-primary/80">
+                  <span className="text-primary/60">[system]$</span> Decrypting profile information...
+                </p>
                 <p className="text-sm text-primary/80 animate-pulse">
                   <span className="text-primary/60">[system]$</span> _
                 </p>
+              </div>
+              
+              {/* Fake progress tracker */}
+              <div className="mt-8">
+                <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full animate-pulse" style={{ 
+                    width: '60%', 
+                    boxShadow: '0 0 10px rgba(0,255,170,0.7)' 
+                  }}></div>
+                </div>
+                <p className="text-xs text-primary/70 mt-2">Securing connection...</p>
               </div>
             </div>
           </div>

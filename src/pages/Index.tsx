@@ -40,16 +40,22 @@ const Index = () => {
       // Set username immediately for UI preview
       setUsername(inputUsername);
       
+      // Fetch account details
       const accountData = await fetchAccountDetails(inputUsername);
       
       if (accountData) {
+        console.log("Account data received:", accountData);
+        
         // Store in context
         setUsername(accountData.username);
         setProfileData(accountData);
         
-        // Also set profile pic in context separately to ensure it's available
+        // Make sure to set the profile picture separately in context
         if (accountData.profile_pic_url) {
+          console.log("Setting profile pic URL:", accountData.profile_pic_url);
           setProfilePic(accountData.profile_pic_url);
+        } else {
+          console.warn("No profile pic URL found in account data");
         }
         
         toast.success("Target found! Redirecting to user verification...");
