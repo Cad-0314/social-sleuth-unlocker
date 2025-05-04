@@ -28,13 +28,48 @@ const sanitizeForLogging = (data: any) => {
   return sanitized;
 };
 
-// Replace Instagram profile URLs with public CDN that supports CORS
+/**
+ * Handle profile picture URLs with CORS issues
+ * 
+ * In a production environment, this should be replaced with:
+ * 1. Server-side proxy that fetches the image and serves it from your domain
+ * 2. A base64 encoding service that converts external images to data URLs
+ * 3. A CDN that can proxy images with proper CORS headers
+ */
 const handleProfilePicUrl = (url: string): string => {
   if (!url) return '';
   
-  // For demo purposes, replace with a publicly accessible image
-  // In production, you would proxy this through your own server
-  return 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1';
+  try {
+    // For a real implementation, you would use one of these approaches:
+    
+    // Approach 1: Server proxy (pseudo-code for illustration)
+    // return `https://your-backend.com/image-proxy?url=${encodeURIComponent(url)}`;
+    
+    // Approach 2: For demo purposes only, we're using a placeholder image
+    // In production, DO NOT use placeholder images for real user data
+    // Instead implement a proper server-side proxy
+    
+    // Different placeholder images based on hash of URL for consistent user images
+    const hashCode = Array.from(url).reduce(
+      (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
+    );
+    
+    // Use different placeholder images to simulate different user profiles
+    const placeholders = [
+      'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
+      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9'
+    ];
+    
+    return placeholders[Math.abs(hashCode % placeholders.length)];
+    
+  } catch (error) {
+    console.error("Error handling profile image URL:", error);
+    // Fallback image in case of errors
+    return 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1';
+  }
 };
 
 export async function fetchAccountDetails(username: string): Promise<ProfileData | null> {
