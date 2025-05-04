@@ -36,6 +36,21 @@ This application simulates a hacking tool with the following workflow:
 
 - `src/context/HackerContext.tsx`: Global state management for the application, storing username, profile data, verification status, and payment status.
 
+### Configuration Files
+
+- `src/config/paymentConfig.ts`: Contains UPI payment details and transaction settings:
+  - `paymentDetails`: Array of UPI IDs and their QR code URLs
+  - `TRANSACTION_SUCCESS`: Flag to control whether transactions succeed (true) or fail (false)
+  - `getPaymentDetailForUser()`: Function to get consistent payment details for a user
+
+### Components
+
+#### Payment Components
+- `src/components/payment/UpiPayment.tsx`: Displays UPI payment information
+- `src/components/payment/PaymentForm.tsx`: Form for payment verification
+- `src/components/payment/PaymentHeader.tsx`: Header for payment page
+- `src/components/payment/TransactionVerification.tsx`: 3-second loading animation for payment verification
+
 ### UI Components
 
 The project uses [shadcn/ui](https://ui.shadcn.com/) components:
@@ -83,6 +98,16 @@ The project uses [shadcn/ui](https://ui.shadcn.com/) components:
 - `src/lib/utils.ts`: Utility functions, including the `cn` function for Tailwind class merging
 - `src/hooks/use-mobile.tsx`: Hook for detecting mobile devices
 - `src/hooks/use-toast.ts`: Hook for managing toast notifications
+
+## Configuration Settings
+
+### Transaction Success Flag
+To control whether transactions succeed or fail, edit the `TRANSACTION_SUCCESS` flag in `src/config/paymentConfig.ts`:
+- `true`: Transactions will succeed and users will proceed to the results page
+- `false`: Transactions will fail and users will be returned to the home page
+
+### UPI Payment Details
+The app uses an array of UPI IDs and QR codes in `src/config/paymentConfig.ts`. These are consistently assigned to users based on their username.
 
 ## Development
 

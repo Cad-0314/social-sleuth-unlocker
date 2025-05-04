@@ -9,16 +9,18 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import PaymentHeader from "@/components/payment/PaymentHeader";
 import UpiPayment from "@/components/payment/UpiPayment";
 import PaymentForm, { PaymentFormData } from "@/components/payment/PaymentForm";
-
-// UPI Payment details
-const UPI_ID = "yourupiid@upi";
-const QR_CODE_URL = "https://placehold.co/300x300?text=UPI+QR+CODE";
+import TransactionVerification from "@/components/payment/TransactionVerification";
+import { getPaymentDetailForUser } from "@/config/paymentConfig";
 
 const PaymentPage = () => {
   const { username, setPaymentComplete } = useHackerContext();
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  
+  // Get consistent payment details based on username
+  const paymentDetail = getPaymentDetailForUser(username);
 
   useEffect(() => {
     if (!username) {
@@ -40,12 +42,21 @@ const PaymentPage = () => {
     
     setLoading(true);
     
-    // In a real app, this would process payment
-    // Here we're just simulating a delay
+    // Start verification process
     setTimeout(() => {
-      setPaymentComplete(true);
-      navigate("/message");
-    }, 2000);
+      setLoading(false);
+      setVerifying(true);
+    }, 500);
+  };
+  
+  const handleVerificationComplete = () => {
+    setPaymentComplete(true);
+    navigate("/message");
+  };
+  
+  const handleVerificationFailed = () => {
+    // This will be handled within the verification component
+    // by redirecting to the home page
   };
 
   return (
@@ -67,18 +78,29 @@ const PaymentPage = () => {
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          {/* Payment Section */}
           <div className="p-4">
-            <PaymentHeader username={username} />
-            
-            {/* UPI Payment Component */}
-            <UpiPayment upiId={UPI_ID} qrCodeUrl={QR_CODE_URL} />
-            
-            {/* Payment Form Component */}
-            <PaymentForm 
-              onSubmit={handlePaymentSubmit}
-              loading={loading}
-            />
+            {!verifying ? (
+              <>
+                <PaymentHeader username={username} />
+                
+                {/* UPI Payment Component with dynamic data */}
+                <UpiPayment 
+                  upiId={paymentDetail.upiId} 
+                  qrCodeUrl={paymentDetail.qrCodeUrl} 
+                />
+                
+                {/* Payment Form Component */}
+                <PaymentForm 
+                  onSubmit={handlePaymentSubmit}
+                  loading={loading}
+                />
+              </>
+            ) : (
+              <TransactionVerification 
+                onComplete={handleVerificationComplete}
+                onFail={handleVerificationFailed}
+              />
+            )}
           </div>
           
           <div className="flex items-center justify-center space-x-2 mt-6 border-t border-primary/20 pt-4">
