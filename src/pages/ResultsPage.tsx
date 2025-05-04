@@ -1,11 +1,13 @@
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHackerContext } from "@/context/HackerContext";
-import { toast } from "sonner";
-import { Check, Copy, UserRound, Shield, Users } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import ProfileDisplay from "@/components/results/ProfileDisplay";
+import CredentialsSection from "@/components/results/CredentialsSection";
+import SecurityNotice from "@/components/results/SecurityNotice";
 
 // Demo predefined passwords
 const demoPasswords = [
@@ -31,9 +33,8 @@ const securityStrings = [
 ];
 
 const ResultsPage = () => {
-  const { username, profileData, profilePic } = useHackerContext();
+  const { username, profileData } = useHackerContext();
   const navigate = useNavigate();
-  const [imageError, setImageError] = useState(false);
   
   // Get a consistent password based on username
   const getUserPassword = () => {
@@ -60,27 +61,11 @@ const ResultsPage = () => {
     if (!username) {
       navigate("/");
     }
-    
-    // Reset image error state when profile data changes
-    setImageError(false);
-  }, [navigate, username, profileData]);
-
-  const handleCopyPassword = () => {
-    navigator.clipboard.writeText(password);
-    toast.success("Password copied to clipboard!");
-  };
-
-  const handleCopyToken = () => {
-    navigator.clipboard.writeText(securityToken);
-    toast.success("Security token copied to clipboard!");
-  };
+  }, [navigate, username]);
 
   const handleStartOver = () => {
     navigate("/");
   };
-
-  // Check if profile pic is available
-  const hasProfilePic = profileData && profileData.profile_pic_url;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
@@ -100,116 +85,19 @@ const ResultsPage = () => {
           </p>
         </div>
 
-        <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              {hasProfilePic && !imageError ? (
-                <img 
-                  src={profileData.profile_pic_url}
-                  alt={username}
-                  onError={() => {
-                    console.log("Results page image load error for:", profileData.profile_pic_url);
-                    setImageError(true);
-                  }}
-                  className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] object-cover"
-                />
-              ) : (
-                <div className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] bg-secondary flex items-center justify-center text-primary text-2xl font-semibold">
-                  {username?.substring(0, 2)?.toUpperCase()}
-                </div>
-              )}
-              <div>
-                <CardTitle className="text-primary flex items-center gap-2">
-                  @{username} 
-                  {profileData?.is_verified && (
-                    <span className="bg-primary/20 p-1 rounded-full">
-                      <Check className="h-4 w-4 text-primary" />
-                    </span>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  {profileData?.full_name || "Instagram User"}
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
+        <ProfileDisplay username={username} profileData={profileData} />
 
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between gap-4 p-2 bg-secondary/20 rounded-md">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-primary" />
-                <span className="text-sm text-muted-foreground">Followers</span>
-              </div>
-              <span className="font-semibold text-primary">{profileData?.followers?.toLocaleString()}</span>
-            </div>
-            
-            <div className="flex items-center justify-between gap-4 p-2 bg-secondary/20 rounded-md">
-              <div className="flex items-center gap-2">
-                <UserRound className="h-4 w-4 text-primary" />
-                <span className="text-sm text-muted-foreground">Following</span>
-              </div>
-              <span className="font-semibold text-primary">{profileData?.following?.toLocaleString()}</span>
-            </div>
-            
-            {profileData?.bio && (
-              <div className="p-3 bg-secondary/20 rounded-md">
-                <p className="text-xs text-muted-foreground mb-1">Bio</p>
-                <p className="text-sm text-foreground">{profileData?.bio}</p>
-              </div>
-            )}
-            
-            <div className="space-y-2">
-              <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Shield className="h-4 w-4" />
-                Account credentials
-              </p>
-              
-              <div className="space-y-2 p-3 bg-secondary/20 rounded-md">
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Username</p>
-                  <div className="bg-secondary/30 p-2 rounded font-mono text-primary text-sm">
-                    {username}
-                  </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Password</p>
-                  <div 
-                    onClick={handleCopyPassword} 
-                    className="bg-secondary/30 p-2 rounded font-mono text-primary text-sm cursor-pointer hover:bg-secondary/50 transition-colors flex justify-between items-center"
-                  >
-                    <span>{password}</span>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Security Token</p>
-                  <div 
-                    onClick={handleCopyToken} 
-                    className="bg-secondary/30 p-2 rounded font-mono text-primary/90 text-xs cursor-pointer hover:bg-secondary/50 transition-colors flex justify-between items-center"
-                  >
-                    <span className="truncate">{securityToken}</span>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 flex-shrink-0">
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="mt-4">
+          <CardContent className="p-0">
+            <CredentialsSection 
+              username={username} 
+              password={password} 
+              securityToken={securityToken} 
+            />
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4">
-            <div className="bg-secondary/10 border border-secondary/30 p-3 rounded w-full">
-              <p className="text-xs text-muted-foreground">
-                <span className="text-primary font-bold">IMPORTANT:</span> This 
-                password was generated for demonstration purposes only. No actual 
-                Instagram accounts were accessed. Using this tool to attempt to access 
-                someone's account without permission is illegal.
-              </p>
-            </div>
+          <CardFooter className="flex flex-col gap-4 pt-4">
+            <SecurityNotice />
             
             <Button 
               onClick={handleStartOver}
@@ -218,7 +106,7 @@ const ResultsPage = () => {
               Hack Another Account
             </Button>
           </CardFooter>
-        </Card>
+        </div>
         
         <div className="text-center text-xs text-muted-foreground mt-4">
           <p>For educational purposes only. This is a simulation.</p>
