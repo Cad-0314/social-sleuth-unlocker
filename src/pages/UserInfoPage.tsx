@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
 import { Button } from "@/components/ui/button";
-import { Shield, Zap } from "lucide-react";
+import { Shield, Zap, AlertTriangle } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import ProfileSection from "@/components/payment/ProfileSection";
 import SecurityToken from "@/components/payment/SecurityToken";
@@ -19,15 +20,15 @@ const securityStrings = [
 ];
 
 const UserInfoPage = () => {
-  const { username, profileData } = useHackerContext();
+  const { username, profileData, error, isLoading } = useHackerContext();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!username) {
+    if (!username && !isLoading) {
       navigate("/");
     }
-  }, [navigate, username]);
+  }, [navigate, username, isLoading]);
 
   // Get a security token based on username
   const getSecurityToken = () => {
@@ -42,6 +43,87 @@ const UserInfoPage = () => {
   const handleContinueToPayment = () => {
     navigate("/payment");
   };
+
+  const handleRetry = () => {
+    navigate("/");
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
+        <div className="w-full max-w-md md:max-w-lg">
+          <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-destructive/30 shadow-[0_0_25px_rgba(255,50,50,0.3)]">
+            <div className="terminal-header">
+              <div className="terminal-button terminal-button-red"></div>
+              <div className="terminal-button terminal-button-yellow"></div>
+              <div className="terminal-button terminal-button-green"></div>
+            </div>
+            
+            <div className="p-6">
+              <Alert variant="destructive" className="mb-4 bg-destructive/20 border-destructive/30">
+                <AlertTriangle className="h-5 w-5" />
+                <AlertTitle className="text-destructive">Account Error</AlertTitle>
+                <AlertDescription className="text-destructive/90">
+                  {error}
+                </AlertDescription>
+              </Alert>
+              
+              <div className="flex flex-col space-y-2 mt-4 terminal-text">
+                <p className="text-sm text-destructive/80">
+                  <span className="text-destructive/60">[system]$</span> Error code: ACCT_NOT_FOUND
+                </p>
+                <p className="text-sm text-destructive/80">
+                  <span className="text-destructive/60">[system]$</span> Unable to establish connection with target account
+                </p>
+                <p className="text-sm text-destructive/80 animate-pulse">
+                  <span className="text-destructive/60">[system]$</span> _
+                </p>
+              </div>
+              
+              <Button 
+                onClick={handleRetry}
+                className="w-full mt-6 bg-destructive hover:bg-destructive/80 text-destructive-foreground shadow-[0_0_15px_rgba(255,70,70,0.3)]"
+              >
+                Retry with Different Username
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
+        <div className="w-full max-w-md md:max-w-lg text-center">
+          <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)]">
+            <div className="terminal-header">
+              <div className="terminal-button terminal-button-red"></div>
+              <div className="terminal-button terminal-button-yellow"></div>
+              <div className="terminal-button terminal-button-green"></div>
+            </div>
+            
+            <div className="p-6">
+              <div className="loading-spinner mb-4"></div>
+              <h3 className="text-primary font-mono text-lg mb-2">Connecting to Target</h3>
+              <div className="flex flex-col space-y-2 mt-4 terminal-text">
+                <p className="text-sm text-primary/80">
+                  <span className="text-primary/60">[system]$</span> Establishing connection...
+                </p>
+                <p className="text-sm text-primary/80">
+                  <span className="text-primary/60">[system]$</span> Retrieving account data...
+                </p>
+                <p className="text-sm text-primary/80 animate-pulse">
+                  <span className="text-primary/60">[system]$</span> _
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">

@@ -1,16 +1,16 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
-import { Lock, Instagram, Sparkles, ArrowRight } from "lucide-react";
+import { Lock, Instagram, Sparkles, ArrowRight, AlertCircle } from "lucide-react";
+import { fetchAccountDetails } from "@/services/apiService";
 
 const Index = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setUsername, setProfileData } = useHackerContext();
+  const { setUsername, setProfileData, setIsLoading, setError } = useHackerContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,36 +22,34 @@ const Index = () => {
     }
     
     setLoading(true);
+    setIsLoading(true);
+    setError(null);
     
     try {
-      // Generate demo profile data
-      const demoProfileData = {
-        username: inputUsername,
-        full_name: inputUsername.charAt(0).toUpperCase() + inputUsername.slice(1) + " Official",
-        bio: "This is a demo account for " + inputUsername,
-        is_verified: Math.random() > 0.5,
-        is_business_account: Math.random() > 0.5,
-        followers: Math.floor(Math.random() * 1000000) + 1000,
-        following: Math.floor(Math.random() * 1000) + 100,
-        profile_pic_url: "https://picsum.photos/200",
-        is_private: Math.random() > 0.7
-      };
+      const accountData = await fetchAccountDetails(inputUsername);
       
-      // Store in context
-      setUsername(demoProfileData.username);
-      setProfileData(demoProfileData);
-      
-      toast.success("Target found! Redirecting to user verification...");
-      
-      // Direct to user info page instead of payment page
-      setTimeout(() => {
-        navigate("/user-info");
-      }, 1000);
+      if (accountData) {
+        // Store in context
+        setUsername(accountData.username);
+        setProfileData(accountData);
+        
+        toast.success("Target found! Redirecting to user verification...");
+        
+        // Direct to user info page
+        setTimeout(() => {
+          navigate("/user-info");
+        }, 1000);
+      } else {
+        // If null is returned, the API service already displayed an error toast
+        setError(`Account not found: @${inputUsername}`);
+      }
     } catch (error) {
-      console.error("Error with demo data:", error);
+      console.error("Error fetching data:", error);
+      setError(`Failed to find account: @${inputUsername}`);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+      setIsLoading(false);
     }
   };
 

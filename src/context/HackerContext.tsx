@@ -26,6 +26,10 @@ interface HackerContextType {
   setPaymentComplete: (status: boolean) => void;
   profileData: ProfileData | null;
   setProfileData: (data: ProfileData) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  error: string | null;
+  setError: (error: string | null) => void;
 }
 
 const HackerContext = createContext<HackerContextType | undefined>(undefined);
@@ -45,6 +49,8 @@ export function HackerProvider({ children }: { children: React.ReactNode }) {
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const value = {
     username,
@@ -58,7 +64,11 @@ export function HackerProvider({ children }: { children: React.ReactNode }) {
     paymentComplete,
     setPaymentComplete,
     profileData,
-    setProfileData
+    setProfileData,
+    isLoading,
+    setIsLoading,
+    error,
+    setError
   };
 
   return <HackerContext.Provider value={value}>{children}</HackerContext.Provider>;
