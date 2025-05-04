@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
-import { Lock, Instagram, Sparkles, ArrowRight, AlertCircle } from "lucide-react";
+import { Lock, Instagram, Sparkles, ArrowRight } from "lucide-react";
 import { fetchAccountDetails } from "@/services/apiService";
 
 const Index = () => {
@@ -41,12 +42,12 @@ const Index = () => {
         }, 1000);
       } else {
         // If null is returned, the API service already displayed an error toast
-        setError(`Account not found: @${inputUsername}`);
+        setError(`Invalid account details: @${inputUsername}`);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError(`Failed to find account: @${inputUsername}`);
-      toast.error("Something went wrong. Please try again.");
+      setError(`Invalid username: @${inputUsername}`);
+      toast.error("Invalid username or connection issue. Please try again.");
     } finally {
       setLoading(false);
       setIsLoading(false);
