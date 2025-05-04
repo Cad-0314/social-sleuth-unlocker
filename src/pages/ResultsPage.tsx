@@ -61,9 +61,9 @@ const ResultsPage = () => {
       navigate("/");
     }
     
-    // Reset image error state when profileData changes
+    // Reset image error state when profile data changes
     setImageError(false);
-  }, [navigate, username, profileData?.profile_pic_url, profilePic]);
+  }, [navigate, username, profileData]);
 
   const handleCopyPassword = () => {
     navigator.clipboard.writeText(password);
@@ -79,8 +79,8 @@ const ResultsPage = () => {
     navigate("/");
   };
 
-  // Use profilePic from context if available and profileData.profile_pic_url is not
-  const displayProfilePic = profileData?.profile_pic_url || profilePic;
+  // Check if profile pic is available
+  const hasProfilePic = profileData && profileData.profile_pic_url;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
@@ -103,11 +103,14 @@ const ResultsPage = () => {
         <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
           <CardHeader>
             <div className="flex items-center gap-4">
-              {displayProfilePic && !imageError ? (
+              {hasProfilePic && !imageError ? (
                 <img 
-                  src={displayProfilePic} 
+                  src={profileData.profile_pic_url}
                   alt={username}
-                  onError={() => setImageError(true)}
+                  onError={() => {
+                    console.log("Results page image load error for:", profileData.profile_pic_url);
+                    setImageError(true);
+                  }}
                   className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] object-cover"
                 />
               ) : (

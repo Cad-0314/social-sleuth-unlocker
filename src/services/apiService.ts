@@ -37,8 +37,10 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
       const data = await response.json();
       console.log("Received profile data:", data);
       
-      // Ensure profile_pic_url exists in the data
-      if (data && !data.profile_pic_url) {
+      // Log the exact profile_pic_url to verify it exists and is correct
+      if (data && data.profile_pic_url) {
+        console.log("Profile picture URL:", data.profile_pic_url);
+      } else {
         console.warn("No profile_pic_url found in API response");
       }
       
