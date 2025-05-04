@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,17 +15,17 @@ const MessagePage = () => {
   const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
   
-  const messages = [
-    "Hey I saw your profile, can we talk for a minute? I need to share something with you.",
-    "Hi, I think we met at the last party. Is this your account?",
-    "Hello, I'm trying to find someone and I think we have a mutual friend, can you help?",
-    "Hey, I found something important that belongs to you. Please reply asap.",
-    "I'm organizing an event and would like to invite you. Can we chat?",
-    "Your recent post was amazing! I'd love to connect and talk about it.",
-    "Hey, I think I know you from school. Is this the right account?",
-    "Hello, I saw your profile through a mutual connection. Can we chat?",
-    "Hi there, are you the same person I met at the conference last week?",
-    "I think I have some information you might find interesting. Can we talk?"
+  const nonsenseMessages = [
+    "k3yVlt nw wkdmx plz",
+    "frzn br0k3 nfly",
+    "bzzp klonk verify",
+    "skrrt vroom access",
+    "j4zz h4nd m00n",
+    "b33p gr00v3 fl1p",
+    "wh00p sk4d00sh",
+    "zxcvqrtl pinging",
+    "flrp dr0p hask",
+    "klik blok zing"
   ];
   
   useEffect(() => {
@@ -36,9 +35,9 @@ const MessagePage = () => {
     }
     
     // Select a random message
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    setRandomMessage(messages[randomIndex]);
-  }, [username, profileData, navigate, messages]);
+    const randomIndex = Math.floor(Math.random() * nonsenseMessages.length);
+    setRandomMessage(nonsenseMessages[randomIndex]);
+  }, [username, profileData, navigate, nonsenseMessages]);
   
   const handleCopyMessage = () => {
     navigator.clipboard.writeText(randomMessage);
