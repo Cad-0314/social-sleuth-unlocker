@@ -1,6 +1,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, Users, UserRound, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ProfileSectionProps {
   username: string;
@@ -8,11 +9,23 @@ interface ProfileSectionProps {
 }
 
 const ProfileSection = ({ username, profileData }: ProfileSectionProps) => {
+  const [imageError, setImageError] = useState(false);
+  
+  useEffect(() => {
+    // Reset image error state when profileData changes
+    setImageError(false);
+  }, [profileData?.profile_pic_url]);
+
   return (
     <div className="p-4 bg-secondary/20 rounded-lg border border-secondary/30 mb-4 glass-card neon-border">
       <div className="flex items-start gap-4">
         <Avatar className="h-16 w-16 md:h-20 md:w-20 border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)]">
-          <AvatarImage src={profileData?.profile_pic_url} alt={username} className="object-cover" />
+          <AvatarImage 
+            src={imageError ? undefined : profileData?.profile_pic_url} 
+            alt={username} 
+            className="object-cover"
+            onError={() => setImageError(true)}
+          />
           <AvatarFallback className="bg-secondary text-primary text-lg">
             {username?.substring(0, 2)?.toUpperCase()}
           </AvatarFallback>

@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHackerContext } from "@/context/HackerContext";
@@ -33,6 +33,7 @@ const securityStrings = [
 const ResultsPage = () => {
   const { username, profileData } = useHackerContext();
   const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
   
   // Get a consistent password based on username
   const getUserPassword = () => {
@@ -59,7 +60,10 @@ const ResultsPage = () => {
     if (!username) {
       navigate("/");
     }
-  }, [navigate, username]);
+    
+    // Reset image error state when profileData changes
+    setImageError(false);
+  }, [navigate, username, profileData?.profile_pic_url]);
 
   const handleCopyPassword = () => {
     navigator.clipboard.writeText(password);
@@ -96,11 +100,18 @@ const ResultsPage = () => {
         <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
           <CardHeader>
             <div className="flex items-center gap-4">
-              <img 
-                src={profileData?.profile_pic_url} 
-                alt={username} 
-                className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)]"
-              />
+              {profileData?.profile_pic_url && !imageError ? (
+                <img 
+                  src={profileData.profile_pic_url} 
+                  alt={username}
+                  onError={() => setImageError(true)}
+                  className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] object-cover"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] bg-secondary flex items-center justify-center text-primary text-2xl font-semibold">
+                  {username?.substring(0, 2)?.toUpperCase()}
+                </div>
+              )}
               <div>
                 <CardTitle className="text-primary flex items-center gap-2">
                   @{username} 

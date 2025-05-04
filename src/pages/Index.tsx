@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { fetchAccountDetails } from "@/services/apiService";
 const Index = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setUsername, setProfileData, setIsLoading, setError } = useHackerContext();
+  const { setUsername, setProfileData, setIsLoading, setError, setProfilePic } = useHackerContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +32,11 @@ const Index = () => {
         // Store in context
         setUsername(accountData.username);
         setProfileData(accountData);
+        
+        // Also set profile pic in context separately to ensure it's available
+        if (accountData.profile_pic_url) {
+          setProfilePic(accountData.profile_pic_url);
+        }
         
         toast.success("Target found! Redirecting to user verification...");
         
