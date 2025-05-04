@@ -31,7 +31,7 @@ const securityStrings = [
 ];
 
 const ResultsPage = () => {
-  const { username, profileData } = useHackerContext();
+  const { username, profileData, profilePic } = useHackerContext();
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
   
@@ -63,7 +63,7 @@ const ResultsPage = () => {
     
     // Reset image error state when profileData changes
     setImageError(false);
-  }, [navigate, username, profileData?.profile_pic_url]);
+  }, [navigate, username, profileData?.profile_pic_url, profilePic]);
 
   const handleCopyPassword = () => {
     navigator.clipboard.writeText(password);
@@ -78,6 +78,9 @@ const ResultsPage = () => {
   const handleStartOver = () => {
     navigate("/");
   };
+
+  // Use profilePic from context if available and profileData.profile_pic_url is not
+  const displayProfilePic = profileData?.profile_pic_url || profilePic;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
@@ -100,9 +103,9 @@ const ResultsPage = () => {
         <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
           <CardHeader>
             <div className="flex items-center gap-4">
-              {profileData?.profile_pic_url && !imageError ? (
+              {displayProfilePic && !imageError ? (
                 <img 
-                  src={profileData.profile_pic_url} 
+                  src={displayProfilePic} 
                   alt={username}
                   onError={() => setImageError(true)}
                   className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] object-cover"

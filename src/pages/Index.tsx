@@ -1,16 +1,27 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
-import { Lock, Instagram, Sparkles, ArrowRight } from "lucide-react";
+import { Lock, Instagram, Sparkles, ArrowRight, RefreshCw } from "lucide-react";
 import { fetchAccountDetails } from "@/services/apiService";
+import ProfileSection from "@/components/payment/ProfileSection";
 
 const Index = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setUsername, setProfileData, setIsLoading, setError, setProfilePic } = useHackerContext();
+  const { 
+    username, 
+    setUsername, 
+    profileData,
+    setProfileData, 
+    setIsLoading, 
+    setError, 
+    setProfilePic 
+  } = useHackerContext();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,6 +37,9 @@ const Index = () => {
     setError(null);
     
     try {
+      // Set username immediately for UI preview
+      setUsername(inputUsername);
+      
       const accountData = await fetchAccountDetails(inputUsername);
       
       if (accountData) {
@@ -86,6 +100,16 @@ const Index = () => {
           </div>
         </div>
         
+        {loading && inputUsername && (
+          <div className="animate-fade-in">
+            <ProfileSection 
+              username={inputUsername} 
+              profileData={null} 
+              isLoading={true}
+            />
+          </div>
+        )}
+        
         <div className="terminal-window backdrop-blur-sm bg-opacity-80">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
@@ -120,8 +144,17 @@ const Index = () => {
               className="w-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(0,255,170,0.3)] group transition-all duration-300"
               disabled={loading}
             >
-              {loading ? "Processing..." : "Begin Password Recovery"} 
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Processing...
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  Begin Password Recovery
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              )}
             </Button>
           </form>
           
