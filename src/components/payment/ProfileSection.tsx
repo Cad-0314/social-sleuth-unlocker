@@ -56,9 +56,20 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
       <div className="flex items-center gap-5">
         <div className="relative group">
           <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-primary/50 shadow-[0_0_15px_rgba(0,255,170,0.35)] ring-2 ring-primary/20 ring-offset-2 ring-offset-background/50 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,255,170,0.5)]">
-            <AvatarFallback className="bg-gradient-to-br from-secondary/70 to-secondary/90 text-primary text-xl font-bold">
-              {getInitials()}
-            </AvatarFallback>
+            {!imageError && profileData?.profile_pic_url ? (
+              <AvatarImage 
+                src={profileData.profile_pic_url}
+                alt={username}
+                onError={() => {
+                  console.log("ProfileSection image error:", profileData.profile_pic_url);
+                  setImageError(true);
+                }}
+              />
+            ) : (
+              <AvatarFallback className="bg-gradient-to-br from-secondary/70 to-secondary/90 text-primary text-xl font-bold">
+                {getInitials()}
+              </AvatarFallback>
+            )}
           </Avatar>
           {profileData?.is_verified && (
             <div className="absolute -bottom-1 -right-1 bg-primary/90 p-1.5 rounded-full shadow-lg">

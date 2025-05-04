@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useState, useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Check, UserRound, Shield, Users } from "lucide-react";
 
@@ -12,6 +12,11 @@ interface ProfileDisplayProps {
 const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
   const [imageError, setImageError] = useState(false);
   
+  useEffect(() => {
+    // Reset image error state when profileData changes
+    setImageError(false);
+  }, [profileData?.profile_pic_url]);
+  
   // Function to get initials from username or full name
   const getInitials = () => {
     if (profileData?.full_name) {
@@ -20,28 +25,27 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
     return username?.substring(0, 2)?.toUpperCase() || "IG";
   };
 
-  // Check if profile pic is available
-  const hasProfilePic = profileData && profileData.profile_pic_url && !imageError;
-
   return (
     <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
       <CardHeader>
         <div className="flex items-center gap-4">
-          {hasProfilePic ? (
-            <img 
-              src={profileData.profile_pic_url}
-              alt={username}
-              onError={() => {
-                console.log("Results page image load error for:", profileData.profile_pic_url);
-                setImageError(true);
-              }}
-              className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] object-cover"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)] bg-secondary flex items-center justify-center text-primary text-2xl font-semibold">
-              {getInitials()}
-            </div>
-          )}
+          <Avatar className="w-20 h-20 border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)]">
+            {!imageError && profileData?.profile_pic_url ? (
+              <AvatarImage 
+                src={profileData.profile_pic_url}
+                alt={username}
+                onError={() => {
+                  console.log("Results page image load error for:", profileData.profile_pic_url);
+                  setImageError(true);
+                }}
+                className="object-cover"
+              />
+            ) : (
+              <AvatarFallback className="bg-secondary text-primary text-2xl font-semibold">
+                {getInitials()}
+              </AvatarFallback>
+            )}
+          </Avatar>
           <div>
             <CardTitle className="text-primary flex items-center gap-2">
               @{username} 
