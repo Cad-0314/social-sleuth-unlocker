@@ -13,20 +13,39 @@ export interface ProfileData {
   is_private: boolean;
 }
 
+// Sanitize sensitive information before logging
+const sanitizeForLogging = (data: any) => {
+  if (!data) return null;
+  
+  // Create a deep copy to avoid mutating the original
+  const sanitized = JSON.parse(JSON.stringify(data));
+  
+  // Remove potentially sensitive fields for logging
+  if (sanitized.profile_pic_url) {
+    sanitized.profile_pic_url = "[REDACTED URL]";
+  }
+  
+  return sanitized;
+};
+
 export async function fetchAccountDetails(username: string): Promise<ProfileData | null> {
   try {
+    // Only log non-sensitive information
     console.log("Fetching account details for:", username);
     
-    // For development, we'll simulate API response
-    // In production, this would be a real API call
     try {
-      // First try the actual API endpoint
-      const response = await fetch("http://localhost:5000/", {
+      // Use HTTPS for production endpoints
+      const API_ENDPOINT = "http://localhost:5000/"; // Should be HTTPS in production
+      
+      // Don't log request bodies with sensitive data
+      const response = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username }),
+        // Add credentials: 'same-origin' for cookies if needed
+        credentials: 'same-origin',
       });
       
       if (!response.ok) {
@@ -35,11 +54,13 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
       }
       
       const data = await response.json();
-      console.log("Received profile data:", data);
       
-      // Log the exact profile_pic_url to verify it exists and is correct
+      // Log sanitized data without sensitive information
+      console.log("Received profile data:", sanitizeForLogging(data));
+      
+      // Check image URL security but don't log the full URL
       if (data && data.profile_pic_url) {
-        console.log("Profile picture URL:", data.profile_pic_url);
+        console.log("Profile picture URL received");
       } else {
         console.warn("No profile_pic_url found in API response");
       }
