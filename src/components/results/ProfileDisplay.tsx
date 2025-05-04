@@ -25,26 +25,16 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
     return username?.substring(0, 2)?.toUpperCase() || "IG";
   };
 
+  // Always use the fallback since Instagram blocks direct image access due to CORS
+  // We could proxy these images through our own server if needed
   return (
     <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
       <CardHeader>
         <div className="flex items-center gap-4">
           <Avatar className="w-20 h-20 border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)]">
-            {!imageError && profileData?.profile_pic_url ? (
-              <AvatarImage 
-                src={profileData.profile_pic_url}
-                alt={username}
-                onError={() => {
-                  console.log("Results page image load error for:", profileData.profile_pic_url);
-                  setImageError(true);
-                }}
-                className="object-cover"
-              />
-            ) : (
-              <AvatarFallback className="bg-secondary text-primary text-2xl font-semibold">
-                {getInitials()}
-              </AvatarFallback>
-            )}
+            <AvatarFallback className="bg-secondary text-primary text-2xl font-semibold">
+              {getInitials()}
+            </AvatarFallback>
           </Avatar>
           <div>
             <CardTitle className="text-primary flex items-center gap-2">
