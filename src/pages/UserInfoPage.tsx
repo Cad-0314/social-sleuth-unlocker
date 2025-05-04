@@ -130,7 +130,6 @@ const UserInfoPage = () => {
                 </p>
               </div>
               
-              {/* Fake progress tracker */}
               <div className="mt-8">
                 <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
                   <div className="h-full bg-primary rounded-full animate-pulse" style={{ 
@@ -151,29 +150,34 @@ const UserInfoPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg">
         <div className="mb-6 text-center">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
-            <h1 className="text-2xl font-bold text-primary">Account Verification</h1>
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="h-1 w-12 bg-primary/80 rounded-full"></div>
+            <Zap className="h-6 w-6 text-primary animate-pulse" />
+            <h1 className="text-2xl font-bold text-primary">Target Acquired</h1>
+            <Zap className="h-6 w-6 text-primary animate-pulse" />
+            <div className="h-1 w-12 bg-primary/80 rounded-full"></div>
           </div>
-          <p className="text-muted-foreground text-sm">Verify account details before proceeding to payment</p>
+          <p className="text-muted-foreground text-sm">Account verification required to proceed</p>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)]">
+        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/30 shadow-[0_0_30px_rgba(0,255,170,0.25)]">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          {/* User Information Section */}
-          <div className="p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-3 w-3 rounded-full bg-primary animate-pulse"></div>
-              <h2 className="text-lg font-bold text-primary">Target Account</h2>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-primary animate-pulse"></div>
+                <h2 className="text-lg font-bold text-primary">Target Information</h2>
+              </div>
+              <div className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full border border-primary/30">
+                Status: Connected
+              </div>
             </div>
             
-            {/* Profile Section - User Information */}
             <div className="mb-6">
               <ProfileSection 
                 username={username} 
@@ -185,23 +189,23 @@ const UserInfoPage = () => {
             
             <Button 
               onClick={handleContinueToPayment}
-              className="w-full mt-6 bg-primary hover:bg-primary/80 text-primary-foreground cyber-button shadow-[0_0_15px_rgba(0,255,170,0.3)]"
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground cyber-button shadow-[0_0_15px_rgba(0,255,170,0.3)] font-medium text-base py-6"
             >
-              Continue to Payment
+              Continue to Payment Authorization
             </Button>
           </div>
           
-          <div className="flex items-center justify-center space-x-2 mt-6 border-t border-primary/20 pt-4">
-            <Shield className="h-5 w-5 text-muted-foreground" />
-            <p className="text-xs text-muted-foreground">
-              256-bit SSL secured connection
+          <div className="flex items-center justify-center space-x-2 my-4 border-t border-primary/20 pt-4">
+            <Shield className="h-4 w-4 text-primary/80" />
+            <p className="text-xs text-primary/80">
+              Secure connection established | Encrypted session
             </p>
           </div>
         </div>
         
         <div className="text-center text-xs text-muted-foreground mt-4">
           <p>For educational purposes only. This is a simulation.</p>
-          <p>No real payments are processed and no credentials are retrieved.</p>
+          <p>No real accounts are accessed. No credentials are stored.</p>
         </div>
       </div>
     </div>
