@@ -69,69 +69,69 @@ const MessagePage = () => {
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
-      <div className="w-full max-w-md">
-        <div className="mb-6 text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
-            <h1 className="text-2xl font-bold text-primary">Send Verification</h1>
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
+    <div className="min-h-screen flex items-center justify-center p-4 matrix-bg relative z-0">
+      <div className="w-full max-w-md relative z-10">
+        <div className="mb-8 text-center">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <Zap className="h-6 w-6 text-primary animate-pulse" />
+            <h1 className="text-3xl font-bold neon-text">Send Verification</h1>
+            <Zap className="h-6 w-6 text-primary animate-pulse" />
           </div>
-          <p className="text-muted-foreground text-sm">Final step - send message to complete access</p>
+          <p className="text-muted-foreground text-sm backdrop-blur-sm px-4 py-2 rounded-full inline-block">Final step - send message to complete access</p>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg border border-primary/30 shadow-[0_0_30px_rgba(0,255,170,0.25)] rounded-lg overflow-hidden">
-          <div className="terminal-header p-2 bg-secondary/20">
+        <div className="terminal-window backdrop-blur-lg border-2 border-primary/30 shadow-[0_0_30px_rgba(140,80,255,0.25)] rounded-xl overflow-hidden animate-pulse-glow">
+          <div className="terminal-header p-3 bg-secondary/30">
             <div className="flex items-center space-x-2">
               <div className="terminal-button terminal-button-red"></div>
               <div className="terminal-button terminal-button-yellow"></div>
               <div className="terminal-button terminal-button-green"></div>
-              <div className="ml-2 text-xs text-primary/70">secure-connection.sh</div>
+              <div className="ml-2 text-xs text-primary/90 font-bold tracking-wide">secure-connection.sh</div>
             </div>
           </div>
           
-          <div className="p-4 md:p-6 space-y-5">
-            <div className="flex items-center space-x-3 p-3 bg-secondary/20 rounded-md border border-secondary/40 shadow-inner">
-              <Avatar className={`${isMobile ? 'h-10 w-10' : 'h-12 w-12'} border-2 border-primary/30 shadow-[0_0_10px_rgba(0,255,170,0.3)]`}>
+          <div className="p-5 md:p-6 space-y-6">
+            <div className="flex items-center space-x-3 p-4 bg-secondary/30 rounded-lg border border-secondary/40 shadow-inner hover:border-primary/30 transition-colors backdrop-blur-sm">
+              <Avatar className={`${isMobile ? 'h-12 w-12' : 'h-14 w-14'} border-2 border-primary/50 shadow-[0_0_15px_rgba(140,80,255,0.4)] animate-float`}>
                 <AvatarImage src={profileData?.profile_pic_url} />
-                <AvatarFallback className="bg-secondary text-primary">
+                <AvatarFallback className="bg-secondary text-primary font-bold">
                   {username?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-foreground">@{username}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-foreground text-lg">@{username}</span>
                   {profileData?.is_verified && (
-                    <span className="bg-primary/20 p-0.5 rounded">
+                    <span className="bg-primary/30 p-1 rounded-full">
                       <Check className="h-3 w-3 text-primary" />
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground line-clamp-1">
+                <p className="text-sm text-muted-foreground line-clamp-1">
                   {profileData?.followers?.toLocaleString() || "—"} followers
                 </p>
               </div>
             </div>
             
             <div className="mb-5">
-              <h2 className="text-lg font-bold mb-3 text-primary flex items-center gap-2">
-                <Lock className="h-4 w-4" />
+              <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2 neon-text">
+                <Lock className="h-5 w-5" />
                 <span className="type-animation">Final Verification Step</span>
               </h2>
               
-              <div className="space-y-3">
-                <div className="text-sm text-muted-foreground bg-secondary/10 p-3 rounded-md border border-secondary/20">
+              <div className="space-y-4">
+                <div className="text-sm text-muted-foreground bg-secondary/20 p-4 rounded-lg border border-secondary/30 shadow-inner">
                   To complete access, send exactly this message to <span className="text-primary font-semibold">@{username}</span> from your account:
                 </div>
                 
                 <div 
                   onClick={handleCopyMessage}
-                  className="p-4 bg-secondary/20 border border-secondary/30 rounded-md cursor-pointer hover:bg-secondary/30 transition-colors font-mono text-sm shadow-inner relative overflow-hidden group"
+                  className="p-4 bg-secondary/30 border border-primary/20 rounded-lg cursor-pointer hover:bg-secondary/40 transition-all font-mono text-sm shadow-inner relative overflow-hidden group neon-box"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-primary/70 font-semibold">SECRET CODE:</span>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-primary/80 font-bold tracking-widest">SECRET CODE:</span>
                     <Button 
                       variant="ghost" 
                       size="sm" 
@@ -139,36 +139,36 @@ const MessagePage = () => {
                         e.stopPropagation();
                         handleCopyMessage();
                       }}
-                      className="h-7 px-2 bg-secondary/30 hover:bg-secondary/50 text-primary"
+                      className="h-8 px-3 bg-secondary/50 hover:bg-secondary/70 text-primary border border-primary/30 rounded-full hover-glow"
                     >
                       {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
                       <span className="ml-1.5 text-xs">{copied ? "Copied" : "Copy"}</span>
                     </Button>
                   </div>
-                  <p className="text-primary font-bold tracking-wide py-2">{randomMessage}</p>
+                  <p className="text-primary font-bold tracking-widest py-3 text-center text-lg neon-text">{randomMessage}</p>
                 </div>
                 
                 <div className="flex items-center text-xs text-muted-foreground mt-1">
-                  <div className="h-1 w-1 rounded-full bg-primary/50 mr-2"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-primary/70 mr-2 animate-pulse"></div>
                   <p>Send exactly as shown to verify account ownership</p>
                 </div>
               </div>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-4 border-t border-primary/10 pt-4">
+            <form onSubmit={handleSubmit} className="space-y-5 border-t border-primary/20 pt-5">
               <div className="space-y-2">
-                <label className="text-sm text-primary/80 flex items-center gap-1.5 font-medium">
-                  <span className="h-1 w-1 rounded-full bg-primary inline-block"></span>
+                <label className="text-sm text-primary/90 flex items-center gap-2 font-medium">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
                   Your Instagram Username
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary/60">@</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary/80 font-bold">@</span>
                   <Input
                     type="text"
                     placeholder="Enter your username"
                     value={senderUsername}
                     onChange={(e) => setSenderUsername(e.target.value)}
-                    className="bg-secondary/10 border-secondary hover:border-primary focus:border-primary pl-8 transition-all"
+                    className="bg-secondary/30 border-secondary hover:border-primary focus:border-primary focus:ring-primary/30 pl-8 transition-all rounded-lg"
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -178,33 +178,33 @@ const MessagePage = () => {
               
               <Button 
                 type="submit" 
-                className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,170,0.3)] transition-all py-6"
+                className="w-full mt-5 bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(140,80,255,0.4)] transition-all py-6 rounded-xl hover:translate-y-[-2px]"
                 disabled={loading}
               >
                 {loading ? (
                   <>
-                    <div className="h-4 w-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin mr-2"></div>
+                    <div className="h-5 w-5 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin mr-2"></div>
                     Verifying...
                   </>
                 ) : (
                   <>
                     I've Sent The Message
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
               </Button>
             </form>
           </div>
           
-          <div className="bg-secondary/10 py-3 px-4 text-center border-t border-primary/10">
-            <p className="text-xs text-primary/60 font-mono">
-              <span className="animate-pulse">▌</span> Connection secured | Waiting for message verification
+          <div className="bg-secondary/20 py-4 px-4 text-center border-t border-primary/20">
+            <p className="text-xs text-primary/80 font-mono tracking-wider">
+              <span className="animate-pulse inline-block mr-1.5">▌</span> Connection secured | Waiting for message verification
             </p>
           </div>
         </div>
         
-        <div className="text-center text-xs text-muted-foreground mt-4">
-          <p className="opacity-60">For educational purposes only. This is a simulation.</p>
+        <div className="text-center text-xs text-muted-foreground mt-5 backdrop-blur-sm py-2 px-4 rounded-full inline-block">
+          <p className="opacity-70">For educational purposes only. This is a simulation.</p>
         </div>
       </div>
     </div>

@@ -1,38 +1,39 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 220 40% 13%;
-    --foreground: 210 40% 98%;
+    --background: 240 25% 8%;
+    --foreground: 240 10% 95%;
 
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
+    --card: 240 25% 10%;
+    --card-foreground: 240 10% 95%;
 
-    --popover: 220 40% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 25% 8%;
+    --popover-foreground: 240 10% 95%;
 
-    --primary: 172 84% 60%;
-    --primary-foreground: 220 40% 13%;
+    --primary: 260 100% 70%;
+    --primary-foreground: 240 10% 8%;
 
-    --secondary: 217 65% 30%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 25% 15%;
+    --secondary-foreground: 240 10% 95%;
 
-    --muted: 217 32% 20%;
-    --muted-foreground: 215 20% 80%;
+    --muted: 240 25% 20%;
+    --muted-foreground: 240 10% 85%;
 
-    --accent: 217 32% 35%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 280 70% 60%;
+    --accent-foreground: 240 10% 95%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 350 90% 60%;
+    --destructive-foreground: 240 10% 95%;
 
-    --border: 217 32% 30%;
-    --input: 217 32% 30%;
-    --ring: 172 84% 60%;
+    --border: 240 25% 20%;
+    --input: 240 25% 20%;
+    --ring: 260 100% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -80,6 +81,7 @@
 .glitch {
   position: relative;
   animation: glitch-skew 1s linear infinite alternate-reverse;
+  text-shadow: 0 0 10px rgba(140, 80, 255, 0.5);
 }
 
 .glitch::before,
@@ -95,11 +97,13 @@
 .glitch::before {
   animation: glitch-anim-1 0.4s linear infinite alternate-reverse;
   clip: rect(44px, 9999px, 56px, 0);
+  text-shadow: 2px 0 rgba(255, 0, 255, 0.5);
 }
 
 .glitch::after {
   animation: glitch-anim-2 0.4s linear infinite alternate-reverse;
   clip: rect(24px, 9999px, 36px, 0);
+  text-shadow: -2px 0 rgba(0, 255, 255, 0.5);
 }
 
 @keyframes glitch-anim-1 {
@@ -146,13 +150,14 @@
 }
 
 .terminal-window {
-  border-radius: 8px;
-  background-color: rgba(20, 30, 50, 0.9);
-  border: 1px solid #1e2c4a;
-  box-shadow: 0 0 15px rgba(0, 255, 200, 0.25);
+  border-radius: 12px;
+  background-color: rgba(20, 20, 40, 0.9);
+  border: 1px solid rgba(140, 80, 255, 0.3);
+  box-shadow: 0 0 20px rgba(140, 80, 255, 0.3);
   padding: 1rem;
   font-family: monospace;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .terminal-header {
@@ -180,22 +185,36 @@
 }
 
 .matrix-bg {
-  background-color: #0f1624;
+  background-color: #0a0a1a;
   background-image: 
-    radial-gradient(rgba(0, 255, 200, 0.05) 1px, transparent 1px),
-    radial-gradient(rgba(0, 255, 200, 0.05) 1px, transparent 1px);
+    radial-gradient(rgba(140, 80, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(rgba(140, 80, 255, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   background-position: 0 0, 25px 25px;
   background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(10, 10, 26, 0.8) 0%, transparent 50%, rgba(10, 10, 26, 0.8) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Loading spinner for API calls */
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(0, 255, 170, 0.3);
+  border: 3px solid rgba(140, 80, 255, 0.3);
   border-radius: 50%;
-  border-top-color: rgba(0, 255, 170, 0.8);
+  border-top-color: rgba(140, 80, 255, 0.8);
   animation: spin 1s infinite linear;
   margin: 0 auto;
 }
@@ -208,32 +227,32 @@
 
 .terminal-text {
   font-family: monospace;
-  color: var(--primary);
+  color: rgba(140, 80, 255, 1);
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 /* Enhanced UI Effects */
 .neon-border {
-  box-shadow: 0 0 5px rgba(0, 255, 200, 0.3),
-              0 0 10px rgba(0, 255, 200, 0.2),
-              0 0 15px rgba(0, 255, 200, 0.2);
-  border: 1px solid rgba(0, 255, 200, 0.4);
+  box-shadow: 0 0 5px rgba(140, 80, 255, 0.3),
+              0 0 10px rgba(140, 80, 255, 0.2),
+              0 0 15px rgba(140, 80, 255, 0.2);
+  border: 1px solid rgba(140, 80, 255, 0.4);
 }
 
 .glass-card {
-  background: rgba(18, 24, 38, 0.5);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(140, 80, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(10, 10, 26, 0.37);
 }
 
 .cyber-button {
   position: relative;
   transition: all 0.3s ease;
   overflow: hidden;
-  border: 1px solid rgba(0, 255, 200, 0.3);
-  text-shadow: 0 0 2px rgba(0, 255, 200, 0.5);
+  border: 1px solid rgba(140, 80, 255, 0.3);
+  text-shadow: 0 0 2px rgba(140, 80, 255, 0.5);
 }
 
 .cyber-button::before {
@@ -244,9 +263,9 @@
   width: calc(100% + 4px);
   height: calc(100% + 4px);
   background: linear-gradient(45deg, 
-    rgba(0, 255, 200, 0.6),
+    rgba(140, 80, 255, 0.6),
     transparent,
-    rgba(0, 255, 200, 0.6)
+    rgba(140, 80, 255, 0.6)
   );
   z-index: -1;
   animation: animate 2s linear infinite;
@@ -263,7 +282,7 @@
 
 /* Matrix background animation */
 .matrix-bg {
-  background: linear-gradient(135deg, #0e1620 0%, #0a0f16 100%);
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a30 100%);
   position: relative;
   overflow: hidden;
 }
@@ -276,8 +295,8 @@
   width: 100%;
   height: 100%;
   background-image: 
-    repeating-linear-gradient(0deg, rgba(0, 255, 170, 0.05) 0px, transparent 2px, transparent 4px),
-    repeating-linear-gradient(90deg, rgba(0, 255, 170, 0.05) 0px, transparent 2px, transparent 4px);
+    repeating-linear-gradient(0deg, rgba(140, 80, 255, 0.05) 0px, transparent 2px, transparent 4px),
+    repeating-linear-gradient(90deg, rgba(140, 80, 255, 0.05) 0px, transparent 2px, transparent 4px);
   background-size: 4px 4px;
   animation: matrixMove 30s linear infinite;
   z-index: -1;
@@ -294,10 +313,10 @@
 
 /* Button improvements */
 .highlight-button {
-  background: linear-gradient(135deg, rgba(0, 255, 200, 0.8), rgba(0, 200, 255, 0.8));
-  color: #0a1520;
+  background: linear-gradient(135deg, rgba(140, 80, 255, 0.8), rgba(190, 100, 255, 0.8));
+  color: #ffffff;
   font-weight: bold;
-  box-shadow: 0 0 15px rgba(0, 255, 200, 0.5);
+  box-shadow: 0 0 15px rgba(140, 80, 255, 0.5);
   border: none;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
@@ -305,6 +324,43 @@
 .contrast-text {
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
   letter-spacing: 0.5px;
+}
+
+/* Neon elements */
+.neon-text {
+  color: #fff;
+  text-shadow: 
+    0 0 5px rgba(140, 80, 255, 0.8),
+    0 0 10px rgba(140, 80, 255, 0.5),
+    0 0 15px rgba(140, 80, 255, 0.3);
+}
+
+.neon-box {
+  box-shadow:
+    0 0 5px rgba(140, 80, 255, 0.5),
+    0 0 15px rgba(140, 80, 255, 0.3),
+    inset 0 0 5px rgba(140, 80, 255, 0.3);
+  border: 1px solid rgba(140, 80, 255, 0.3);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+
+.neon-box:hover {
+  box-shadow:
+    0 0 8px rgba(140, 80, 255, 0.6),
+    0 0 20px rgba(140, 80, 255, 0.4),
+    inset 0 0 8px rgba(140, 80, 255, 0.4);
+}
+
+/* Cool hover effects */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(140, 80, 255, 0.4);
 }
 
 @media (max-width: 640px) {
