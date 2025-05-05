@@ -69,11 +69,6 @@ const MainContent = ({ username, profileData, securityToken, onContinueToPayment
             </p>
           </div>
         </div>
-        
-        <div className="text-center text-xs text-muted-foreground mt-4">
-          <p>For educational purposes only. This is a simulation.</p>
-          <p>No real accounts are accessed. No credentials are stored.</p>
-        </div>
       </div>
     </div>
   );

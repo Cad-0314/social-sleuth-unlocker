@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -122,11 +123,6 @@ const ResultsPage = () => {
               Hack Another Account
             </Button>
           </CardFooter>
-        </div>
-        
-        <div className="text-center text-xs text-muted-foreground mt-4">
-          <p>For educational purposes only. This is a simulation.</p>
-          <p>No real Instagram accounts were compromised. The displayed information is fake.</p>
         </div>
       </div>
     </div>

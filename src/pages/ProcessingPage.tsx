@@ -104,11 +104,6 @@ const ProcessingPage = () => {
             </div>
           </div>
         </div>
-        
-        <div className="text-center text-xs text-muted-foreground mt-4">
-          <p>For educational purposes only. This is a simulation.</p>
-          <p>No real Instagram accounts are being accessed.</p>
-        </div>
       </div>
     </div>
   );

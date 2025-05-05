@@ -161,10 +161,6 @@ const MessagePage = () => {
                 </>
               )}
             </Button>
-
-            <p className="text-center text-xs text-muted-foreground pt-2">
-              After sending the message, click the button above to continue
-            </p>
           </form>
         </CardContent>
       </Card>

@@ -110,11 +110,6 @@ const PaymentPage = () => {
             </p>
           </div>
         </div>
-        
-        <div className="text-center text-xs text-muted-foreground mt-4">
-          <p>For educational purposes only. This is a simulation.</p>
-          <p>No real payments are processed and no credentials are retrieved.</p>
-        </div>
       </div>
     </div>
   );
