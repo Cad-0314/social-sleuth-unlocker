@@ -36,31 +36,17 @@ const sanitizeForLogging = (data: any) => {
   return sanitized;
 };
 
-/**
- * Handle profile picture URLs with CORS issues
- */
-const handleProfilePicUrl = (url: string): string => {
-  if (!url) return '';
-  
-  try {
-    // Return the URL directly since it's already proxied
-    return url;
-  } catch (error) {
-    console.error("Error handling profile image URL:", error);
-    // Fallback image in case of errors
-    return 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1';
-  }
-};
-
 export async function fetchAccountDetails(username: string): Promise<ProfileData | null> {
   try {
-    // Only log non-sensitive information
-    console.log("Fetching account details for:", username);
+    console.log("========= FETCH ACCOUNT DETAILS START =========");
+    console.log("[API] Fetching account details for:", username);
+    
+    const API_ENDPOINT = "https://landa.firestars.co/api.php";
+    console.log("[API] Using endpoint:", API_ENDPOINT);
     
     try {
-      const API_ENDPOINT = "https://landa.firestars.co/api.php";
+      console.log("[API] Preparing request with username:", username);
       
-      // Don't log request bodies with sensitive data
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: {
@@ -69,34 +55,70 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
         body: JSON.stringify({ username }),
       });
       
+      console.log("[API] Response status:", response.status, response.statusText);
+      
       if (!response.ok) {
         const errorText = await response.text();
+        console.error("[API] Response error:", response.status, errorText);
         throw new Error(`API Error: ${response.status} - ${errorText || 'Unknown error'}`);
       }
       
-      // Parse the JSON response
-      const data = await response.json();
+      const responseText = await response.text();
+      console.log("[API] Raw response:", responseText.substring(0, 300) + (responseText.length > 300 ? "..." : ""));
       
-      // Log sanitized data without sensitive information
-      console.log("Received profile data:", sanitizeForLogging(data));
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log("[API] Successfully parsed JSON response");
+      } catch (parseError) {
+        console.error("[API] JSON parse error:", parseError);
+        throw new Error("Failed to parse API response as JSON");
+      }
       
-      return data;
+      console.log("[API] Received response data:", sanitizeForLogging(data));
+      
+      // Add fallbacks for key fields to ensure compatibility
+      const processedData: ProfileData = {
+        username: data.username,
+        full_name: data.full_name || "",
+        biography: data.biography || data.bio || "",
+        bio: data.biography || data.bio || "",
+        is_verified: Boolean(data.is_verified),
+        is_private: Boolean(data.is_private),
+        profile_picture: data.profile_picture || data.profile_pic_url || "",
+        profile_pic_url: data.profile_picture || data.profile_pic_url || "",
+        follower_count: data.follower_count || data.followers || 0,
+        followers: data.follower_count || data.followers || 0,
+        following_count: data.following_count || data.following || 0,
+        following: data.following_count || data.following || 0,
+        post_count: data.post_count || 0,
+        external_url: data.external_url || "",
+      };
+      
+      console.log("[API] Processed profile data:", sanitizeForLogging(processedData));
+      console.log("========= FETCH ACCOUNT DETAILS END: SUCCESS =========");
+      
+      return processedData;
     } catch (fetchError) {
-      console.error("API fetch error:", fetchError);
+      console.error("[API] Fetch error:", fetchError);
       
       // Handle network errors more gracefully
       if (fetchError instanceof TypeError && fetchError.message.includes("Failed to fetch")) {
-        throw new Error(`Invalid account details for @${username}. Please check the username and try again.`);
+        toast.error(`Network error: Unable to connect to the API. Please try again later.`);
+        throw new Error(`Network error: Unable to connect to the API for @${username}`);
       }
+      
       throw fetchError;
     }
   } catch (error) {
-    console.error("Error fetching account details:", error);
+    console.error("========= FETCH ACCOUNT DETAILS END: ERROR =========", error);
+    
     if (error instanceof Error) {
       toast.error(error.message);
     } else {
       toast.error("Failed to fetch account information. Please try again.");
     }
+    
     return null;
   }
 }

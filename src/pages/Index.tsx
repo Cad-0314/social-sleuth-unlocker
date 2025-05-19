@@ -32,6 +32,7 @@ const Index = () => {
       return;
     }
     
+    console.log("[Index] Submit handler started for username:", inputUsername);
     setLoading(true);
     setIsLoading(true);
     setError(null);
@@ -39,41 +40,53 @@ const Index = () => {
     try {
       // Set username immediately for UI preview
       setUsername(inputUsername);
+      console.log("[Index] Username set to context:", inputUsername);
       
       // Fetch account details
+      console.log("[Index] Calling fetchAccountDetails API");
       const accountData = await fetchAccountDetails(inputUsername);
+      console.log("[Index] API call completed, received data:", accountData ? "yes" : "no");
       
       if (accountData) {
-        console.log("Account data received:", accountData);
+        console.log("[Index] Processing account data:", {
+          username: accountData.username,
+          fullName: accountData.full_name,
+          isVerified: accountData.is_verified,
+          hasProfilePic: !!accountData.profile_picture || !!accountData.profile_pic_url
+        });
         
         // Store in context
         setUsername(accountData.username);
         setProfileData(accountData);
         
         // Make sure to set the profile picture separately in context
-        const profilePicUrl = accountData.profile_pic_url || accountData.profile_picture;
+        const profilePicUrl = accountData.profile_picture || accountData.profile_pic_url;
         if (profilePicUrl) {
-          console.log("Setting profile pic URL:", profilePicUrl);
+          console.log("[Index] Setting profile pic URL:", profilePicUrl.substring(0, 50) + "...");
           setProfilePic(profilePicUrl);
         } else {
-          console.warn("No profile pic URL found in account data");
+          console.warn("[Index] No profile pic URL found in account data");
         }
         
         toast.success("Target found! Redirecting to user verification...");
+        console.log("[Index] Success toast shown, preparing to navigate");
         
         // Direct to user info page
         setTimeout(() => {
+          console.log("[Index] Navigating to /user-info");
           navigate("/user-info");
         }, 1000);
       } else {
+        console.error("[Index] Account data is null");
         // If null is returned, the API service already displayed an error toast
         setError(`Invalid account details: @${inputUsername}`);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("[Index] Error in submit handler:", error);
       setError(`Invalid username: @${inputUsername}`);
       toast.error("Invalid username or connection issue. Please try again.");
     } finally {
+      console.log("[Index] Submit handler completed");
       setLoading(false);
       setIsLoading(false);
     }

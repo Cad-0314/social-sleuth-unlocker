@@ -13,9 +13,15 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
   const [imageError, setImageError] = useState(false);
   
   useEffect(() => {
+    console.log("[ProfileDisplay] Component mounted/updated", {
+      username,
+      hasProfileData: !!profileData,
+      profilePicUrl: profileData?.profile_picture || profileData?.profile_pic_url
+    });
+    
     // Reset image error state when profileData changes
     setImageError(false);
-  }, [profileData?.profile_pic_url, profileData?.profile_picture]);
+  }, [profileData?.profile_pic_url, profileData?.profile_picture, username, profileData]);
   
   // Function to get initials from username or full name
   const getInitials = () => {
@@ -25,17 +31,35 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
     return username?.substring(0, 2)?.toUpperCase() || "IG";
   };
 
+  // Get correct values with fallbacks
+  const getProfilePic = () => profileData?.profile_picture || profileData?.profile_pic_url || "";
+  const getFollowers = () => profileData?.follower_count || profileData?.followers || 0;
+  const getFollowing = () => profileData?.following_count || profileData?.following || 0;
+  const getBio = () => profileData?.biography || profileData?.bio || "";
+
+  console.log("[ProfileDisplay] Rendering with data:", {
+    username,
+    fullName: profileData?.full_name,
+    bio: getBio()?.substring(0, 20) + "...",
+    profilePic: getProfilePic() ? "exists" : "missing",
+    followers: getFollowers(),
+    following: getFollowing(),
+  });
+
   return (
     <Card className="border-primary/30 bg-secondary/10 backdrop-blur-lg shadow-[0_0_25px_rgba(0,255,170,0.2)]">
       <CardHeader>
         <div className="flex items-center gap-4">
           <Avatar className="w-20 h-20 border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)]">
-            {!imageError && (profileData?.profile_pic_url || profileData?.profile_picture) && (
+            {!imageError && getProfilePic() && (
               <img 
-                src={profileData.profile_pic_url || profileData.profile_picture}
+                src={getProfilePic()}
                 alt={`${username}'s profile`}
                 className="h-full w-full object-cover"
-                onError={() => setImageError(true)}
+                onError={() => {
+                  console.log("[ProfileDisplay] Image loading error");
+                  setImageError(true);
+                }}
               />
             )}
             <AvatarFallback className="bg-secondary text-primary text-2xl font-semibold">
@@ -65,7 +89,7 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
             <span className="text-sm text-muted-foreground">Followers</span>
           </div>
           <span className="font-semibold text-primary">
-            {(profileData?.followers || profileData?.follower_count)?.toLocaleString()}
+            {getFollowers().toLocaleString()}
           </span>
         </div>
         
@@ -75,7 +99,7 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
             <span className="text-sm text-muted-foreground">Following</span>
           </div>
           <span className="font-semibold text-primary">
-            {(profileData?.following || profileData?.following_count)?.toLocaleString()}
+            {getFollowing().toLocaleString()}
           </span>
         </div>
         
@@ -101,10 +125,10 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
           </div>
         )}
         
-        {(profileData?.bio || profileData?.biography) && (
+        {getBio() && (
           <div className="p-3 bg-secondary/20 rounded-md">
             <p className="text-xs text-muted-foreground mb-1">Bio</p>
-            <p className="text-sm text-foreground">{profileData?.bio || profileData?.biography}</p>
+            <p className="text-sm text-foreground">{getBio()}</p>
           </div>
         )}
         

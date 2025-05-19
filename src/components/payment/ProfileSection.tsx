@@ -14,9 +14,15 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
   const [imageError, setImageError] = useState(false);
   
   useEffect(() => {
+    console.log("[ProfileSection] Component mounted/updated", {
+      username,
+      hasProfileData: !!profileData,
+      isLoading
+    });
+    
     // Reset image error state when profileData changes
     setImageError(false);
-  }, [profileData?.profile_pic_url]);
+  }, [profileData?.profile_pic_url, profileData?.profile_picture, username, profileData, isLoading]);
 
   // Function to get initials from username or full name
   const getInitials = () => {
@@ -25,6 +31,12 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
     }
     return username?.substring(0, 2)?.toUpperCase() || "IG";
   };
+
+  // Helper functions to get correct values with fallbacks
+  const getProfilePic = () => profileData?.profile_picture || profileData?.profile_pic_url || "";
+  const getFollowers = () => profileData?.follower_count || profileData?.followers || 0;
+  const getFollowing = () => profileData?.following_count || profileData?.following || 0;
+  const getBio = () => profileData?.biography || profileData?.bio || "";
 
   if (isLoading) {
     return (
@@ -51,17 +63,29 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
     );
   }
 
+  console.log("[ProfileSection] Rendering with data:", {
+    username,
+    fullName: profileData?.full_name,
+    bio: getBio()?.substring(0, 20) + "...",
+    profilePic: getProfilePic() ? "exists" : "missing",
+    followers: getFollowers(),
+    following: getFollowing(),
+  });
+
   return (
     <div className="p-6 bg-secondary/30 backdrop-blur-md rounded-lg border border-primary/30 mb-4 glass-card shadow-[0_0_25px_rgba(0,255,170,0.25)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,170,0.35)] transform hover:scale-[1.01]">
       <div className="flex items-center gap-5">
         <div className="relative group">
           <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-primary/50 shadow-[0_0_15px_rgba(0,255,170,0.35)] ring-2 ring-primary/20 ring-offset-2 ring-offset-background/50 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,255,170,0.5)]">
-            {!imageError && profileData?.profile_pic_url && (
+            {!imageError && getProfilePic() && (
               <img 
-                src={profileData.profile_pic_url}
+                src={getProfilePic()}
                 alt={`${username}'s profile`}
                 className="h-full w-full object-cover rounded-full"
-                onError={() => setImageError(true)}
+                onError={() => {
+                  console.log("[ProfileSection] Image loading error");
+                  setImageError(true);
+                }}
               />
             )}
             <AvatarFallback className="bg-gradient-to-br from-secondary/70 to-secondary/90 text-primary text-xl font-bold">
@@ -94,7 +118,7 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
               <Users className="h-4 w-4 text-primary" />
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground leading-none">Followers</span>
-                <span className="text-sm font-semibold text-primary">{profileData?.followers?.toLocaleString()}</span>
+                <span className="text-sm font-semibold text-primary">{getFollowers().toLocaleString()}</span>
               </div>
             </div>
             
@@ -102,7 +126,7 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
               <UserRound className="h-4 w-4 text-primary" />
               <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground leading-none">Following</span>
-                <span className="text-sm font-semibold text-primary">{profileData?.following?.toLocaleString()}</span>
+                <span className="text-sm font-semibold text-primary">{getFollowing().toLocaleString()}</span>
               </div>
             </div>
             
@@ -119,14 +143,14 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
         </div>
       </div>
       
-      {profileData?.bio && (
+      {getBio() && (
         <div className="mt-5 p-4 bg-secondary/40 rounded-lg border border-primary/20 shadow-inner hover:bg-secondary/50 transition-all duration-300">
           <div className="flex items-center gap-1.5 mb-2">
             <Star className="h-4 w-4 text-primary" />
             <span className="text-xs font-semibold text-primary">Bio</span>
           </div>
           <div className="text-sm text-muted-foreground">
-            {profileData.bio}
+            {getBio()}
           </div>
         </div>
       )}
