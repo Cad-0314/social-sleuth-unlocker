@@ -5,12 +5,17 @@ export interface ProfileData {
   username: string;
   full_name: string;
   bio: string;
+  biography: string;
   is_verified: boolean;
-  is_business_account: boolean;
-  followers: number;
-  following: number;
-  profile_pic_url: string;
   is_private: boolean;
+  followers: number;
+  follower_count: number;
+  following: number;
+  following_count: number;
+  post_count: number;
+  profile_pic_url: string;
+  profile_picture: string;
+  external_url?: string;
 }
 
 // Sanitize sensitive information before logging
@@ -24,47 +29,22 @@ const sanitizeForLogging = (data: any) => {
   if (sanitized.profile_pic_url) {
     sanitized.profile_pic_url = "[REDACTED URL]";
   }
+  if (sanitized.profile_picture) {
+    sanitized.profile_picture = "[REDACTED URL]";
+  }
   
   return sanitized;
 };
 
 /**
  * Handle profile picture URLs with CORS issues
- * 
- * In a production environment, this should be replaced with:
- * 1. Server-side proxy that fetches the image and serves it from your domain
- * 2. A base64 encoding service that converts external images to data URLs
- * 3. A CDN that can proxy images with proper CORS headers
  */
 const handleProfilePicUrl = (url: string): string => {
   if (!url) return '';
   
   try {
-    // For a real implementation, you would use one of these approaches:
-    
-    // Approach 1: Server proxy (pseudo-code for illustration)
-    // return `https://your-backend.com/image-proxy?url=${encodeURIComponent(url)}`;
-    
-    // Approach 2: For demo purposes only, we're using a placeholder image
-    // In production, DO NOT use placeholder images for real user data
-    // Instead implement a proper server-side proxy
-    
-    // Different placeholder images based on hash of URL for consistent user images
-    const hashCode = Array.from(url).reduce(
-      (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
-    );
-    
-    // Use different placeholder images to simulate different user profiles
-    const placeholders = [
-      'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
-      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6',
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9'
-    ];
-    
-    return placeholders[Math.abs(hashCode % placeholders.length)];
-    
+    // Return the URL directly since it's already proxied
+    return url;
   } catch (error) {
     console.error("Error handling profile image URL:", error);
     // Fallback image in case of errors
@@ -78,8 +58,8 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
     console.log("Fetching account details for:", username);
     
     try {
-      // Use HTTPS for production endpoints
-      const API_ENDPOINT = "http://localhost:5000/"; // Should be HTTPS in production
+      // Use the new API endpoint
+      const API_ENDPOINT = "https://landa.firestars.co/api.php";
       
       // Don't log request bodies with sensitive data
       const response = await fetch(API_ENDPOINT, {
@@ -88,8 +68,6 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username }),
-        // Add credentials: 'same-origin' for cookies if needed
-        credentials: 'same-origin',
       });
       
       if (!response.ok) {
@@ -99,15 +77,33 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
       
       const data = await response.json();
       
-      // Process profile image URL to avoid CORS issues
-      if (data && data.profile_pic_url) {
-        data.profile_pic_url = handleProfilePicUrl(data.profile_pic_url);
+      // Process profile image URL
+      if (data && data.profile_picture) {
+        data.profile_pic_url = handleProfilePicUrl(data.profile_picture);
       }
       
-      // Log sanitized data without sensitive information
-      console.log("Received profile data:", sanitizeForLogging(data));
+      // Map the response data to our ProfileData interface
+      const mappedData: ProfileData = {
+        username: data.username,
+        full_name: data.full_name,
+        bio: data.biography || "", // Map biography to bio
+        biography: data.biography || "",
+        is_verified: data.is_verified,
+        is_private: data.is_private,
+        followers: data.follower_count,
+        follower_count: data.follower_count,
+        following: data.following_count,
+        following_count: data.following_count,
+        post_count: data.post_count || 0,
+        profile_pic_url: data.profile_picture,
+        profile_picture: data.profile_picture,
+        external_url: data.external_url,
+      };
       
-      return data;
+      // Log sanitized data without sensitive information
+      console.log("Received profile data:", sanitizeForLogging(mappedData));
+      
+      return mappedData;
     } catch (fetchError) {
       console.error("API fetch error:", fetchError);
       

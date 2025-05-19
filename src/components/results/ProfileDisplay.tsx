@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Check, UserRound, Shield, Users } from "lucide-react";
+import { Check, UserRound, Shield, Users, Link } from "lucide-react";
 
 interface ProfileDisplayProps {
   username: string;
@@ -30,9 +30,9 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
       <CardHeader>
         <div className="flex items-center gap-4">
           <Avatar className="w-20 h-20 border-2 border-primary shadow-[0_0_15px_rgba(0,255,170,0.3)]">
-            {!imageError && profileData?.profile_pic_url && (
+            {!imageError && (profileData?.profile_pic_url || profileData?.profile_picture) && (
               <img 
-                src={profileData.profile_pic_url}
+                src={profileData.profile_pic_url || profileData.profile_picture}
                 alt={`${username}'s profile`}
                 className="h-full w-full object-cover"
                 onError={() => setImageError(true)}
@@ -64,7 +64,9 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
             <Users className="h-4 w-4 text-primary" />
             <span className="text-sm text-muted-foreground">Followers</span>
           </div>
-          <span className="font-semibold text-primary">{profileData?.followers?.toLocaleString()}</span>
+          <span className="font-semibold text-primary">
+            {(profileData?.followers || profileData?.follower_count)?.toLocaleString()}
+          </span>
         </div>
         
         <div className="flex items-center justify-between gap-4 p-2 bg-secondary/20 rounded-md">
@@ -72,13 +74,53 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
             <UserRound className="h-4 w-4 text-primary" />
             <span className="text-sm text-muted-foreground">Following</span>
           </div>
-          <span className="font-semibold text-primary">{profileData?.following?.toLocaleString()}</span>
+          <span className="font-semibold text-primary">
+            {(profileData?.following || profileData?.following_count)?.toLocaleString()}
+          </span>
         </div>
         
-        {profileData?.bio && (
+        {(profileData?.is_private !== undefined) && (
+          <div className="flex items-center justify-between gap-4 p-2 bg-secondary/20 rounded-md">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Account Type</span>
+            </div>
+            <span className="font-semibold text-primary">
+              {profileData.is_private ? "Private" : "Public"}
+            </span>
+          </div>
+        )}
+        
+        {profileData?.post_count !== undefined && (
+          <div className="flex items-center justify-between gap-4 p-2 bg-secondary/20 rounded-md">
+            <div className="flex items-center gap-2">
+              <UserRound className="h-4 w-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Posts</span>
+            </div>
+            <span className="font-semibold text-primary">{profileData.post_count.toLocaleString()}</span>
+          </div>
+        )}
+        
+        {(profileData?.bio || profileData?.biography) && (
           <div className="p-3 bg-secondary/20 rounded-md">
             <p className="text-xs text-muted-foreground mb-1">Bio</p>
-            <p className="text-sm text-foreground">{profileData?.bio}</p>
+            <p className="text-sm text-foreground">{profileData?.bio || profileData?.biography}</p>
+          </div>
+        )}
+        
+        {profileData?.external_url && (
+          <div className="p-3 bg-secondary/20 rounded-md">
+            <div className="flex items-center gap-2">
+              <Link className="h-4 w-4 text-primary" />
+              <a 
+                href={profileData.external_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-sm text-primary hover:underline"
+              >
+                {profileData.external_url}
+              </a>
+            </div>
           </div>
         )}
       </div>
