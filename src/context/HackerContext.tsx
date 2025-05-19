@@ -4,13 +4,19 @@ import React, { createContext, useContext, useState } from "react";
 interface ProfileData {
   username: string;
   full_name: string;
-  bio: string;
+  bio?: string;
+  biography?: string;
   is_verified: boolean;
-  is_business_account: boolean;
-  followers: number;
-  following: number;
-  profile_pic_url: string;
+  is_business_account?: boolean;
+  followers?: number;
+  follower_count?: number;
+  following?: number;
+  following_count?: number;
+  post_count?: number;
+  profile_pic_url?: string;
+  profile_picture?: string;
   is_private: boolean;
+  external_url?: string;
 }
 
 interface HackerContextType {
@@ -25,7 +31,7 @@ interface HackerContextType {
   paymentComplete: boolean;
   setPaymentComplete: (status: boolean) => void;
   profileData: ProfileData | null;
-  setProfileData: (data: ProfileData) => void;
+  setProfileData: (data: ProfileData | null) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   error: string | null;
