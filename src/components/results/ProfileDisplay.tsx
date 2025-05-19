@@ -15,7 +15,7 @@ const ProfileDisplay = ({ username, profileData }: ProfileDisplayProps) => {
   useEffect(() => {
     // Reset image error state when profileData changes
     setImageError(false);
-  }, [profileData?.profile_pic_url]);
+  }, [profileData?.profile_pic_url, profileData?.profile_picture]);
   
   // Function to get initials from username or full name
   const getInitials = () => {

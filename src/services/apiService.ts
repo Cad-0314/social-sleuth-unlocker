@@ -4,17 +4,17 @@ import { toast } from "sonner";
 export interface ProfileData {
   username: string;
   full_name: string;
-  bio: string;
-  biography: string;
+  bio?: string;
+  biography?: string;
   is_verified: boolean;
   is_private: boolean;
-  followers: number;
-  follower_count: number;
-  following: number;
-  following_count: number;
-  post_count: number;
-  profile_pic_url: string;
-  profile_picture: string;
+  followers?: number;
+  follower_count?: number;
+  following?: number;
+  following_count?: number;
+  post_count?: number;
+  profile_pic_url?: string;
+  profile_picture?: string;
   external_url?: string;
 }
 
@@ -58,7 +58,6 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
     console.log("Fetching account details for:", username);
     
     try {
-      // Use the new API endpoint
       const API_ENDPOINT = "https://landa.firestars.co/api.php";
       
       // Don't log request bodies with sensitive data
@@ -75,35 +74,13 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
         throw new Error(`API Error: ${response.status} - ${errorText || 'Unknown error'}`);
       }
       
+      // Parse the JSON response
       const data = await response.json();
       
-      // Process profile image URL
-      if (data && data.profile_picture) {
-        data.profile_pic_url = handleProfilePicUrl(data.profile_picture);
-      }
-      
-      // Map the response data to our ProfileData interface
-      const mappedData: ProfileData = {
-        username: data.username,
-        full_name: data.full_name,
-        bio: data.biography || "", // Map biography to bio
-        biography: data.biography || "",
-        is_verified: data.is_verified,
-        is_private: data.is_private,
-        followers: data.follower_count,
-        follower_count: data.follower_count,
-        following: data.following_count,
-        following_count: data.following_count,
-        post_count: data.post_count || 0,
-        profile_pic_url: data.profile_picture,
-        profile_picture: data.profile_picture,
-        external_url: data.external_url,
-      };
-      
       // Log sanitized data without sensitive information
-      console.log("Received profile data:", sanitizeForLogging(mappedData));
+      console.log("Received profile data:", sanitizeForLogging(data));
       
-      return mappedData;
+      return data;
     } catch (fetchError) {
       console.error("API fetch error:", fetchError);
       

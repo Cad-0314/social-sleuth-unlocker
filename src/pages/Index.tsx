@@ -51,9 +51,10 @@ const Index = () => {
         setProfileData(accountData);
         
         // Make sure to set the profile picture separately in context
-        if (accountData.profile_pic_url) {
-          console.log("Setting profile pic URL:", accountData.profile_pic_url);
-          setProfilePic(accountData.profile_pic_url);
+        const profilePicUrl = accountData.profile_pic_url || accountData.profile_picture;
+        if (profilePicUrl) {
+          console.log("Setting profile pic URL:", profilePicUrl);
+          setProfilePic(profilePicUrl);
         } else {
           console.warn("No profile pic URL found in account data");
         }
