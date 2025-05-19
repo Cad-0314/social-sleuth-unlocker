@@ -36,6 +36,35 @@ const sanitizeForLogging = (data: any) => {
   return sanitized;
 };
 
+// Mock data to use when the API call fails due to CORS
+const getMockProfileData = (username: string): ProfileData => {
+  console.log("[API] Using mock data for username:", username);
+  
+  // Generate some random but realistic looking values
+  const followerCount = Math.floor(Math.random() * 900000) + 1000;
+  const followingCount = Math.floor(Math.random() * 1000) + 100;
+  const postCount = Math.floor(Math.random() * 500) + 10;
+  const isVerified = Math.random() > 0.8; // 20% chance of verified
+  const isPrivate = Math.random() > 0.6; // 40% chance of private
+  
+  return {
+    username: username,
+    full_name: username.charAt(0).toUpperCase() + username.slice(1) + (Math.random() > 0.5 ? " " + username.split("").reverse().join("") : ""),
+    biography: "This is a generated profile due to API connection issues. The real profile could not be fetched.",
+    bio: "This is a generated profile due to API connection issues. The real profile could not be fetched.",
+    is_verified: isVerified,
+    is_private: isPrivate,
+    followers: followerCount,
+    follower_count: followerCount,
+    following: followingCount,
+    following_count: followingCount,
+    post_count: postCount,
+    profile_pic_url: `https://ui-avatars.com/api/?name=${username}&background=random`,
+    profile_picture: `https://ui-avatars.com/api/?name=${username}&background=random`,
+    external_url: "https://instagram.com"
+  };
+};
+
 export async function fetchAccountDetails(username: string): Promise<ProfileData | null> {
   try {
     console.log("========= FETCH ACCOUNT DETAILS START =========");
@@ -53,6 +82,8 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username }),
+        // Set a short timeout so we don't wait too long if CORS is failing
+        signal: AbortSignal.timeout(5000)
       });
       
       console.log("[API] Response status:", response.status, response.statusText);
@@ -102,7 +133,24 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
     } catch (fetchError) {
       console.error("[API] Fetch error:", fetchError);
       
-      // Handle network errors more gracefully
+      // Check if it's a CORS error by looking for presence of TypeError and "Failed to fetch"
+      if (fetchError instanceof TypeError && fetchError.message.includes("Failed to fetch")) {
+        console.log("[API] CORS error detected, falling back to mock data");
+        
+        // Create mock profile data since we can't access the API due to CORS
+        const mockProfile = getMockProfileData(username);
+        console.log("[API] Generated mock profile:", sanitizeForLogging(mockProfile));
+        
+        // Show a warning toast to the user
+        toast.warning("API connection failed. Using simulated profile data.", {
+          duration: 5000,
+        });
+        
+        console.log("========= FETCH ACCOUNT DETAILS END: USING MOCK DATA =========");
+        return mockProfile;
+      }
+      
+      // Handle other network errors more gracefully
       if (fetchError instanceof TypeError && fetchError.message.includes("Failed to fetch")) {
         toast.error(`Network error: Unable to connect to the API. Please try again later.`);
         throw new Error(`Network error: Unable to connect to the API for @${username}`);
