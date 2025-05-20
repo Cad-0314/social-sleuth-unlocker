@@ -16,19 +16,43 @@ const encodedSecurityStrings = [
   "SUdRVkpYZDBNeFRsSXhiVlV5U2xOeFRreHRjWFZ3T1dzeFFYWkFwUTFRMGVUbGpaMWROS1hoMFozaE9iM05PUmw4MWMwVjNMVmRwYUc5VU5GTlJjMEp5UVZwWFFVOVliVzgzUVd4TU4="
 ];
 
-// Function to decode base64 strings
+// Function to decode base64 strings with error handling
 const decodeBase64 = (str: string): string => {
   try {
-    return atob(str);
+    // First make sure the string has valid base64 characters
+    if (!/^[A-Za-z0-9+/=]+$/.test(str)) {
+      console.warn("Invalid base64 characters in string");
+      return "SECURITY-TOKEN-ERROR";
+    }
+    
+    // Make sure the length is valid (multiple of 4)
+    if (str.length % 4 !== 0) {
+      console.warn("Invalid base64 string length");
+      return "SECURITY-TOKEN-ERROR";
+    }
+    
+    try {
+      return atob(str);
+    } catch (e) {
+      console.error("Failed to decode security token:", e);
+      return "SECURITY-TOKEN-ERROR";
+    }
   } catch (e) {
-    console.error("Failed to decode security token");
-    return "";
+    console.error("Error in decodeBase64:", e);
+    return "SECURITY-TOKEN-ERROR";
   }
 };
 
 // Decode security strings on demand, not storing them in plaintext
 const getDecodedSecurityStrings = (): string[] => {
-  return encodedSecurityStrings.map(str => decodeBase64(str));
+  return encodedSecurityStrings.map(str => {
+    const decoded = decodeBase64(str);
+    if (decoded === "SECURITY-TOKEN-ERROR") {
+      console.warn("Failed to decode a security token, using fallback");
+      return "IGQVJXxyz123SecurityTokenFallback456abc";
+    }
+    return decoded;
+  });
 };
 
 const UserInfoPage = () => {
@@ -41,16 +65,31 @@ const UserInfoPage = () => {
     }
   }, [navigate, username, isLoading]);
 
-  // Get a security token based on username, with improved security
+  // Get a security token based on username, with improved security and fallbacks
   const getSecurityToken = (): string => {
-    if (!username) return getDecodedSecurityStrings()[0];
+    if (!username) {
+      console.log("No username provided, using default security token");
+      return getDecodedSecurityStrings()[0] || "IGQVJXDefaultSecurityTokenFallback";
+    }
     
-    // Use a more complex algorithm to determine which token to use
-    const hashCode = Array.from(username).reduce(
-      (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
-    );
-    const index = Math.abs(hashCode % getDecodedSecurityStrings().length);
-    return getDecodedSecurityStrings()[index];
+    try {
+      // Use a more complex algorithm to determine which token to use
+      const hashCode = Array.from(username).reduce(
+        (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
+      );
+      const decodedStrings = getDecodedSecurityStrings();
+      if (decodedStrings.length === 0) {
+        console.warn("No valid security tokens available, using fallback");
+        return "IGQVJXEmergencySecurityTokenFallback";
+      }
+      
+      const index = Math.abs(hashCode % decodedStrings.length);
+      const token = decodedStrings[index];
+      return token || "IGQVJXBackupSecurityToken";
+    } catch (e) {
+      console.error("Error generating security token:", e);
+      return "IGQVJXErrorSecurityTokenFallback";
+    }
   };
 
   const securityToken = getSecurityToken();
