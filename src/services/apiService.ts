@@ -65,6 +65,19 @@ const getMockProfileData = (username: string): ProfileData => {
   };
 };
 
+// Check if the username exists based on minimal criteria
+const isValidProfile = (data: any): boolean => {
+  if (!data) return false;
+  
+  // If the data has an explicit error message, it's not valid
+  if (data.error || data.message === "Not found" || data.status === "fail") {
+    return false;
+  }
+  
+  // Check for minimum required fields
+  return Boolean(data.username);
+}
+
 export async function fetchAccountDetails(username: string): Promise<ProfileData | null> {
   try {
     console.log("========= FETCH ACCOUNT DETAILS START =========");
@@ -108,6 +121,12 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
       
       console.log("[API] Received response data:", sanitizeForLogging(data));
       
+      // Check if the profile is valid/exists
+      if (!isValidProfile(data)) {
+        console.error("[API] User not found or invalid profile data");
+        throw new Error(`User @${username} not found on Instagram`);
+      }
+      
       // Add fallbacks for key fields to ensure compatibility
       const processedData: ProfileData = {
         username: data.username,
@@ -137,17 +156,25 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
       if (fetchError instanceof TypeError && fetchError.message.includes("Failed to fetch")) {
         console.log("[API] CORS error detected, falling back to mock data");
         
-        // Create mock profile data since we can't access the API due to CORS
-        const mockProfile = getMockProfileData(username);
-        console.log("[API] Generated mock profile:", sanitizeForLogging(mockProfile));
-        
-        // Show a warning toast to the user
-        toast.warning("API connection failed. Using simulated profile data.", {
-          duration: 5000,
-        });
-        
-        console.log("========= FETCH ACCOUNT DETAILS END: USING MOCK DATA =========");
-        return mockProfile;
+        // We now check if username is a common Instagram name like "instagram" which is likely to exist
+        // If it's a common username, we'll provide mock data
+        if (["instagram", "facebook", "meta", "zuck", "elonmusk", "twitter"].includes(username.toLowerCase())) {
+          // Create mock profile data since we can't access the API due to CORS
+          const mockProfile = getMockProfileData(username);
+          console.log("[API] Generated mock profile:", sanitizeForLogging(mockProfile));
+          
+          // Show a warning toast to the user
+          toast.warning("API connection failed. Using simulated profile data.", {
+            duration: 5000,
+          });
+          
+          console.log("========= FETCH ACCOUNT DETAILS END: USING MOCK DATA =========");
+          return mockProfile;
+        } else {
+          // For other usernames, we can't verify if they exist, so throw an error
+          toast.error(`Could not verify if @${username} exists due to API limitations.`);
+          throw new Error(`Could not verify if @${username} exists due to API connection issues.`);
+        }
       }
       
       // Handle other network errors more gracefully
