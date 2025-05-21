@@ -61,12 +61,12 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Transaction ID Input */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="transactionId" className="text-sm">Transaction ID</Label>
-          <span className="text-xs text-primary">Required</span>
+          <Label htmlFor="transactionId" className="text-sm text-white">Transaction ID</Label>
+          <span className="text-xs text-[#3CEFFF]">Required</span>
         </div>
         <Input
           id="transactionId"
@@ -74,10 +74,10 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
           placeholder="Enter UPI transaction ID"
           value={formData.transactionId}
           onChange={handleChange}
-          className="bg-card/50 border-primary/20 focus:border-primary focus:ring-2 focus:ring-primary/20"
+          className="bg-[#151f32] border-[#1E293B] focus:border-[#3CEFFF] focus:ring-[#3CEFFF]/20"
           disabled={loading}
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-[#94A3B8]">
           Enter the transaction ID from your UPI payment app
         </p>
       </div>
@@ -85,8 +85,8 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
       {/* Screenshot Upload */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label htmlFor="screenshot" className="text-sm">Payment Screenshot</Label>
-          <span className="text-xs text-primary">Required</span>
+          <Label htmlFor="screenshot" className="text-sm text-white">Payment Screenshot</Label>
+          <span className="text-xs text-[#3CEFFF]">Required</span>
         </div>
         
         <input
@@ -101,51 +101,55 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
         />
         
         <div 
-          className={`border-2 rounded-md p-4 text-center cursor-pointer transition-all ${
+          className={`rounded-lg p-4 text-center cursor-pointer transition-all ${
             formData.screenshotFile 
-              ? "border-primary/40 bg-primary/5 neon-border" 
-              : "border-secondary/40 hover:border-primary/30 hover:bg-secondary/10"
+              ? "border-2 border-[#3CEFFF]/40 bg-[#3CEFFF]/5" 
+              : "border border-[#1E293B] bg-[#151f32] hover:border-[#3CEFFF]/30"
           } ${loading ? "opacity-50 pointer-events-none" : ""}`}
           onClick={triggerFileUpload}
         >
           {formData.screenshotFile ? (
             <div className="flex flex-col items-center">
-              <div className="bg-primary/10 rounded-full p-2 mb-2">
-                <Check className="h-5 w-5 text-primary" />
+              <div className="bg-[#3CEFFF]/10 rounded-full p-2 mb-2">
+                <Check className="h-5 w-5 text-[#3CEFFF]" />
               </div>
-              <p className="text-sm font-medium text-primary truncate max-w-full">
+              <p className="text-sm font-medium text-white truncate max-w-full">
                 {formData.screenshotFile.name}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-[#94A3B8] mt-1">
                 Click to change file
               </p>
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <div className="bg-secondary/20 rounded-full p-2 mb-2">
-                <Upload className="h-5 w-5 text-muted-foreground" />
+              <div className="bg-[#1a2236] rounded-full p-2 mb-2">
+                <Upload className="h-5 w-5 text-[#94A3B8]" />
               </div>
-              <p className="text-sm font-medium">Upload Screenshot</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Click to select a file or drag and drop
+              <p className="text-sm font-medium text-white">Upload Screenshot</p>
+              <p className="text-xs text-[#94A3B8] mt-1">
+                Click to select a file
               </p>
             </div>
           )}
         </div>
       </div>
       
-      <div className="flex items-center justify-between p-3 bg-primary/10 rounded border border-primary/20">
-        <span className="text-primary font-medium">Total Amount:</span>
-        <span className="text-lg font-bold text-primary">₹1499.00</span>
-      </div>
-      
       <Button 
         type="submit" 
-        className="w-full mt-6 cyber-button shadow-[0_0_15px_rgba(0,170,255,0.3)]"
+        className="w-full mt-6 py-6 bg-gradient-to-r from-[#3CEFFF] to-[#2E7CF6] hover:from-[#3CEFFF] hover:to-[#4B89F2] text-[#080C18] font-medium shadow-lg shadow-[#3CEFFF]/20 border border-[#3CEFFF]/30"
         disabled={loading}
       >
-        <IndianRupee className="h-4 w-4" />
-        {loading ? "Processing..." : "Complete Payment & Continue"}
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 rounded-full border-2 border-[#080C18]/30 border-t-[#080C18] animate-spin"></div>
+            <span>Processing...</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <IndianRupee className="h-4 w-4" />
+            <span>Complete Payment & Continue</span>
+          </div>
+        )}
       </Button>
     </form>
   );

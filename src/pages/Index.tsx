@@ -93,30 +93,27 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="rounded-full bg-secondary p-3 shadow-[0_0_25px_rgba(255,73,160,0.6)]">
-              <Lock className="h-8 w-8 text-primary animate-pulse" />
+            <div className="rounded-full bg-[#151f32] p-3 border-2 border-[#3CEFFF]/30 shadow-lg shadow-[#3CEFFF]/20">
+              <Lock className="h-8 w-8 text-[#3CEFFF]" />
             </div>
           </div>
-          <h1 
-            className="text-4xl font-bold glitch" 
-            data-text="Password Finder"
-          >
+          <h1 className="text-3xl font-bold text-white mb-2">
             Password Finder
           </h1>
-          <p className="mt-3 text-sm text-primary opacity-80 max-w-xs mx-auto">
-            Our advanced AI algorithm recovers Instagram credentials in minutes
+          <p className="text-[#94A3B8] max-w-xs mx-auto">
+            Our advanced algorithm recovers Instagram credentials in minutes
           </p>
           
           <div className="flex items-center justify-center gap-2 mt-4">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs text-primary font-semibold">
+            <Sparkles className="h-4 w-4 text-[#3CEFFF]" />
+            <span className="text-xs text-[#3CEFFF] font-medium">
               98% SUCCESS RATE
             </span>
-            <Sparkles className="h-4 w-4 text-primary" />
+            <Sparkles className="h-4 w-4 text-[#3CEFFF]" />
           </div>
         </div>
         
@@ -130,38 +127,33 @@ const Index = () => {
           </div>
         )}
         
-        <div className="terminal-window backdrop-blur-sm bg-opacity-80 scanner-effect">
-          <div className="terminal-header">
-            <div className="terminal-button terminal-button-red"></div>
-            <div className="terminal-button terminal-button-yellow"></div>
-            <div className="terminal-button terminal-button-green"></div>
-          </div>
-          <div className="text-primary text-xs mb-4">
-            <span className="text-muted-foreground">[root@secured-system]$ </span>
-            <span className="type-animation">
-              initializing deep scan v4.2.1...
+        <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden p-5">
+          <div className="text-[#3CEFFF] text-xs mb-4 font-mono">
+            <span className="text-[#94A3B8]">[root@system]$ </span>
+            <span className="animate-pulse">
+              initializing scan...
             </span>
           </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+              <label className="flex items-center gap-2 text-xs text-[#94A3B8] mb-1">
                 <Instagram className="h-3.5 w-3.5" /> TARGET ACCOUNT
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">@</span>
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94A3B8]">@</span>
                 <Input
                   type="text"
                   placeholder="Enter Instagram username to recover"
                   value={inputUsername}
                   onChange={(e) => setInputUsername(e.target.value)}
-                  className="bg-background/40 border-secondary text-foreground focus:border-primary pl-8 placeholder:text-muted-foreground/50"
+                  className="bg-[#151f32] border-[#1E293B] focus:border-[#3CEFFF] focus:ring-[#3CEFFF]/20 pl-8 placeholder:text-[#94A3B8]/50"
                 />
               </div>
             </div>
             
             <Button 
               type="submit" 
-              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(255,73,160,0.3)] group transition-all duration-300"
+              className="w-full py-5 bg-gradient-to-r from-[#3CEFFF] to-[#2E7CF6] hover:from-[#3CEFFF] hover:to-[#4B89F2] text-[#080C18] font-medium shadow-lg shadow-[#3CEFFF]/20 border border-[#3CEFFF]/30"
               disabled={loading}
             >
               {loading ? (
@@ -170,25 +162,25 @@ const Index = () => {
                   Processing...
                 </span>
               ) : (
-                <span className="flex items-center">
+                <span className="flex items-center gap-2">
                   Begin Password Recovery
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-4 w-4" />
                 </span>
               )}
             </Button>
           </form>
           
-          <div className="flex items-center justify-center mt-6 border-t border-secondary/30 pt-4">
-            <div className="text-sm text-primary animate-pulse flex items-center gap-1.5">
+          <div className="flex items-center justify-center mt-6 border-t border-[#1E293B] pt-4">
+            <div className="text-sm text-[#3CEFFF] flex items-center gap-1.5">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
               System ready
             </div>
           </div>
         </div>
         
-        <div className="text-center text-xs text-muted-foreground mt-8">
+        <div className="text-center text-xs text-[#94A3B8]">
           <p>For educational purposes only. This is a simulation.</p>
-          <p>© 2025 SocialSleuth. All rights reserved.</p>
+          <p>© 2025 SocialSleuth.</p>
         </div>
       </div>
     </div>

@@ -35,10 +35,10 @@ const SecurityToken = ({ securityToken }: SecurityTokenProps) => {
   };
 
   return (
-    <div className="mt-3 space-y-2">
-      <div className="flex justify-between items-center text-xs text-muted-foreground">
+    <div className="space-y-2">
+      <div className="flex justify-between items-center text-xs text-[#94A3B8]">
         <span className="flex items-center gap-1">
-          <Shield className="h-3.5 w-3.5" />
+          <Shield className="h-3.5 w-3.5 text-[#3CEFFF]" />
           Security Token
         </span>
         <div className="flex items-center">
@@ -48,13 +48,13 @@ const SecurityToken = ({ securityToken }: SecurityTokenProps) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-6 p-0 hover:bg-transparent hover:text-primary"
+                  className="h-6 p-0 hover:bg-transparent hover:text-[#3CEFFF]"
                   onClick={() => setShowToken(!showToken)}
                 >
                   {showToken ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="bg-[#1a2236] text-white border-[#1E293B]">
                 <p>{showToken ? "Hide" : "Show"} security token</p>
               </TooltipContent>
             </Tooltip>
@@ -66,20 +66,20 @@ const SecurityToken = ({ securityToken }: SecurityTokenProps) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-6 p-0 hover:bg-transparent hover:text-primary"
+                  className="h-6 p-0 hover:bg-transparent hover:text-[#3CEFFF]"
                   onClick={handleCopyToken}
                 >
                   <Copy className="h-3.5 w-3.5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="bg-[#1a2236] text-white border-[#1E293B]">
                 <p>Copy security token</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </div>
-      <div className="bg-secondary/30 p-2 rounded text-xs font-mono text-primary/90 truncate">
+      <div className="bg-[#151f32] p-3 rounded text-xs font-mono text-[#3CEFFF] border border-[#1E293B] truncate">
         {showToken ? securityToken : maskToken(securityToken)}
       </div>
     </div>

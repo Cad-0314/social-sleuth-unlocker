@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
-import { Card } from "@/components/ui/card";
 import { CheckCircle, AlertCircle, LoaderCircle } from "lucide-react";
 import { TRANSACTION_SUCCESS } from "@/config/paymentConfig";
 import { Button } from "@/components/ui/button";
@@ -49,33 +48,33 @@ const TransactionVerification = ({ onComplete, onFail }: TransactionVerification
   }, [onComplete, onFail]);
 
   return (
-    <Card className="p-6 border border-secondary/40 bg-secondary/10 flex flex-col items-center glass-card scanner-effect">
+    <div className="bg-[#151f32] p-5 rounded-lg border border-[#1E293B] flex flex-col items-center">
       {status === "loading" && (
         <>
-          <LoaderCircle className="h-12 w-12 text-primary animate-spin mb-4" />
-          <h3 className="text-xl font-bold text-primary mb-2">Verifying Transaction</h3>
-          <p className="text-muted-foreground mb-4">Please wait while we verify your payment...</p>
+          <LoaderCircle className="h-12 w-12 text-[#3CEFFF] animate-spin mb-4" />
+          <h3 className="text-xl font-bold text-white mb-2">Verifying Transaction</h3>
+          <p className="text-[#94A3B8] mb-4 text-center">Please wait while we verify your payment...</p>
           <div className="w-full mb-2">
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-2 bg-[#1a2236]" />
           </div>
-          <p className="text-xs text-muted-foreground">Do not close this window</p>
+          <p className="text-xs text-[#94A3B8]">Do not close this window</p>
         </>
       )}
       
       {status === "success" && (
         <>
           <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-          <h3 className="text-xl font-bold text-green-500 mb-2">Transaction Verified</h3>
-          <p className="text-muted-foreground mb-4">Payment successful! Redirecting...</p>
-          <Progress value={100} className="w-full h-2" />
+          <h3 className="text-xl font-bold text-white mb-2">Transaction Verified</h3>
+          <p className="text-[#94A3B8] mb-4 text-center">Payment successful! Redirecting...</p>
+          <Progress value={100} className="w-full h-2 bg-[#1a2236]" />
         </>
       )}
       
       {status === "failed" && (
         <>
           <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-          <h3 className="text-xl font-bold text-red-500 mb-2">Transaction Failed</h3>
-          <p className="text-muted-foreground mb-4">We couldn't verify your payment. Please try again.</p>
+          <h3 className="text-xl font-bold text-white mb-2">Transaction Failed</h3>
+          <p className="text-[#94A3B8] mb-4 text-center">We couldn't verify your payment. Please try again.</p>
           <Button 
             variant="destructive" 
             className="w-full"
@@ -85,7 +84,7 @@ const TransactionVerification = ({ onComplete, onFail }: TransactionVerification
           </Button>
         </>
       )}
-    </Card>
+    </div>
   );
 };
 

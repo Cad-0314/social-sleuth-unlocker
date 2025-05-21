@@ -14,15 +14,9 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
   const [imageError, setImageError] = useState(false);
   
   useEffect(() => {
-    console.log("[ProfileSection] Component mounted/updated", {
-      username,
-      hasProfileData: !!profileData,
-      isLoading
-    });
-    
     // Reset image error state when profileData changes
     setImageError(false);
-  }, [profileData?.profile_pic_url, profileData?.profile_picture, username, profileData, isLoading]);
+  }, [profileData?.profile_pic_url, profileData?.profile_picture, username, profileData]);
 
   // Function to get initials from username or full name
   const getInitials = () => {
@@ -40,22 +34,22 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
 
   if (isLoading) {
     return (
-      <div className="p-3 sm:p-4 bg-secondary/20 backdrop-blur-md rounded-lg border border-primary/20 mb-4 glass-card shadow-[0_0_20px_rgba(0,255,170,0.2)]">
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="relative h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-full border-2 border-primary/30 shadow-[0_0_15px_rgba(0,255,170,0.3)] overflow-hidden bg-secondary/30 flex items-center justify-center">
-            <RefreshCw className="h-6 w-6 sm:h-8 sm:w-8 text-primary animate-spin" />
+      <div className="p-4 bg-[#151f32] rounded-lg border border-[#1E293B] mb-4">
+        <div className="flex items-center gap-4">
+          <div className="relative h-16 w-16 rounded-full border-2 border-[#3CEFFF]/30 overflow-hidden bg-[#1a2236] flex items-center justify-center">
+            <RefreshCw className="h-6 w-6 text-[#3CEFFF] animate-spin" />
           </div>
           
-          <div className="space-y-3 flex-1 mt-3 sm:mt-0 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <Skeleton className="h-6 w-32 sm:h-7 sm:w-40" />
-              <Skeleton className="h-4 w-4 sm:h-5 sm:w-5 rounded-full" />
+          <div className="space-y-3 flex-1">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-6 w-32 bg-[#1a2236]" />
+              <Skeleton className="h-4 w-4 rounded-full bg-[#1a2236]" />
             </div>
-            <Skeleton className="h-4 w-28 sm:w-32 mx-auto sm:mx-0" />
+            <Skeleton className="h-4 w-28 bg-[#1a2236]" />
             
-            <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 mt-2">
-              <Skeleton className="h-8 w-24 sm:w-28 rounded-full" />
-              <Skeleton className="h-8 w-24 sm:w-28 rounded-full" />
+            <div className="flex gap-3 mt-2">
+              <Skeleton className="h-8 w-24 rounded-full bg-[#1a2236]" />
+              <Skeleton className="h-8 w-24 rounded-full bg-[#1a2236]" />
             </div>
           </div>
         </div>
@@ -63,79 +57,67 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
     );
   }
 
-  console.log("[ProfileSection] Rendering with data:", {
-    username,
-    fullName: profileData?.full_name,
-    bio: getBio()?.substring(0, 20) + "...",
-    profilePic: getProfilePic() ? "exists" : "missing",
-    followers: getFollowers(),
-    following: getFollowing(),
-  });
-
   return (
-    <div className="p-4 sm:p-6 bg-secondary/30 backdrop-blur-md rounded-lg border border-primary/30 mb-4 glass-card shadow-[0_0_25px_rgba(0,255,170,0.25)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,170,0.35)] transform hover:scale-[1.01]">
-      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
-        <div className="relative group">
-          <Avatar className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 border-2 border-primary/50 shadow-[0_0_15px_rgba(0,255,170,0.35)] ring-2 ring-primary/20 ring-offset-2 ring-offset-background/50 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,255,170,0.5)]">
+    <div className="p-4 bg-[#151f32] rounded-lg border border-[#1E293B] mb-4">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+        <div className="relative">
+          <Avatar className="h-16 w-16 sm:h-20 sm:w-20 border-2 border-[#3CEFFF]/30 shadow-lg shadow-[#3CEFFF]/20">
             {!imageError && getProfilePic() && (
               <img 
                 src={getProfilePic()}
                 alt={`${username}'s profile`}
                 className="h-full w-full object-cover rounded-full"
-                onError={() => {
-                  console.log("[ProfileSection] Image loading error");
-                  setImageError(true);
-                }}
+                onError={() => setImageError(true)}
               />
             )}
-            <AvatarFallback className="bg-gradient-to-br from-secondary/70 to-secondary/90 text-primary text-xl font-bold">
+            <AvatarFallback className="bg-[#1a2236] text-[#3CEFFF] text-xl font-bold">
               {getInitials()}
             </AvatarFallback>
           </Avatar>
           {profileData?.is_verified && (
-            <div className="absolute -bottom-1 -right-1 bg-primary/90 p-1.5 rounded-full shadow-lg">
-              <Verified className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground" />
+            <div className="absolute -bottom-1 -right-1 bg-[#3CEFFF] p-1.5 rounded-full shadow-lg">
+              <Check className="h-3 w-3 text-[#080C18]" />
             </div>
           )}
         </div>
         
-        <div className="space-y-2 flex-1 text-center sm:text-left mt-3 sm:mt-0">
+        <div className="space-y-2 flex-1 text-center sm:text-left">
           <div className="flex items-center justify-center sm:justify-start gap-2">
-            <h3 className="font-bold text-foreground text-xl md:text-2xl truncate max-w-[200px] sm:max-w-none">@{username}</h3>
+            <h3 className="font-bold text-white text-xl truncate max-w-[200px]">@{username}</h3>
             {profileData?.is_verified && (
-              <span className="bg-primary/20 p-1 rounded-full neon-border">
-                <Check className="h-3.5 w-3.5 text-primary" />
+              <span className="bg-[#3CEFFF]/20 p-1 rounded-full border border-[#3CEFFF]/30">
+                <Verified className="h-3.5 w-3.5 text-[#3CEFFF]" />
               </span>
             )}
           </div>
           
           {profileData?.full_name && (
-            <p className="text-sm text-primary/90 font-medium truncate max-w-[230px] sm:max-w-none">{profileData.full_name}</p>
+            <p className="text-sm text-[#94A3B8] truncate max-w-[200px]">{profileData.full_name}</p>
           )}
           
-          <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 mt-3">
-            <div className="flex items-center gap-2 bg-secondary/50 px-2 sm:px-3 py-1.5 rounded-full border border-primary/20 shadow-sm hover:bg-secondary/70 transition-colors">
-              <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+          <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
+            <div className="flex items-center gap-2 bg-[#1a2236] px-3 py-1.5 rounded-lg border border-[#1E293B]">
+              <Users className="h-3.5 w-3.5 text-[#3CEFFF]" />
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground leading-none">Followers</span>
-                <span className="text-xs sm:text-sm font-semibold text-primary">{getFollowers().toLocaleString()}</span>
+                <span className="text-xs text-[#94A3B8] leading-none">Followers</span>
+                <span className="text-xs font-semibold text-white">{getFollowers().toLocaleString()}</span>
               </div>
             </div>
             
-            <div className="flex items-center gap-2 bg-secondary/50 px-2 sm:px-3 py-1.5 rounded-full border border-primary/20 shadow-sm hover:bg-secondary/70 transition-colors">
-              <UserRound className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+            <div className="flex items-center gap-2 bg-[#1a2236] px-3 py-1.5 rounded-lg border border-[#1E293B]">
+              <UserRound className="h-3.5 w-3.5 text-[#3CEFFF]" />
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground leading-none">Following</span>
-                <span className="text-xs sm:text-sm font-semibold text-primary">{getFollowing().toLocaleString()}</span>
+                <span className="text-xs text-[#94A3B8] leading-none">Following</span>
+                <span className="text-xs font-semibold text-white">{getFollowing().toLocaleString()}</span>
               </div>
             </div>
             
             {profileData?.is_private && (
-              <div className="flex items-center gap-2 bg-secondary/50 px-2 sm:px-3 py-1.5 rounded-full border border-primary/20 shadow-sm hover:bg-secondary/70 transition-colors">
-                <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+              <div className="flex items-center gap-2 bg-[#1a2236] px-3 py-1.5 rounded-lg border border-[#1E293B]">
+                <Shield className="h-3.5 w-3.5 text-[#3CEFFF]" />
                 <div className="flex flex-col">
-                  <span className="text-xs text-muted-foreground leading-none">Account</span>
-                  <span className="text-xs sm:text-sm font-semibold text-primary">Private</span>
+                  <span className="text-xs text-[#94A3B8] leading-none">Account</span>
+                  <span className="text-xs font-semibold text-white">Private</span>
                 </div>
               </div>
             )}
@@ -144,12 +126,12 @@ const ProfileSection = ({ username, profileData, isLoading = false }: ProfileSec
       </div>
       
       {getBio() && (
-        <div className="mt-5 p-3 sm:p-4 bg-secondary/40 rounded-lg border border-primary/20 shadow-inner hover:bg-secondary/50 transition-all duration-300">
-          <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
-            <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
-            <span className="text-xs font-semibold text-primary">Bio</span>
+        <div className="mt-4 p-3 bg-[#1a2236] rounded-lg border border-[#1E293B]">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Star className="h-3.5 w-3.5 text-[#3CEFFF]" />
+            <span className="text-xs font-medium text-white">Bio</span>
           </div>
-          <div className="text-xs sm:text-sm text-muted-foreground break-words">
+          <div className="text-xs text-[#94A3B8] break-words">
             {getBio()}
           </div>
         </div>

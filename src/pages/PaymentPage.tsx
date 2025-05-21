@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHackerContext } from "@/context/HackerContext";
-import { Shield, Zap } from "lucide-react";
+import { Shield, Zap, LockKeyhole } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -60,36 +60,34 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-6 matrix-bg">
-      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
-        <div className="mb-6 text-center">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
-            <h1 className="text-2xl font-bold text-primary">Password Recovery</h1>
-            <Zap className="h-5 w-5 text-primary animate-pulse" />
-          </div>
-          <p className="text-muted-foreground text-sm">Complete payment to continue</p>
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:px-6 sm:py-12">
+      <div className="max-w-md mx-auto">
+        <div className="flex items-center justify-center gap-3 mb-5">
+          <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
+          <LockKeyhole className="h-5 w-5 text-[#3CEFFF]" />
+          <h1 className="text-xl font-bold text-white">Payment Gateway</h1>
+          <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg border-2 border-primary/20 shadow-[0_0_25px_rgba(0,170,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,170,255,0.3)]">
-          <div className="terminal-header">
-            <div className="terminal-button terminal-button-red"></div>
-            <div className="terminal-button terminal-button-yellow"></div>
-            <div className="terminal-button terminal-button-green"></div>
+        <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden">
+          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-4 sm:p-5 border-b border-[#1E293B] flex items-center justify-between">
+            <div>
+              <h2 className="text-white font-bold">@{username}</h2>
+              <p className="text-xs text-[#94A3B8] mt-1">Password recovery service</p>
+            </div>
+            <div className="bg-[#151f32] p-2 rounded-lg border border-[#1E293B]">
+              <p className="text-sm font-bold text-[#3CEFFF]">₹1499</p>
+            </div>
           </div>
           
-          <div className="p-4 md:p-6 overflow-y-auto max-h-[80vh]">
+          <div className="p-5 max-h-[calc(100vh-200px)] overflow-y-auto">
             {!verifying ? (
               <>
                 <PaymentHeader username={username} />
-                
-                {/* UPI Payment Component with dynamic data */}
                 <UpiPayment 
                   upiId={paymentDetail.upiId} 
                   qrCodeUrl={paymentDetail.qrCodeUrl} 
                 />
-                
-                {/* Payment Form Component */}
                 <PaymentForm 
                   onSubmit={handlePaymentSubmit}
                   loading={loading}
@@ -103,12 +101,14 @@ const PaymentPage = () => {
             )}
           </div>
           
-          <div className="flex items-center justify-center space-x-2 mt-4 border-t border-primary/20 p-4">
-            <Shield className="h-5 w-5 text-muted-foreground" />
-            <p className="text-xs text-muted-foreground">
-              256-bit SSL secured payment
-            </p>
+          <div className="border-t border-[#1E293B] p-4 flex items-center justify-center gap-2">
+            <Shield className="h-4 w-4 text-[#94A3B8]" />
+            <p className="text-xs text-[#94A3B8]">Secure payment</p>
           </div>
+        </div>
+        
+        <div className="mt-6 text-center text-xs text-[#94A3B8]">
+          <p>© 2025 SocialSleuth</p>
         </div>
       </div>
     </div>
