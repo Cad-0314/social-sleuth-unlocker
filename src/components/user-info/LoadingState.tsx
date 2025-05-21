@@ -12,27 +12,27 @@ const LoadingState = () => {
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          <div className="p-6">
-            <div className="relative w-24 h-24 mx-auto mb-6">
+          <div className="p-4 sm:p-6">
+            <div className="relative w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-6">
               <div className="absolute inset-0 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
               <div className="absolute inset-3 border-3 border-primary/20 border-b-primary rounded-full animate-spin animation-delay-150"></div>
               <div className="absolute inset-6 flex items-center justify-center">
-                <RefreshCw className="h-8 w-8 text-primary animate-pulse" />
+                <RefreshCw className="h-6 w-6 sm:h-8 sm:w-8 text-primary animate-pulse" />
               </div>
             </div>
             
-            <h3 className="text-primary font-mono text-lg mb-2">Connecting to Target</h3>
+            <h3 className="text-primary font-mono text-base sm:text-lg mb-2">Connecting to Target</h3>
             <div className="flex flex-col space-y-2 mt-4 terminal-text">
-              <p className="text-sm text-primary/80">
+              <p className="text-xs sm:text-sm text-primary/80">
                 <span className="text-primary/60">[system]$</span> Establishing connection...
               </p>
-              <p className="text-sm text-primary/80">
+              <p className="text-xs sm:text-sm text-primary/80">
                 <span className="text-primary/60">[system]$</span> Retrieving account data...
               </p>
-              <p className="text-sm text-primary/80">
+              <p className="text-xs sm:text-sm text-primary/80">
                 <span className="text-primary/60">[system]$</span> Decrypting profile information...
               </p>
-              <p className="text-sm text-primary/80 animate-pulse">
+              <p className="text-xs sm:text-sm text-primary/80 animate-pulse">
                 <span className="text-primary/60">[system]$</span> _
               </p>
             </div>
