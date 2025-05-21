@@ -33,10 +33,12 @@ const MessagePage = () => {
       return;
     }
     
-    // Select a random message
-    const randomIndex = Math.floor(Math.random() * nonsenseMessages.length);
-    setRandomMessage(nonsenseMessages[randomIndex]);
-  }, [username, profileData, navigate, nonsenseMessages]);
+    // Only set the random message if it hasn't been set yet
+    if (!randomMessage) {
+      const randomIndex = Math.floor(Math.random() * nonsenseMessages.length);
+      setRandomMessage(nonsenseMessages[randomIndex]);
+    }
+  }, [username, profileData, navigate, nonsenseMessages, randomMessage]);
   
   const handleCopyMessage = () => {
     navigator.clipboard.writeText(randomMessage);
