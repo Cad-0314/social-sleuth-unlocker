@@ -97,7 +97,7 @@ const Index = () => {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="rounded-full bg-secondary p-3 shadow-[0_0_25px_rgba(0,255,170,0.6)]">
+            <div className="rounded-full bg-secondary p-3 shadow-[0_0_25px_rgba(255,73,160,0.6)]">
               <Lock className="h-8 w-8 text-primary animate-pulse" />
             </div>
           </div>
@@ -130,7 +130,7 @@ const Index = () => {
           </div>
         )}
         
-        <div className="terminal-window backdrop-blur-sm bg-opacity-80">
+        <div className="terminal-window backdrop-blur-sm bg-opacity-80 scanner-effect">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>
@@ -161,7 +161,7 @@ const Index = () => {
             
             <Button 
               type="submit" 
-              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(0,255,170,0.3)] group transition-all duration-300"
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(255,73,160,0.3)] group transition-all duration-300"
               disabled={loading}
             >
               {loading ? (

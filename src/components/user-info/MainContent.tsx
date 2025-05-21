@@ -1,5 +1,4 @@
 
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Shield, Zap } from "lucide-react";
 import ProfileSection from "@/components/payment/ProfileSection";
@@ -27,7 +26,7 @@ const MainContent = ({ username, profileData, securityToken, onContinueToPayment
           <p className="text-muted-foreground text-sm">Account verification required to proceed</p>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/30 shadow-[0_0_30px_rgba(0,255,170,0.25)]">
+        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/30 shadow-[0_0_30px_rgba(255,73,160,0.25)] scanner-effect">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>
@@ -56,7 +55,7 @@ const MainContent = ({ username, profileData, securityToken, onContinueToPayment
             
             <Button 
               onClick={onContinueToPayment}
-              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground cyber-button shadow-[0_0_15px_rgba(0,255,170,0.3)] font-medium text-base py-6"
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground cyber-button shadow-[0_0_15px_rgba(255,73,160,0.3)] font-medium text-base py-6"
             >
               Continue to Payment Authorization
             </Button>

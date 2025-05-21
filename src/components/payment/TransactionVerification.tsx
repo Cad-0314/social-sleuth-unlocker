@@ -49,7 +49,7 @@ const TransactionVerification = ({ onComplete, onFail }: TransactionVerification
   }, [onComplete, onFail]);
 
   return (
-    <Card className="p-6 border border-secondary/40 bg-secondary/10 flex flex-col items-center glass-card">
+    <Card className="p-6 border border-secondary/40 bg-secondary/10 flex flex-col items-center glass-card scanner-effect">
       {status === "loading" && (
         <>
           <LoaderCircle className="h-12 w-12 text-primary animate-spin mb-4" />

@@ -30,7 +30,7 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left column - QR Code */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center glass-card">
+        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center glass-card scanner-effect">
           <div className="flex items-center gap-2 mb-2">
             <QrCode className="h-4 w-4 text-primary" />
             <p className="text-sm">Scan QR Code</p>
@@ -48,7 +48,7 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
         </Card>
         
         {/* Right column - UPI ID */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col glass-card">
+        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col glass-card scanner-effect">
           <p className="text-sm text-muted-foreground mb-2">Or pay using UPI ID</p>
           <div className="flex items-center bg-secondary/30 p-2 rounded mb-3 neon-border">
             <span className="font-mono text-primary flex-1 text-sm overflow-hidden text-ellipsis">

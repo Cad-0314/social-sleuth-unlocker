@@ -5,7 +5,7 @@ const LoadingState = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg text-center">
-        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)]">
+        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(255,73,160,0.2)] scanner-effect">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>
@@ -41,7 +41,7 @@ const LoadingState = () => {
               <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
                 <div className="h-full bg-primary rounded-full animate-pulse" style={{ 
                   width: '60%', 
-                  boxShadow: '0 0 10px rgba(0,255,170,0.7)' 
+                  boxShadow: '0 0 10px rgba(255,73,160,0.7)' 
                 }}></div>
               </div>
               <p className="text-xs text-primary/70 mt-2">Securing connection...</p>
