@@ -88,11 +88,11 @@ export default {
 				},
 				'pulse-glow': {
 					'0%, 100%': { 
-						boxShadow: '0 0 15px rgba(255, 73, 160, 0.5)',
+						boxShadow: '0 0 15px rgba(0, 170, 255, 0.5)',
 						transform: 'scale(1)'
 					},
 					'50%': { 
-						boxShadow: '0 0 25px rgba(255, 73, 160, 0.8)',
+						boxShadow: '0 0 25px rgba(0, 170, 255, 0.8)',
 						transform: 'scale(1.02)'
 					},
 				},

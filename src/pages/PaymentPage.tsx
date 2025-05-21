@@ -60,8 +60,8 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
-      <div className="w-full max-w-md md:max-w-lg">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-6 matrix-bg">
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
         <div className="mb-6 text-center">
           <div className="inline-flex items-center gap-2 mb-2">
             <Zap className="h-5 w-5 text-primary animate-pulse" />
@@ -71,14 +71,14 @@ const PaymentPage = () => {
           <p className="text-muted-foreground text-sm">Complete payment to continue</p>
         </div>
         
-        <div className="terminal-window backdrop-blur-lg bg-opacity-70 border border-primary/20 shadow-[0_0_25px_rgba(0,255,170,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,255,170,0.3)]">
+        <div className="terminal-window backdrop-blur-lg border-2 border-primary/20 shadow-[0_0_25px_rgba(0,170,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,170,255,0.3)]">
           <div className="terminal-header">
             <div className="terminal-button terminal-button-red"></div>
             <div className="terminal-button terminal-button-yellow"></div>
             <div className="terminal-button terminal-button-green"></div>
           </div>
           
-          <div className="p-4">
+          <div className="p-4 md:p-6 overflow-y-auto max-h-[80vh]">
             {!verifying ? (
               <>
                 <PaymentHeader username={username} />
@@ -103,7 +103,7 @@ const PaymentPage = () => {
             )}
           </div>
           
-          <div className="flex items-center justify-center space-x-2 mt-6 border-t border-primary/20 pt-4">
+          <div className="flex items-center justify-center space-x-2 mt-4 border-t border-primary/20 p-4">
             <Shield className="h-5 w-5 text-muted-foreground" />
             <p className="text-xs text-muted-foreground">
               256-bit SSL secured payment

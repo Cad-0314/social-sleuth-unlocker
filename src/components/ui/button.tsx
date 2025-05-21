@@ -10,16 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_10px_rgba(255,73,160,0.4)]",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_10px_rgba(0,170,255,0.4)]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-[0_0_10px_rgba(234,56,76,0.4)]",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-[0_0_8px_rgba(255,73,160,0.3)]",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-[0_0_8px_rgba(0,170,255,0.3)]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        cyber: "relative bg-gradient-to-r from-primary/90 to-primary/70 text-primary-foreground shadow-[0_0_15px_rgba(255,73,160,0.4)] border border-primary/30 overflow-hidden before:absolute before:inset-0 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:bg-gradient-to-r before:from-primary/70 before:to-primary/90 hover:shadow-[0_0_20px_rgba(255,73,160,0.6)]",
+        cyber: "relative bg-gradient-to-r from-primary/90 to-primary/70 text-primary-foreground shadow-[0_0_15px_rgba(0,170,255,0.4)] border border-primary/30 overflow-hidden before:absolute before:inset-0 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:bg-gradient-to-r before:from-primary/70 before:to-primary/90 hover:shadow-[0_0_20px_rgba(0,170,255,0.6)]",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -7,8 +7,8 @@ interface PaymentHeaderProps {
 
 const PaymentHeader = ({ username }: PaymentHeaderProps) => {
   return (
-    <div className="mb-5">
-      <h2 className="text-lg font-bold mb-2 text-primary flex items-center gap-2 p-2 bg-primary/10 rounded-md shadow-sm">
+    <div className="mb-6">
+      <h2 className="text-lg font-bold mb-3 text-primary flex items-center gap-2 p-3 bg-primary/10 rounded-md border border-primary/20 shadow-sm">
         <Lock className="h-4 w-4" />
         <span className="type-animation">Payment Required</span>
       </h2>
@@ -19,7 +19,7 @@ const PaymentHeader = ({ username }: PaymentHeaderProps) => {
         </p>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs bg-green-900/30 text-green-400 p-2 rounded border border-green-900/40 shadow-[0_0_10px_rgba(0,255,128,0.2)]">
+          <div className="flex items-center gap-2 text-xs bg-green-900/30 text-green-400 p-2 rounded border border-green-900/40 shadow-sm">
             <ShieldCheck className="h-4 w-4" />
             <span>Secure, encrypted payment process</span>
           </div>

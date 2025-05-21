@@ -1,37 +1,36 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 260 25% 7%;
+    --background: 220 40% 10%;
     --foreground: 210 10% 95%;
 
-    --card: 260 25% 10%;
+    --card: 220 40% 13%;
     --card-foreground: 210 10% 95%;
 
-    --popover: 260 25% 8%;
+    --popover: 220 40% 8%;
     --popover-foreground: 210 10% 95%;
 
-    --primary: 330 85% 65%;
+    --primary: 195 100% 50%;
     --primary-foreground: 210 10% 98%;
 
-    --secondary: 260 25% 15%;
+    --secondary: 220 40% 15%;
     --secondary-foreground: 210 10% 95%;
 
-    --muted: 260 25% 20%;
+    --muted: 220 40% 20%;
     --muted-foreground: 210 10% 85%;
 
-    --accent: 320 70% 60%;
+    --accent: 195 80% 60%;
     --accent-foreground: 210 10% 95%;
 
-    --destructive: 350 90% 60%;
+    --destructive: 0 90% 60%;
     --destructive-foreground: 210 10% 95%;
 
-    --border: 260 25% 20%;
-    --input: 260 25% 20%;
-    --ring: 330 85% 65%;
+    --border: 220 40% 20%;
+    --input: 220 40% 20%;
+    --ring: 195 100% 50%;
 
     --radius: 0.75rem;
   }
@@ -151,9 +150,9 @@
 
 .terminal-window {
   border-radius: 12px;
-  background-color: rgba(20, 20, 40, 0.9);
-  border: 1px solid rgba(255, 73, 160, 0.3);
-  box-shadow: 0 0 20px rgba(255, 73, 160, 0.3);
+  background-color: rgba(15, 25, 40, 0.9);
+  border: 1px solid rgba(0, 170, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
   padding: 1rem;
   font-family: monospace;
   overflow: hidden;
@@ -185,10 +184,10 @@
 }
 
 .matrix-bg {
-  background-color: #12101e;
+  background-color: #0a1525;
   background-image: 
-    radial-gradient(rgba(255, 73, 160, 0.1) 1px, transparent 1px),
-    radial-gradient(rgba(255, 73, 160, 0.08) 1px, transparent 1px);
+    radial-gradient(rgba(0, 170, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(rgba(0, 170, 255, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   background-position: 0 0, 25px 25px;
   background-attachment: fixed;
@@ -203,7 +202,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(0deg, rgba(18, 16, 30, 0.8) 0%, transparent 50%, rgba(18, 16, 30, 0.8) 100%);
+  background: linear-gradient(0deg, rgba(10, 21, 37, 0.8) 0%, transparent 50%, rgba(10, 21, 37, 0.8) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -222,7 +221,7 @@
   left: 0;
   background: linear-gradient(to bottom, 
     transparent, 
-    rgba(255, 73, 160, 0.2), 
+    rgba(0, 170, 255, 0.2), 
     transparent
   );
   animation: scanner 3s ease-in-out infinite;
@@ -232,9 +231,9 @@
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(255, 73, 160, 0.3);
+  border: 3px solid rgba(0, 170, 255, 0.3);
   border-radius: 50%;
-  border-top-color: rgba(255, 73, 160, 0.8);
+  border-top-color: rgba(0, 170, 255, 0.8);
   animation: spin 1s infinite linear;
   margin: 0 auto;
 }
@@ -247,23 +246,23 @@
 
 .terminal-text {
   font-family: monospace;
-  color: rgba(255, 73, 160, 1);
+  color: rgba(0, 170, 255, 1);
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 /* Enhanced UI Effects */
 .neon-border {
-  box-shadow: 0 0 5px rgba(255, 73, 160, 0.3),
-              0 0 10px rgba(255, 73, 160, 0.2),
-              0 0 15px rgba(255, 73, 160, 0.2);
-  border: 1px solid rgba(255, 73, 160, 0.4);
+  box-shadow: 0 0 5px rgba(0, 170, 255, 0.3),
+              0 0 10px rgba(0, 170, 255, 0.2),
+              0 0 15px rgba(0, 170, 255, 0.2);
+  border: 1px solid rgba(0, 170, 255, 0.4);
 }
 
 .glass-card {
-  background: rgba(20, 20, 40, 0.6);
+  background: rgba(15, 25, 40, 0.6);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 73, 160, 0.15);
+  border: 1px solid rgba(0, 170, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(10, 10, 26, 0.37);
 }
 
@@ -271,8 +270,8 @@
   position: relative;
   transition: all 0.3s ease;
   overflow: hidden;
-  border: 1px solid rgba(255, 73, 160, 0.3);
-  text-shadow: 0 0 2px rgba(255, 73, 160, 0.5);
+  border: 1px solid rgba(0, 170, 255, 0.3);
+  text-shadow: 0 0 2px rgba(0, 170, 255, 0.5);
 }
 
 .cyber-button::before {
@@ -283,9 +282,9 @@
   width: calc(100% + 4px);
   height: calc(100% + 4px);
   background: linear-gradient(45deg, 
-    rgba(255, 73, 160, 0.6),
+    rgba(0, 170, 255, 0.6),
     transparent,
-    rgba(255, 73, 160, 0.6)
+    rgba(0, 170, 255, 0.6)
   );
   z-index: -1;
   animation: animate 2s linear infinite;

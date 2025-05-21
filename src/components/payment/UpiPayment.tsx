@@ -30,12 +30,12 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left column - QR Code */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col items-center justify-center glass-card scanner-effect">
+        <Card className="p-4 flex flex-col items-center justify-center border-2 border-primary/30 bg-card/90 hover:shadow-[0_0_15px_rgba(0,170,255,0.3)] transition-all duration-300">
           <div className="flex items-center gap-2 mb-2">
             <QrCode className="h-4 w-4 text-primary" />
             <p className="text-sm">Scan QR Code</p>
           </div>
-          <div className="bg-white p-2 rounded-md mb-2 neon-border">
+          <div className="bg-white p-3 rounded-md mb-3 neon-border overflow-hidden">
             <img 
               src={qrCodeUrl} 
               alt="UPI QR Code" 
@@ -48,9 +48,9 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
         </Card>
         
         {/* Right column - UPI ID */}
-        <Card className="p-4 border border-secondary/40 bg-secondary/10 flex flex-col glass-card scanner-effect">
-          <p className="text-sm text-muted-foreground mb-2">Or pay using UPI ID</p>
-          <div className="flex items-center bg-secondary/30 p-2 rounded mb-3 neon-border">
+        <Card className="p-4 border-2 border-primary/30 bg-card/90 flex flex-col hover:shadow-[0_0_15px_rgba(0,170,255,0.3)] transition-all duration-300">
+          <p className="text-sm text-muted-foreground mb-3">Or pay using UPI ID</p>
+          <div className="flex items-center bg-primary/10 p-3 rounded mb-4 border border-primary/20">
             <span className="font-mono text-primary flex-1 text-sm overflow-hidden text-ellipsis">
               {upiId}
             </span>
@@ -60,7 +60,7 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 px-2"
+                    className="h-8 w-8 p-0 hover:bg-primary/20"
                     onClick={handleCopyUpiId}
                   >
                     <Copy className="h-3.5 w-3.5" />
@@ -72,7 +72,7 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="text-xs bg-primary/10 p-2 rounded border border-primary/20 mt-auto neon-border">
+          <div className="text-sm bg-primary/10 p-3 rounded border border-primary/20 mt-auto">
             <p className="font-medium text-primary mb-1">Payment Amount:</p>
             <p className="text-lg font-bold text-primary">₹1499.00</p>
           </div>

@@ -61,7 +61,7 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Transaction ID Input */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -74,7 +74,7 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
           placeholder="Enter UPI transaction ID"
           value={formData.transactionId}
           onChange={handleChange}
-          className="bg-background/40 border-secondary focus:border-primary neon-border"
+          className="bg-card/50 border-primary/20 focus:border-primary focus:ring-2 focus:ring-primary/20"
           disabled={loading}
         />
         <p className="text-xs text-muted-foreground">
@@ -101,7 +101,7 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
         />
         
         <div 
-          className={`border-2 border-dashed rounded-md p-4 text-center cursor-pointer transition-all ${
+          className={`border-2 rounded-md p-4 text-center cursor-pointer transition-all ${
             formData.screenshotFile 
               ? "border-primary/40 bg-primary/5 neon-border" 
               : "border-secondary/40 hover:border-primary/30 hover:bg-secondary/10"
@@ -134,14 +134,14 @@ const PaymentForm = ({ onSubmit, loading }: PaymentFormProps) => {
         </div>
       </div>
       
-      <div className="flex items-center justify-between my-1 p-2 bg-primary/5 rounded neon-border">
+      <div className="flex items-center justify-between p-3 bg-primary/10 rounded border border-primary/20">
         <span className="text-primary font-medium">Total Amount:</span>
         <span className="text-lg font-bold text-primary">₹1499.00</span>
       </div>
       
       <Button 
         type="submit" 
-        className="w-full mt-4 bg-primary hover:bg-primary/80 text-primary-foreground flex items-center justify-center gap-2 cyber-button shadow-[0_0_15px_rgba(0,255,170,0.3)]"
+        className="w-full mt-6 cyber-button shadow-[0_0_15px_rgba(0,170,255,0.3)]"
         disabled={loading}
       >
         <IndianRupee className="h-4 w-4" />
