@@ -14,22 +14,51 @@ const CredentialsSection = ({ username, password, securityToken }: CredentialsSe
   const [showPassword, setShowPassword] = useState(false);
   const [showToken, setShowToken] = useState(false);
 
-  const handleCopyPassword = async () => {
+  const copyToClipboard = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(password);
-      toast.success("Password copied to clipboard!");
+      // Check if we're using secure context (modern browsers requirement)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } else {
+        // Fallback for mobile browsers that don't support clipboard API
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+
+        // Use the older execCommand method for copying
+        const success = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        return success;
+      }
     } catch (err) {
       console.error("Failed to copy: ", err);
+      return false;
+    }
+  };
+
+  const handleCopyPassword = async () => {
+    const success = await copyToClipboard(password);
+    if (success) {
+      toast.success("Password copied to clipboard!");
+    } else {
       toast.error("Failed to copy to clipboard");
     }
   };
 
   const handleCopyToken = async () => {
-    try {
-      await navigator.clipboard.writeText(securityToken);
+    const success = await copyToClipboard(securityToken);
+    if (success) {
       toast.success("Security token copied to clipboard!");
-    } catch (err) {
-      console.error("Failed to copy: ", err);
+    } else {
       toast.error("Failed to copy to clipboard");
     }
   };

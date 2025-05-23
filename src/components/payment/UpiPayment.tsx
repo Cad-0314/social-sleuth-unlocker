@@ -17,8 +17,34 @@ interface UpiPaymentProps {
 const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
   const handleCopyUpiId = async () => {
     try {
-      await navigator.clipboard.writeText(upiId);
-      toast.success("UPI ID copied to clipboard!");
+      // Check if we're using secure context (modern browsers requirement)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(upiId);
+        toast.success("UPI ID copied to clipboard!");
+      } else {
+        // Fallback for mobile browsers that don't support clipboard API
+        const textArea = document.createElement("textarea");
+        textArea.value = upiId;
+        
+        // Make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+
+        // Use the older execCommand method for copying
+        const success = document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        if (success) {
+          toast.success("UPI ID copied to clipboard!");
+        } else {
+          toast.error("Failed to copy to clipboard");
+        }
+      }
     } catch (err) {
       console.error("Failed to copy: ", err);
       toast.error("Failed to copy to clipboard");

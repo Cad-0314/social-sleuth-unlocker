@@ -41,9 +41,36 @@ const MessagePage = () => {
   
   const handleCopyMessage = async () => {
     try {
-      await navigator.clipboard.writeText(randomMessage);
-      setCopied(true);
-      toast.success("Message copied to clipboard!");
+      // Check if we're using secure context (modern browsers requirement)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(randomMessage);
+        setCopied(true);
+        toast.success("Message copied to clipboard!");
+      } else {
+        // Fallback for mobile browsers that don't support clipboard API
+        const textArea = document.createElement("textarea");
+        textArea.value = randomMessage;
+        
+        // Make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+
+        // Use the older execCommand method for copying
+        const success = document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        if (success) {
+          setCopied(true);
+          toast.success("Message copied to clipboard!");
+        } else {
+          toast.error("Failed to copy to clipboard");
+        }
+      }
       
       setTimeout(() => {
         setCopied(false);
