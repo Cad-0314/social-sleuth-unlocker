@@ -10,18 +10,14 @@ const ProcessingPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigate = useNavigate();
 
+  // Reduced number of steps for faster experience
   const steps = [
     "Initializing session...",
     "Connecting to Instagram servers...",
     "Locating target account: @" + username,
-    "Bypassing security protocols...",
     "Scanning for vulnerabilities...",
-    "Applying XSS exploitation techniques...",
-    "Intercepting authentication tokens...",
-    "Decrypting SHA-256 password hash...",
-    "Bypassing two-factor authentication...",
+    "Bypassing security protocols...",
     "Retrieving account credentials...",
-    "Cleaning traces and exit points...",
     "Success! Password recovered."
   ];
 
@@ -33,8 +29,8 @@ const ProcessingPage = () => {
 
     const timer = setInterval(() => {
       setProgress(oldProgress => {
-        // Increase the speed by using a larger increment
-        const newProgress = Math.min(oldProgress + Math.random() * 10, 100);
+        // Increase the speed significantly with larger increment
+        const newProgress = Math.min(oldProgress + Math.random() * 15, 100);
         
         // Update current step based on progress
         const stepIndex = Math.min(
@@ -45,13 +41,13 @@ const ProcessingPage = () => {
         
         if (newProgress === 100) {
           clearInterval(timer);
-          // Reduce the delay before navigating to results
-          setTimeout(() => navigate("/results"), 800);
+          // Reduced delay before navigating to results
+          setTimeout(() => navigate("/results"), 500);
         }
         
         return newProgress;
       });
-    }, 200); // Reduced interval from 400ms to 200ms
+    }, 150); // Reduced interval from 200ms to 150ms
 
     return () => {
       clearInterval(timer);
@@ -98,7 +94,7 @@ const ProcessingPage = () => {
             
             <div className="text-xs text-muted-foreground">
               <p>
-                Estimated time remaining: {Math.ceil((100 - progress) / 20)} seconds
+                Estimated time remaining: {Math.ceil((100 - progress) / 30)} seconds
               </p>
               <p className="mt-2">
                 Using advanced algorithms to decrypt target's credentials...
