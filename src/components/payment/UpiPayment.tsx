@@ -15,9 +15,14 @@ interface UpiPaymentProps {
 }
 
 const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
-  const handleCopyUpiId = () => {
-    navigator.clipboard.writeText(upiId);
-    toast.success("UPI ID copied to clipboard!");
+  const handleCopyUpiId = async () => {
+    try {
+      await navigator.clipboard.writeText(upiId);
+      toast.success("UPI ID copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy to clipboard");
+    }
   };
 
   return (

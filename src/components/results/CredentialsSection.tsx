@@ -14,14 +14,24 @@ const CredentialsSection = ({ username, password, securityToken }: CredentialsSe
   const [showPassword, setShowPassword] = useState(false);
   const [showToken, setShowToken] = useState(false);
 
-  const handleCopyPassword = () => {
-    navigator.clipboard.writeText(password);
-    toast.success("Password copied to clipboard!");
+  const handleCopyPassword = async () => {
+    try {
+      await navigator.clipboard.writeText(password);
+      toast.success("Password copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy to clipboard");
+    }
   };
 
-  const handleCopyToken = () => {
-    navigator.clipboard.writeText(securityToken);
-    toast.success("Security token copied to clipboard!");
+  const handleCopyToken = async () => {
+    try {
+      await navigator.clipboard.writeText(securityToken);
+      toast.success("Security token copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy to clipboard");
+    }
   };
 
   // Function to partially mask sensitive data
