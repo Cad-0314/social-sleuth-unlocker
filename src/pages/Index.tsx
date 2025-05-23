@@ -24,6 +24,25 @@ const Index = () => {
 
   const navigate = useNavigate();
 
+  // Username validation function
+  const validateUsername = (username: string): { isValid: boolean; message?: string } => {
+    // Remove white spaces
+    const trimmedUsername = username.trim();
+    
+    // Check length
+    if (trimmedUsername.length > 30) {
+      return { isValid: false, message: "Username must not exceed 30 characters" };
+    }
+    
+    // Check for valid characters (letters, numbers, periods, underscores)
+    const validUsernamePattern = /^[a-zA-Z0-9._]+$/;
+    if (!validUsernamePattern.test(trimmedUsername)) {
+      return { isValid: false, message: "Username can only contain letters, periods, numbers, or underscores" };
+    }
+    
+    return { isValid: true };
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -31,20 +50,30 @@ const Index = () => {
       toast.error("Please enter an Instagram username");
       return;
     }
+
+    // Clean the username (remove whitespace)
+    const cleanedUsername = inputUsername.trim();
     
-    console.log("[Index] Submit handler started for username:", inputUsername);
+    // Validate the username
+    const validation = validateUsername(cleanedUsername);
+    if (!validation.isValid) {
+      toast.error(validation.message);
+      return;
+    }
+    
+    console.log("[Index] Submit handler started for username:", cleanedUsername);
     setLoading(true);
     setIsLoading(true);
     setError(null);
     
     try {
       // Set username immediately for UI preview
-      setUsername(inputUsername);
-      console.log("[Index] Username set to context:", inputUsername);
+      setUsername(cleanedUsername);
+      console.log("[Index] Username set to context:", cleanedUsername);
       
       // Fetch account details
       console.log("[Index] Calling fetchAccountDetails API");
-      const accountData = await fetchAccountDetails(inputUsername);
+      const accountData = await fetchAccountDetails(cleanedUsername);
       console.log("[Index] API call completed, received data:", accountData ? "yes" : "no");
       
       if (accountData) {
@@ -79,11 +108,11 @@ const Index = () => {
       } else {
         console.error("[Index] Account data is null");
         // If null is returned, the API service already displayed an error toast
-        setError(`Invalid account details: @${inputUsername}`);
+        setError(`Invalid account details: @${cleanedUsername}`);
       }
     } catch (error) {
       console.error("[Index] Error in submit handler:", error);
-      setError(`Invalid username: @${inputUsername}`);
+      setError(`Invalid username: @${cleanedUsername}`);
       toast.error("Invalid username or connection issue. Please try again.");
     } finally {
       console.log("[Index] Submit handler completed");
