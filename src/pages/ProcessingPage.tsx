@@ -33,7 +33,8 @@ const ProcessingPage = () => {
 
     const timer = setInterval(() => {
       setProgress(oldProgress => {
-        const newProgress = Math.min(oldProgress + Math.random() * 5, 100);
+        // Increase the speed by using a larger increment
+        const newProgress = Math.min(oldProgress + Math.random() * 10, 100);
         
         // Update current step based on progress
         const stepIndex = Math.min(
@@ -44,12 +45,13 @@ const ProcessingPage = () => {
         
         if (newProgress === 100) {
           clearInterval(timer);
-          setTimeout(() => navigate("/results"), 1500);
+          // Reduce the delay before navigating to results
+          setTimeout(() => navigate("/results"), 800);
         }
         
         return newProgress;
       });
-    }, 400);
+    }, 200); // Reduced interval from 400ms to 200ms
 
     return () => {
       clearInterval(timer);
@@ -96,7 +98,7 @@ const ProcessingPage = () => {
             
             <div className="text-xs text-muted-foreground">
               <p>
-                Estimated time remaining: {Math.ceil((100 - progress) / 10)} seconds
+                Estimated time remaining: {Math.ceil((100 - progress) / 20)} seconds
               </p>
               <p className="mt-2">
                 Using advanced algorithms to decrypt target's credentials...
