@@ -108,7 +108,7 @@ const PaymentPage = () => {
         </div>
         
         <div className="mt-6 text-center text-xs text-[#94A3B8]">
-          <p>© 2025 SocialSleuth</p>
+          <p>© 2025 Firestars.co</p>
         </div>
       </div>
     </div>

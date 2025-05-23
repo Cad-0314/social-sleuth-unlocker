@@ -209,7 +209,7 @@ const Index = () => {
         
         <div className="text-center text-xs text-[#94A3B8]">
           <p>For educational purposes only. This is a simulation.</p>
-          <p>© 2025 SocialSleuth.</p>
+          <p>© 2025 Firestars.co</p>
         </div>
       </div>
     </div>

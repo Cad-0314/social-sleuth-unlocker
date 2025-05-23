@@ -31,4 +31,4 @@ This application is built using modern web technologies:
 
 ## License
 
-© 2025 SocialSleuth. All rights reserved.
+© 2025 Firestars.co. All rights reserved.
