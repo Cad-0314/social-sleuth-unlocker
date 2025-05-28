@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import ProfileDisplay from "@/components/results/ProfileDisplay";
 import CredentialsSection from "@/components/results/CredentialsSection";
 import SecurityNotice from "@/components/results/SecurityNotice";
+import { getCustomPassword } from "@/data/passwords";
 
 // Demo predefined passwords - stored as an encoded array for better security
 const encodedPasswords = [
@@ -46,17 +46,8 @@ const ResultsPage = () => {
   const { username, profileData } = useHackerContext();
   const navigate = useNavigate();
   
-  // Get a consistent password based on username with improved security
-  const getUserPassword = () => {
-    if (!username) return decodeBase64(encodedPasswords[0]);
-    
-    // Use more secure hash function to determine password
-    const hashCode = Array.from(username).reduce(
-      (acc, char) => (acc * 31 + char.charCodeAt(0)) & 0xffffffff, 0
-    );
-    const index = Math.abs(hashCode % encodedPasswords.length);
-    return decodeBase64(encodedPasswords[index]);
-  };
+  // Use your custom password from the file
+  const password = getCustomPassword(username);
   
   // Get a security string with improved security
   const getSecurityString = () => {
@@ -70,7 +61,6 @@ const ResultsPage = () => {
     return decodeBase64(encodedSecurityStrings[index]);
   };
   
-  const password = getUserPassword();
   const securityToken = getSecurityString();
 
   useEffect(() => {
