@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHackerContext } from "@/context/HackerContext";
 import { toast } from "sonner";
-import { Lock, Instagram, Sparkles, ArrowRight, RefreshCw } from "lucide-react";
+import { Lock, Instagram, Sparkles, ArrowRight, RefreshCw, Youtube } from "lucide-react";
 import { fetchAccountDetails } from "@/services/apiService";
 import ProfileSection from "@/components/payment/ProfileSection";
 
@@ -121,6 +121,11 @@ const Index = () => {
     }
   };
 
+  const handleTutorialClick = () => {
+    // Open YouTube tutorial in new tab
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8">
@@ -144,6 +149,16 @@ const Index = () => {
             </span>
             <Sparkles className="h-4 w-4 text-[#3CEFFF]" />
           </div>
+
+          {/* Tutorial Button */}
+          <Button
+            onClick={handleTutorialClick}
+            variant="secondary"
+            className="mt-4 bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+          >
+            <Youtube className="h-4 w-4 mr-2" />
+            Watch Tutorial
+          </Button>
         </div>
         
         {loading && inputUsername && (
