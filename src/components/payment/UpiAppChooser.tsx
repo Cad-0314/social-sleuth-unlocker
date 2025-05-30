@@ -11,16 +11,7 @@ interface UpiAppChooserProps {
 }
 
 const UpiAppChooser = ({ upiId, amount, onAppSelected }: UpiAppChooserProps) => {
-  const [selectedApp, setSelectedApp] = useState<string | null>(null);
-
-  const upiApps = [
-    { name: "Google Pay", color: "#4285f4", icon: "🇬" },
-    { name: "PhonePe", color: "#5f259f", icon: "📱" },
-    { name: "Paytm", color: "#002970", icon: "💳" },
-    { name: "BHIM", color: "#ff6b35", icon: "🏦" },
-    { name: "Amazon Pay", color: "#ff9900", icon: "📦" },
-    { name: "Other UPI Apps", color: "#6b7280", icon: "💰" }
-  ];
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
 
   const generateUpiLink = () => {
     // URL encode the transaction note
@@ -30,7 +21,7 @@ const UpiAppChooser = ({ upiId, amount, onAppSelected }: UpiAppChooserProps) => 
     return `upi://pay?pa=${upiId}&pn=${merchantName}&am=${amount}&cu=INR&tn=${transactionNote}`;
   };
 
-  const handleUpiPayment = (appName: string) => {
+  const handleUpiPayment = () => {
     const upiLink = generateUpiLink();
     
     try {
@@ -42,9 +33,9 @@ const UpiAppChooser = ({ upiId, amount, onAppSelected }: UpiAppChooserProps) => 
       link.click();
       document.body.removeChild(link);
       
-      setSelectedApp(appName);
-      onAppSelected?.(appName);
-      toast.success(`Opening ${appName} for payment`);
+      setPaymentInitiated(true);
+      onAppSelected?.("UPI App");
+      toast.success("Opening UPI apps for payment");
     } catch (error) {
       console.error('Error opening UPI app:', error);
       toast.error("Unable to open UPI app. Please try manual payment.");
@@ -52,49 +43,37 @@ const UpiAppChooser = ({ upiId, amount, onAppSelected }: UpiAppChooserProps) => 
   };
 
   return (
-    <div className="mb-6 space-y-4">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="mb-4">
+      <div className="flex items-center gap-2 mb-3">
         <Smartphone className="h-4 w-4 text-[#3CEFFF]" />
-        <h3 className="font-medium text-white">Choose UPI App</h3>
+        <h3 className="font-medium text-white text-sm">Quick UPI Payment</h3>
       </div>
       
-      <div className="bg-[#151f32] rounded-lg border border-[#1E293B] p-4">
-        <p className="text-sm text-[#94A3B8] mb-4">Select your preferred UPI app to pay ₹{amount}</p>
-        
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {upiApps.map((app) => (
-            <Button
-              key={app.name}
-              variant="outline"
-              className={`flex items-center gap-2 p-3 h-auto bg-[#1a2236] border-[#1E293B] hover:border-[#3CEFFF]/40 hover:bg-[#1E293B] text-white ${
-                selectedApp === app.name ? 'border-[#3CEFFF] bg-[#3CEFFF]/10' : ''
-              }`}
-              onClick={() => handleUpiPayment(app.name)}
-            >
-              <span className="text-lg">{app.icon}</span>
-              <span className="text-xs font-medium">{app.name}</span>
-              <ExternalLink className="h-3 w-3 ml-auto" />
-            </Button>
-          ))}
+      <Button
+        onClick={handleUpiPayment}
+        className="w-full flex items-center justify-center gap-3 bg-[#151f32] hover:bg-[#1a2236] border border-[#3CEFFF]/30 hover:border-[#3CEFFF]/60 text-white py-3 h-auto"
+        variant="outline"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-base">🇬</span>
+          <span className="text-base">📱</span>
+          <span className="text-base">💳</span>
+          <span className="text-base">🏦</span>
         </div>
-        
-        {selectedApp && (
-          <div className="bg-[#3CEFFF]/10 border border-[#3CEFFF]/20 rounded-lg p-3">
-            <p className="text-sm text-[#3CEFFF] font-medium">
-              ✓ {selectedApp} selected
-            </p>
-            <p className="text-xs text-[#94A3B8] mt-1">
-              Complete the payment in {selectedApp} and return here to upload screenshot
-            </p>
-          </div>
-        )}
-        
-        <div className="text-xs text-[#94A3B8] mt-3 space-y-1">
-          <p>• Amount: ₹{amount}</p>
-          <p>• UPI ID: {upiId}</p>
-          <p>• Merchant: Firestar Password Cracker</p>
+        <span className="font-medium">Choose UPI App</span>
+        <div className="flex items-center gap-1">
+          <span className="text-sm text-[#3CEFFF]">₹{amount}</span>
+          <ExternalLink className="h-3 w-3" />
         </div>
-      </div>
+      </Button>
+      
+      {paymentInitiated && (
+        <div className="bg-[#3CEFFF]/10 border border-[#3CEFFF]/20 rounded-lg p-2 mt-3">
+          <p className="text-xs text-[#3CEFFF] font-medium text-center">
+            ✓ Complete payment and return to upload screenshot
+          </p>
+        </div>
+      )}
     </div>
   );
 };

