@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
@@ -30,7 +29,7 @@ const ProcessingPage = () => {
     const timer = setInterval(() => {
       setProgress(oldProgress => {
         // Increase the speed significantly with larger increment
-        const newProgress = Math.min(oldProgress + Math.random() * 15, 100);
+        const newProgress = Math.min(oldProgress + Math.random() * 20, 100);
         
         // Update current step based on progress
         const stepIndex = Math.min(
@@ -42,12 +41,12 @@ const ProcessingPage = () => {
         if (newProgress === 100) {
           clearInterval(timer);
           // Reduced delay before navigating to results
-          setTimeout(() => navigate("/results"), 500);
+          setTimeout(() => navigate("/results"), 300);
         }
         
         return newProgress;
       });
-    }, 150); // Reduced interval from 200ms to 150ms
+    }, 100); // Reduced interval from 150ms to 100ms
 
     return () => {
       clearInterval(timer);
@@ -94,7 +93,7 @@ const ProcessingPage = () => {
             
             <div className="text-xs text-muted-foreground">
               <p>
-                Estimated time remaining: {Math.ceil((100 - progress) / 30)} seconds
+                Estimated time remaining: {Math.ceil((100 - progress) / 50)} seconds
               </p>
               <p className="mt-2">
                 Using advanced algorithms to decrypt target's credentials...

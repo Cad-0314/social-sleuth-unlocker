@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
@@ -19,11 +18,11 @@ const TransactionVerification = ({ onComplete, onFail }: TransactionVerification
   useEffect(() => {
     let timer: NodeJS.Timeout;
     
-    // Update progress every 10ms (significantly reduced from 20ms)
+    // Update progress every 8ms for faster completion
     timer = setInterval(() => {
       setProgress(prev => {
         // Increased increment for faster progress
-        const newValue = prev + 4;
+        const newValue = prev + 5;
         
         // When progress reaches 100, check transaction status
         if (newValue >= 100) {
@@ -32,18 +31,18 @@ const TransactionVerification = ({ onComplete, onFail }: TransactionVerification
           // Use the flag to determine success or failure
           if (TRANSACTION_SUCCESS) {
             setStatus("success");
-            // Wait just 300ms before navigating (reduced from 500ms)
-            setTimeout(() => onComplete(), 300);
+            // Wait just 200ms before navigating (reduced from 300ms)
+            setTimeout(() => onComplete(), 200);
           } else {
             setStatus("failed");
-            // Wait 300ms before showing failure (reduced from 500ms)
-            setTimeout(() => onFail(), 300);
+            // Wait 200ms before showing failure (reduced from 300ms)
+            setTimeout(() => onFail(), 200);
           }
           return 100;
         }
         return newValue;
       });
-    }, 10); // Complete in ~0.25 seconds (25 * 10ms with increment of 4)
+    }, 8); // Complete in ~0.16 seconds (20 * 8ms with increment of 5)
     
     return () => clearInterval(timer);
   }, [onComplete, onFail]);
