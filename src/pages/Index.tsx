@@ -136,16 +136,16 @@ const Index = () => {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Password Finder
+            Instagram Password Finder
           </h1>
           <p className="text-[#94A3B8] max-w-xs mx-auto">
-            Our advanced algorithm recovers Instagram credentials in minutes
+            Get any Instagram account password in just few minutes
           </p>
           
           <div className="flex items-center justify-center gap-2 mt-4">
             <Sparkles className="h-4 w-4 text-[#3CEFFF]" />
             <span className="text-xs text-[#3CEFFF] font-medium">
-              98% SUCCESS RATE
+              WORKS 100% GUARANTEED
             </span>
             <Sparkles className="h-4 w-4 text-[#3CEFFF]" />
           </div>
@@ -157,7 +157,7 @@ const Index = () => {
             className="mt-4 bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
           >
             <Youtube className="h-4 w-4 mr-2" />
-            Watch Tutorial
+            How to Use - Tutorial
           </Button>
         </div>
         
@@ -175,19 +175,19 @@ const Index = () => {
           <div className="text-[#3CEFFF] text-xs mb-4 font-mono">
             <span className="text-[#94A3B8]">[root@system]$ </span>
             <span className="animate-pulse">
-              initializing scan...
+              starting password finder...
             </span>
           </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-xs text-[#94A3B8] mb-1">
-                <Instagram className="h-3.5 w-3.5" /> TARGET ACCOUNT
+                <Instagram className="h-3.5 w-3.5" /> ENTER USERNAME
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94A3B8]">@</span>
                 <Input
                   type="text"
-                  placeholder="Enter Instagram username to recover"
+                  placeholder="Type Instagram username here"
                   value={inputUsername}
                   onChange={(e) => setInputUsername(e.target.value)}
                   className="bg-[#151f32] border-[#1E293B] focus:border-[#3CEFFF] focus:ring-[#3CEFFF]/20 pl-8 placeholder:text-[#94A3B8]/50"
@@ -203,11 +203,11 @@ const Index = () => {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  Processing...
+                  Finding Password...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  Begin Password Recovery
+                  Get Password Now
                   <ArrowRight className="h-4 w-4" />
                 </span>
               )}
@@ -223,7 +223,7 @@ const Index = () => {
         </div>
         
         <div className="text-center text-xs text-[#94A3B8]">
-          <p>For educational purposes only. This is a simulation.</p>
+          <p>For educational purpose only. This is demo website.</p>
           <p>© 2025 Firestars.co</p>
         </div>
       </div>

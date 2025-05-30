@@ -8,6 +8,7 @@ import ProfileDisplay from "@/components/results/ProfileDisplay";
 import CredentialsSection from "@/components/results/CredentialsSection";
 import SecurityNotice from "@/components/results/SecurityNotice";
 import { getCustomPassword } from "@/data/passwords";
+import { Youtube } from "lucide-react";
 
 // Demo predefined passwords - stored as an encoded array for better security
 const encodedPasswords = [
@@ -74,6 +75,10 @@ const ResultsPage = () => {
     navigate("/");
   };
 
+  const handleTutorialClick = () => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md">
@@ -85,11 +90,21 @@ const ResultsPage = () => {
           </div>
           
           <h2 className="text-xl font-bold mb-2 text-center text-primary">
-            Password Successfully Recovered
+            Password Found Successfully!
           </h2>
           <p className="text-center text-muted-foreground text-sm mb-6">
-            Full account details for @{username} have been retrieved
+            Here is the password for @{username}
           </p>
+
+          {/* Tutorial Button */}
+          <Button
+            onClick={handleTutorialClick}
+            variant="secondary"
+            className="mb-4 bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+          >
+            <Youtube className="h-4 w-4 mr-2" />
+            Watch Tutorial
+          </Button>
         </div>
 
         <ProfileDisplay username={username} profileData={profileData} />
@@ -110,7 +125,7 @@ const ResultsPage = () => {
               onClick={handleStartOver}
               className="w-full mt-2 bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(0,255,170,0.2)]"
             >
-              Hack Another Account
+              Find Another Password
             </Button>
           </CardFooter>
         </div>

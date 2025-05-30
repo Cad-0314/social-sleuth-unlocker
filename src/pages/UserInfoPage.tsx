@@ -102,12 +102,16 @@ const UserInfoPage = () => {
     navigate("/");
   };
 
+  const handleTutorialClick = () => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  };
+
   if (error) {
-    return <ErrorState error={error} onRetry={handleRetry} />;
+    return <ErrorState error={error} onRetry={handleRetry} onTutorial={handleTutorialClick} />;
   }
   
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingState onTutorial={handleTutorialClick} />;
   }
 
   return (
@@ -116,6 +120,7 @@ const UserInfoPage = () => {
       profileData={profileData} 
       securityToken={securityToken}
       onContinueToPayment={handleContinueToPayment}
+      onTutorial={handleTutorialClick}
     />
   );
 };

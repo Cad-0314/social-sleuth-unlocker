@@ -59,14 +59,30 @@ const PaymentPage = () => {
     // by redirecting to the home page
   };
 
+  const handleTutorialClick = () => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:px-6 sm:py-12">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-center gap-3 mb-5">
           <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
           <LockKeyhole className="h-5 w-5 text-[#3CEFFF]" />
-          <h1 className="text-xl font-bold text-white">Payment Gateway</h1>
+          <h1 className="text-xl font-bold text-white">Payment Required</h1>
           <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
+        </div>
+
+        {/* Tutorial Button */}
+        <div className="text-center mb-4">
+          <Button
+            onClick={handleTutorialClick}
+            variant="secondary"
+            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+          >
+            <Youtube className="h-4 w-4 mr-2" />
+            How to Pay - Tutorial
+          </Button>
         </div>
         
         <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden">
@@ -103,7 +119,7 @@ const PaymentPage = () => {
           
           <div className="border-t border-[#1E293B] p-4 flex items-center justify-center gap-2">
             <Shield className="h-4 w-4 text-[#94A3B8]" />
-            <p className="text-xs text-[#94A3B8]">Secure payment</p>
+            <p className="text-xs text-[#94A3B8]">Safe payment system</p>
           </div>
         </div>
         

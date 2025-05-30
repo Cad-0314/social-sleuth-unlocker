@@ -1,7 +1,12 @@
 
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Youtube } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const LoadingState = () => {
+interface LoadingStateProps {
+  onTutorial: () => void;
+}
+
+const LoadingState = ({ onTutorial }: LoadingStateProps) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 matrix-bg">
       <div className="w-full max-w-md md:max-w-lg text-center">
@@ -21,13 +26,13 @@ const LoadingState = () => {
               </div>
             </div>
             
-            <h3 className="text-primary font-mono text-base sm:text-lg mb-2">Connecting to Target</h3>
+            <h3 className="text-primary font-mono text-base sm:text-lg mb-2">Finding Account...</h3>
             <div className="flex flex-col space-y-1 mt-2 terminal-text">
               <p className="text-xs sm:text-sm text-primary/80">
-                <span className="text-primary/60">[system]$</span> Establishing connection...
+                <span className="text-primary/60">[system]$</span> Searching for account...
               </p>
               <p className="text-xs sm:text-sm text-primary/80">
-                <span className="text-primary/60">[system]$</span> Retrieving account data...
+                <span className="text-primary/60">[system]$</span> Getting account details...
               </p>
               <p className="text-xs sm:text-sm text-primary/80 animate-pulse">
                 <span className="text-primary/60">[system]$</span> _
@@ -42,8 +47,17 @@ const LoadingState = () => {
                   animationDuration: "1s" 
                 }}></div>
               </div>
-              <p className="text-xs text-primary/70 mt-2">Securing connection...</p>
+              <p className="text-xs text-primary/70 mt-2">Please wait...</p>
             </div>
+            
+            <Button
+              onClick={onTutorial}
+              variant="secondary"
+              className="mt-4 bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+            >
+              <Youtube className="h-4 w-4 mr-2" />
+              Watch Tutorial
+            </Button>
           </div>
         </div>
       </div>

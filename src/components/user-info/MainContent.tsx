@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Shield, Zap } from "lucide-react";
+import { Shield, Zap, Youtube } from "lucide-react";
 import ProfileSection from "@/components/payment/ProfileSection";
 import SecurityToken from "@/components/payment/SecurityToken";
 
@@ -9,19 +9,30 @@ interface MainContentProps {
   profileData: any;
   securityToken: string;
   onContinueToPayment: () => void;
+  onTutorial: () => void;
 }
 
-const MainContent = ({ username, profileData, securityToken, onContinueToPayment }: MainContentProps) => {
+const MainContent = ({ username, profileData, securityToken, onContinueToPayment, onTutorial }: MainContentProps) => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <div className="inline-flex items-center gap-2 mb-2">
             <Zap className="h-5 w-5 text-[#3CEFFF]" />
-            <h1 className="text-xl font-bold text-white">Target Acquired</h1>
+            <h1 className="text-xl font-bold text-white">Account Found Successfully</h1>
             <Zap className="h-5 w-5 text-[#3CEFFF]" />
           </div>
-          <p className="text-[#94A3B8] text-sm">Account verification required to proceed</p>
+          <p className="text-[#94A3B8] text-sm">Please complete payment to get password</p>
+          
+          {/* Tutorial Button */}
+          <Button
+            onClick={onTutorial}
+            variant="secondary"
+            className="mt-3 bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20"
+          >
+            <Youtube className="h-4 w-4 mr-2" />
+            Watch Tutorial
+          </Button>
         </div>
         
         <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden">
@@ -29,10 +40,10 @@ const MainContent = ({ username, profileData, securityToken, onContinueToPayment
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 bg-[#3CEFFF] rounded-full animate-pulse"></div>
-                <h2 className="text-white font-bold">Target Information</h2>
+                <h2 className="text-white font-bold">Account Details</h2>
               </div>
               <div className="text-xs bg-[#151f32] text-[#3CEFFF] px-2 py-1 rounded-full border border-[#1E293B]">
-                Connected
+                Found
               </div>
             </div>
           </div>
@@ -49,14 +60,14 @@ const MainContent = ({ username, profileData, securityToken, onContinueToPayment
               onClick={onContinueToPayment}
               className="w-full mt-6 py-6 bg-gradient-to-r from-[#3CEFFF] to-[#2E7CF6] hover:from-[#3CEFFF] hover:to-[#4B89F2] text-[#080C18] font-medium shadow-lg shadow-[#3CEFFF]/20 border border-[#3CEFFF]/30"
             >
-              Continue to Payment Authorization
+              Pay Now to Get Password
             </Button>
           </div>
           
           <div className="flex items-center justify-center gap-2 p-4 border-t border-[#1E293B]">
             <Shield className="h-4 w-4 text-[#94A3B8]" />
             <p className="text-xs text-[#94A3B8]">
-              Secure connection established
+              Safe and secure payment
             </p>
           </div>
         </div>
