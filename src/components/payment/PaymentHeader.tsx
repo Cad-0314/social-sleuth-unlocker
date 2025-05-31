@@ -20,7 +20,7 @@ const PaymentHeader = ({ username }: PaymentHeaderProps) => {
         </h2>
         
         <p className="text-sm text-[#94A3B8]">
-          Pay ₹1499 to get password for @{username}
+          Pay ₹229 to get password for @{username}
         </p>
       </div>
       

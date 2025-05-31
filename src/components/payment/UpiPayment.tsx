@@ -1,4 +1,3 @@
-
 import { Copy, IndianRupee, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +15,7 @@ interface UpiPaymentProps {
 }
 
 const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
-  const amount = 1499;
+  const amount = 229;
 
   const handleCopyUpiId = async () => {
     try {

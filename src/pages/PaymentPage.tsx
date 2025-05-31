@@ -93,7 +93,7 @@ const PaymentPage = () => {
               <p className="text-xs text-[#94A3B8] mt-1">Password recovery service</p>
             </div>
             <div className="bg-[#151f32] p-2 rounded-lg border border-[#1E293B]">
-              <p className="text-sm font-bold text-[#3CEFFF]">₹1499</p>
+              <p className="text-sm font-bold text-[#3CEFFF]">₹229</p>
             </div>
           </div>
           
