@@ -65,44 +65,44 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="h-px w-16 bg-[#3CEFFF]/60"></div>
-          <LockKeyhole className="h-5 w-5 text-[#3CEFFF]" />
-          <h1 className="text-xl font-bold text-white">Secure Payment</h1>
-          <div className="h-px w-16 bg-[#3CEFFF]/60"></div>
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-2 sm:px-4 py-2 sm:py-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <div className="h-px w-8 sm:w-16 bg-[#3CEFFF]/60"></div>
+          <LockKeyhole className="h-4 w-4 text-[#3CEFFF]" />
+          <h1 className="text-sm sm:text-lg font-bold text-white">Secure Payment</h1>
+          <div className="h-px w-8 sm:w-16 bg-[#3CEFFF]/60"></div>
         </div>
 
         {/* Tutorial Button */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-3">
           <Button
             onClick={handleTutorialClick}
             variant="secondary"
-            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20 py-2 px-4 text-sm"
+            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20 py-1.5 px-3 text-xs sm:text-sm h-auto"
           >
-            <Youtube className="h-4 w-4 mr-2" />
-            How to Pay - Watch Tutorial
+            <Youtube className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5" />
+            How to Pay - Tutorial
           </Button>
         </div>
         
-        <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-4 border-b border-[#1E293B]">
+        <div className="bg-[#111827] rounded-lg border border-[#1E293B] shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-3 border-b border-[#1E293B]">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-white">@{username}</h2>
-                <p className="text-xs text-[#94A3B8] mt-1">Password Recovery Service</p>
+                <h2 className="text-sm sm:text-base font-bold text-white">@{username}</h2>
+                <p className="text-xs text-[#94A3B8] mt-0.5">Password Recovery Service</p>
               </div>
-              <div className="bg-[#151f32] p-2 rounded-lg border border-[#1E293B]">
-                <p className="text-lg font-bold text-[#3CEFFF]">₹229</p>
+              <div className="bg-[#151f32] p-2 rounded border border-[#1E293B]">
+                <p className="text-sm sm:text-base font-bold text-[#3CEFFF]">₹229</p>
                 <p className="text-xs text-[#94A3B8]">One-time</p>
               </div>
             </div>
           </div>
           
-          <div className="p-4">
+          <div className="p-3">
             {!verifying ? (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <PaymentHeader username={username} />
                 <UpiPayment 
                   upiId={paymentDetail.upiId} 
@@ -121,13 +121,13 @@ const PaymentPage = () => {
             )}
           </div>
           
-          <div className="border-t border-[#1E293B] p-3 flex items-center justify-center gap-2 bg-[#0f1724]">
-            <Shield className="h-4 w-4 text-[#94A3B8]" />
+          <div className="border-t border-[#1E293B] p-2 flex items-center justify-center gap-1.5 bg-[#0f1724]">
+            <Shield className="h-3 w-3 text-[#94A3B8]" />
             <p className="text-xs text-[#94A3B8]">256-bit SSL encrypted secure payment</p>
           </div>
         </div>
         
-        <div className="mt-4 text-center text-xs text-[#94A3B8]">
+        <div className="mt-3 text-center text-xs text-[#94A3B8]">
           <p>© 2025 Firestars.co - Secure Digital Services</p>
         </div>
       </div>

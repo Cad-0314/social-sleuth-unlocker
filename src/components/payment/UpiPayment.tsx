@@ -54,22 +54,22 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {/* Payment Methods Header */}
-      <div className="flex items-center gap-2">
-        <IndianRupee className="h-4 w-4 text-[#3CEFFF]" />
-        <h3 className="font-semibold text-white text-base">Payment Methods</h3>
+      <div className="flex items-center gap-1.5">
+        <IndianRupee className="h-3 w-3 sm:h-4 sm:w-4 text-[#3CEFFF]" />
+        <h3 className="font-semibold text-white text-sm">Payment Methods</h3>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {/* QR Code Section */}
-        <div className="bg-[#151f32] rounded-lg border border-[#1E293B] p-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <QrCode className="h-4 w-4 text-[#3CEFFF]" />
-            <h4 className="text-sm font-medium text-white">Scan QR Code</h4>
+        <div className="bg-[#151f32] rounded border border-[#1E293B] p-3 text-center">
+          <div className="flex items-center justify-center gap-1.5 mb-2">
+            <QrCode className="h-3 w-3 text-[#3CEFFF]" />
+            <h4 className="text-xs font-medium text-white">Scan QR Code</h4>
           </div>
           
-          <div className="bg-white p-2 rounded-lg mx-auto max-w-[140px] mb-3">
+          <div className="bg-white p-1.5 rounded mx-auto max-w-[120px] mb-2">
             <img 
               src={qrCodeUrl} 
               alt="UPI QR Code" 
@@ -77,28 +77,28 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
             />
           </div>
           
-          <div className="bg-[#1a2236] p-2 rounded border border-[#1E293B]">
-            <p className="text-xs text-[#94A3B8] mb-1">Amount</p>
-            <p className="text-lg font-bold text-[#3CEFFF]">₹{amount}</p>
+          <div className="bg-[#1a2236] p-1.5 rounded border border-[#1E293B]">
+            <p className="text-xs text-[#94A3B8] mb-0.5">Amount</p>
+            <p className="text-sm font-bold text-[#3CEFFF]">₹{amount}</p>
           </div>
           
-          <p className="text-xs text-[#94A3B8] mt-2">
-            Open any UPI app and scan this QR code to pay
+          <p className="text-xs text-[#94A3B8] mt-1.5">
+            Open any UPI app and scan this QR code
           </p>
         </div>
         
         {/* Manual UPI Section */}
-        <div className="bg-[#151f32] rounded-lg border border-[#1E293B] p-4">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <IndianRupee className="h-4 w-4 text-[#3CEFFF]" />
-            <h4 className="text-sm font-medium text-white">Manual Payment</h4>
+        <div className="bg-[#151f32] rounded border border-[#1E293B] p-3">
+          <div className="flex items-center justify-center gap-1.5 mb-2">
+            <IndianRupee className="h-3 w-3 text-[#3CEFFF]" />
+            <h4 className="text-xs font-medium text-white">Manual Payment</h4>
           </div>
           
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <div>
-              <p className="text-xs text-[#94A3B8] mb-1">UPI ID</p>
-              <div className="flex items-center bg-[#1a2236] p-2 rounded border border-[#1E293B]">
-                <span className="font-mono text-[#3CEFFF] flex-1 text-xs">
+              <p className="text-xs text-[#94A3B8] mb-0.5">UPI ID</p>
+              <div className="flex items-center bg-[#1a2236] p-1.5 rounded border border-[#1E293B]">
+                <span className="font-mono text-[#3CEFFF] flex-1 text-xs break-all">
                   {upiId}
                 </span>
                 <TooltipProvider>
@@ -107,10 +107,10 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-6 w-6 p-0 hover:bg-[#1E293B] ml-1"
+                        className="h-5 w-5 p-0 hover:bg-[#1E293B] ml-1 flex-shrink-0"
                         onClick={handleCopyUpiId}
                       >
-                        <Copy className="h-3 w-3 text-[#3CEFFF]" />
+                        <Copy className="h-2.5 w-2.5 text-[#3CEFFF]" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className="bg-[#1a2236] text-white border-[#1E293B]">
@@ -122,27 +122,27 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
             </div>
             
             <div>
-              <p className="text-xs text-[#94A3B8] mb-1">Amount</p>
-              <div className="bg-[#1a2236] p-2 rounded border border-[#1E293B] text-center">
-                <p className="text-lg font-bold text-[#3CEFFF]">₹{amount}</p>
+              <p className="text-xs text-[#94A3B8] mb-0.5">Amount</p>
+              <div className="bg-[#1a2236] p-1.5 rounded border border-[#1E293B] text-center">
+                <p className="text-sm font-bold text-[#3CEFFF]">₹{amount}</p>
               </div>
             </div>
           </div>
           
-          <p className="text-xs text-[#94A3B8] mt-3 text-center">
-            Copy the UPI ID and use it in your UPI app to send payment
+          <p className="text-xs text-[#94A3B8] mt-2 text-center">
+            Copy UPI ID and use in your UPI app
           </p>
         </div>
       </div>
       
       {/* Compact Payment Instructions */}
-      <div className="bg-[#0c2514] border border-[#0f3a20] rounded-lg p-3">
-        <h5 className="text-xs font-medium text-[#4ADE80] mb-2">Payment Instructions:</h5>
+      <div className="bg-[#0c2514] border border-[#0f3a20] rounded p-2">
+        <h5 className="text-xs font-medium text-[#4ADE80] mb-1">Instructions:</h5>
         <ol className="text-xs text-[#4ADE80] space-y-0.5 list-decimal list-inside">
-          <li>Choose QR code scan or manual UPI payment</li>
-          <li>Complete the payment of ₹{amount}</li>
-          <li>Take a screenshot of the successful transaction</li>
-          <li>Fill in the transaction details below and upload the screenshot</li>
+          <li>Choose QR scan or manual UPI payment</li>
+          <li>Complete payment of ₹{amount}</li>
+          <li>Take screenshot of successful transaction</li>
+          <li>Upload screenshot below</li>
         </ol>
       </div>
     </div>
