@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface UpiPaymentProps {
   upiId: string;
@@ -16,6 +17,7 @@ interface UpiPaymentProps {
 
 const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
   const amount = 229;
+  const [showEnlargedQR, setShowEnlargedQR] = useState(false);
 
   const handleCopyUpiId = async () => {
     try {
@@ -62,13 +64,17 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
             <h4 className="text-xs font-medium text-white">Scan QR Code</h4>
           </div>
           
-          <div className="bg-white p-1 rounded mx-auto w-20 h-20 mb-1">
+          <div 
+            className="bg-white p-1 rounded mx-auto w-32 h-32 mb-1 cursor-pointer hover:scale-105 transition-transform"
+            onClick={() => setShowEnlargedQR(true)}
+          >
             <img 
               src={qrCodeUrl} 
               alt="UPI QR Code" 
               className="w-full h-full rounded"
             />
           </div>
+          <p className="text-xs text-[#94A3B8]">Click to enlarge</p>
         </div>
         
         {/* UPI ID directly below QR */}
@@ -112,6 +118,23 @@ const UpiPayment = ({ upiId, qrCodeUrl }: UpiPaymentProps) => {
           1. Scan QR or copy UPI ID • 2. Pay ₹{amount} • 3. Upload screenshot below
         </p>
       </div>
+
+      {/* Enlarged QR Modal */}
+      {showEnlargedQR && (
+        <div 
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={() => setShowEnlargedQR(false)}
+        >
+          <div className="bg-white p-4 rounded-lg">
+            <img 
+              src={qrCodeUrl} 
+              alt="UPI QR Code" 
+              className="w-64 h-64 rounded"
+            />
+            <p className="text-center text-black text-sm mt-2">Click anywhere to close</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
