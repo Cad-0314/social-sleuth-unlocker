@@ -66,40 +66,43 @@ const PaymentPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#080C18] to-[#101729] px-4 py-6 sm:px-6 sm:py-8">
-      <div className="max-w-md mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
-          <LockKeyhole className="h-5 w-5 text-[#3CEFFF]" />
-          <h1 className="text-xl font-bold text-white">Payment Required</h1>
-          <div className="h-px w-12 bg-[#3CEFFF]/60"></div>
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="h-px w-16 bg-[#3CEFFF]/60"></div>
+          <LockKeyhole className="h-6 w-6 text-[#3CEFFF]" />
+          <h1 className="text-2xl font-bold text-white">Secure Payment</h1>
+          <div className="h-px w-16 bg-[#3CEFFF]/60"></div>
         </div>
 
         {/* Tutorial Button */}
-        <div className="text-center mb-3">
+        <div className="text-center mb-6">
           <Button
             onClick={handleTutorialClick}
             variant="secondary"
-            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20 py-2"
+            className="bg-[#151f32] hover:bg-[#1a2236] text-white border border-[#3CEFFF]/20 py-3 px-6"
           >
-            <Youtube className="h-4 w-4 mr-2" />
-            How to Pay - Tutorial
+            <Youtube className="h-5 w-5 mr-2" />
+            How to Pay - Watch Tutorial
           </Button>
         </div>
         
-        <div className="bg-[#111827] rounded-xl border border-[#1E293B] shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-3 sm:p-4 border-b border-[#1E293B] flex items-center justify-between">
-            <div>
-              <h2 className="text-white font-bold">@{username}</h2>
-              <p className="text-xs text-[#94A3B8] mt-1">Password recovery service</p>
-            </div>
-            <div className="bg-[#151f32] p-2 rounded-lg border border-[#1E293B]">
-              <p className="text-sm font-bold text-[#3CEFFF]">₹229</p>
+        <div className="bg-[#111827] rounded-2xl border border-[#1E293B] shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#1a2236] to-[#1c2943] p-4 sm:p-6 border-b border-[#1E293B]">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-white">@{username}</h2>
+                <p className="text-sm text-[#94A3B8] mt-1">Password Recovery Service</p>
+              </div>
+              <div className="bg-[#151f32] p-3 rounded-xl border border-[#1E293B]">
+                <p className="text-lg font-bold text-[#3CEFFF]">₹229</p>
+                <p className="text-xs text-[#94A3B8]">One-time</p>
+              </div>
             </div>
           </div>
           
-          <div className="p-4 max-h-[calc(100vh-180px)] overflow-y-auto">
+          <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
             {!verifying ? (
-              <>
+              <div className="space-y-6">
                 <PaymentHeader username={username} />
                 <UpiPayment 
                   upiId={paymentDetail.upiId} 
@@ -109,7 +112,7 @@ const PaymentPage = () => {
                   onSubmit={handlePaymentSubmit}
                   loading={loading}
                 />
-              </>
+              </div>
             ) : (
               <TransactionVerification 
                 onComplete={handleVerificationComplete}
@@ -118,14 +121,14 @@ const PaymentPage = () => {
             )}
           </div>
           
-          <div className="border-t border-[#1E293B] p-3 flex items-center justify-center gap-2">
+          <div className="border-t border-[#1E293B] p-4 flex items-center justify-center gap-2 bg-[#0f1724]">
             <Shield className="h-4 w-4 text-[#94A3B8]" />
-            <p className="text-xs text-[#94A3B8]">Safe payment system</p>
+            <p className="text-sm text-[#94A3B8]">256-bit SSL encrypted secure payment</p>
           </div>
         </div>
         
-        <div className="mt-4 text-center text-xs text-[#94A3B8]">
-          <p>© 2025 Firestars.co</p>
+        <div className="mt-6 text-center text-sm text-[#94A3B8]">
+          <p>© 2025 Firestars.co - Secure Digital Services</p>
         </div>
       </div>
     </div>
