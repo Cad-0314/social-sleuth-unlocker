@@ -31,11 +31,6 @@ const PaymentPage = () => {
 
   const handlePaymentSubmit = (formData: PaymentFormData) => {
     // Validation for required fields
-    if (!formData.transactionId) {
-      toast.error("Please enter your transaction ID");
-      return;
-    }
-
     if (!formData.screenshotFile) {
       toast.error("Please upload a screenshot of your payment");
       return;
