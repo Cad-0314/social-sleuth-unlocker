@@ -95,8 +95,8 @@ export async function fetchAccountDetails(username: string): Promise<ProfileData
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username }),
-        // Set a short timeout so we don't wait too long if CORS is failing
-        signal: AbortSignal.timeout(5000)
+        // Set a longer timeout to allow for API response
+        signal: AbortSignal.timeout(15000)
       });
       
       console.log("[API] Response status:", response.status, response.statusText);
